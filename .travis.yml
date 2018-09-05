@@ -11,7 +11,7 @@ install:
 
 #run tests with
 script:
-  - pytest
+  - pytest --cov-branch
 
 after_success:
   - coveralls
