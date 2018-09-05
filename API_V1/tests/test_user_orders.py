@@ -34,17 +34,17 @@ def test_orders_retrival():
 
 def test_orders_quantity_not_int():
     result=app.test_client()
-    response= result.post('/api/v1/orders', data=json.dumps(mock_order[0]) ,content_type='application/json')
+    response= result.post('/api/v1/orders', data=mock_order[0] ,content_type='application/json')
     assert(response.status_code==400)
 
 def test_orders_food_item_not_str():
     result=app.test_client()
-    response= result.post('/api/v1/orders', data=json.dumps(mock_order[1]) ,content_type='application/json')
+    response= result.post('/api/v1/orders', data=mock_order[1] ,content_type='application/json')
     assert(response.status_code==400)
 
 def test_orders_food_item_special_characters():
     result=app.test_client()
-    response= result.post('/api/v1/orders', data=json.dumps(mock_order[2]) ,content_type='application/json')
+    response= result.post('/api/v1/orders', data=mock_order[2] ,content_type='application/json')
     assert(response.status_code==400)
 
 def test_order_food_item_successfully():
