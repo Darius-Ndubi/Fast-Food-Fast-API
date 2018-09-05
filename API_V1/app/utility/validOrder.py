@@ -42,3 +42,20 @@ class OrderDataValidator(object):
         e=NotFound("Seached Fast Food order not found")
         e.data={'custom':404}
         raise e
+    
+    """
+        Method to handle the validity checking of status entered 
+    """
+    @staticmethod
+    def statusValid(order_status):
+
+        #check if the order status is of string type
+        if  type(order_status) != str:
+            api.abort(400, "Order status :{} is not an string".format(order_status))
+    
+        #check if the contents of order status have characters between a-z and A-Z
+        elif not re.match(r"(^[a-zA-Z]+$)",order_status):
+            api.abort(400, "Order status :{} is not well formatted ".format(order_status))
+
+        return True
+        

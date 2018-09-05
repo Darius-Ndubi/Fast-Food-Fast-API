@@ -97,3 +97,28 @@ class ManageOrdersDAO(object):
             api.abort (404, "Order: {} does not Exist, Please view the list of available orders then check again".format(order_id))
 
         api.abort (500, "An expected error occurred during data Validation")
+
+
+
+    """
+        Method to edit order and give it a status
+    """
+    def update_order(self,order_id,data):
+        #check if id entered is valid
+        data_check = OrderDataValidator.orderIdValid(order_id)
+        print(data_check)
+        
+        #check if status entered is well formated
+        data_check2 = OrderDataValidator.statusValid(data['status'])
+        print (data_check2)
+
+        if data_check and data_check2 == True:
+
+            #locate the specific order
+            order=self.get_specific_order(order_id)
+            print (order)
+            order.update(data)
+            return order
+
+        api.abort (500, "An expected error occurred during data Validation")
+
