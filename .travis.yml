@@ -11,7 +11,8 @@ install:
 
 #run tests with
 script:
-  - pytest --cov-branch
+  - coverage run -m pytest
 
+# command to run test coverage
 after_success:
   - coveralls
