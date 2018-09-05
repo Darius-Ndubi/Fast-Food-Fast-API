@@ -11,7 +11,7 @@ install:
 script:
   # - cd API_V1/tests
   # - nosetests  --with-coverage --cover-package=resources
-  - py.test --cov=API_V1/tests/
+  - pytest
 
 after_success:
   - coveralls
