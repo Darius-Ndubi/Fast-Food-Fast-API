@@ -5,6 +5,12 @@ from app.models.manOrders import ManageOrdersDAO
 
 ns = api.namespace('api/v1/orders', description='Orders and their operations')
 
+"""
+    Model for adding status to an order
+"""
+status = api.model('Status',{
+    'status': fields.String(required = True, description = 'Add order Status')
+})
 
 """
     Model for placing on food item
@@ -14,7 +20,7 @@ order = api.model('Orders',{
     'food_item' : fields.String(readOnly = True, description = 'Food Title'),
     'price' : fields.Integer(readOnly = True, description = 'Food item price'),
     'quantity' : fields.Integer(required = True, description = 'Number of food item ordered'),
-    'total' : fields.Integer(readOnly = True, description = 'Total amount payable')
+    'total' : fields.Integer(readOnly = True, description = 'Total amount payable'),
 })
 
 """
@@ -58,4 +64,12 @@ class OrderSpecific(Resource):
         return orderAO.get_specific_order(order_id),200
 
 
+
+    @ns.doc('Add status to an order')
+    @ns.expect(status)
+    @ns.marshal_with(status, code = 200)
+    def put(self, order_id):
+        '''Update the status of order given its identifier'''
+
+        return orderAO.update_order(order_id, api.payload),200
 

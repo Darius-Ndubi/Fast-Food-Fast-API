@@ -13,6 +13,11 @@ mock_order=[{'quantity':'3','food_item':'Burger'},
             {'quantity':3,'food_item':'$%^&@!'},
             {'quantity':3,'food_item':'Burger'}]
 
+"""
+    Mock answer data to test the working of user edit order
+"""
+mock_answers=[{'status':123},{'status':'Rejected'}]
+
 
 """
     A test on list of orders endpoint
@@ -34,17 +39,17 @@ def test_orders_retrival():
 
 def test_orders_quantity_not_int():
     result=app.test_client()
-    response= result.post('/api/v1/orders', data=json.dumps(mock_order[0]) ,content_type='application/json')
+    response= result.post('/api/v1/orders', data=mock_order[0] ,content_type='application/json')
     assert(response.status_code==400)
 
 def test_orders_food_item_not_str():
     result=app.test_client()
-    response= result.post('/api/v1/orders', data=json.dumps(mock_order[1]) ,content_type='application/json')
+    response= result.post('/api/v1/orders', data=mock_order[1] ,content_type='application/json')
     assert(response.status_code==400)
 
 def test_orders_food_item_special_characters():
     result=app.test_client()
-    response= result.post('/api/v1/orders', data=json.dumps(mock_order[2]) ,content_type='application/json')
+    response= result.post('/api/v1/orders', data=mock_order[2] ,content_type='application/json')
     assert(response.status_code==400)
 
 def test_order_food_item_successfully():
@@ -79,3 +84,20 @@ def test_get_order_successfully():
     result=app.test_client()
     response= result.get('/api/v1/orders/2' ,content_type='application/json')
     assert(response.status_code == 200)
+
+
+"""
+    Test on updating a specific order status from the list of orders
+    Tests-----
+        -> Test on trying to edit data with status as an integer
+        -> Test on editing an order successfully
+"""
+def test_status_data_type_not_str():
+    result=app.test_client()
+    response= result.put('/api/v1/orders/3', data=mock_answers[0] ,content_type='application/json')
+    assert(response.status_code==400)
+
+def test_status_add_successfully():
+    result=app.test_client()
+    response= result.put('/api/v1/orders/3', data=json.dumps(mock_answers[1]) ,content_type='application/json')
+    assert(response.status_code==200)
