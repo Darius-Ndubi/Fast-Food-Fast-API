@@ -1,5 +1,6 @@
 from app import api
 import re
+from werkzeug.exceptions import NotFound
 """
     class to validate data entered by user in the order
 """
@@ -24,3 +25,20 @@ class OrderDataValidator(object):
             api.abort(400, "Food Item entered :{} is not an string".format(self.food_item))
         
         return True
+    
+    
+    """
+        Method to validate the order ID entered by user if it is from 1 or more
+    """
+    @staticmethod
+    def orderIdValid(user_order_id):
+        if user_order_id == 0:
+            api.abort(404, "Order id  :{} cannot be found, Orders are identified from 1 onwards".format(user_order_id))
+        
+        elif user_order_id > 0:
+            return True
+        
+        #api.abort(404, "Order id  :{} cannot be found, Orders are identified from 1 onwards".format(user_order_id))
+        e=NotFound("Seached Fast Food order not found")
+        e.data={'custom':404}
+        raise e

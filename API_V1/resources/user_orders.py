@@ -33,7 +33,7 @@ orderAO.create_new_order({'food_item':'Fish','quantity':3})
 @ns.response(400, 'Bad Request')
 @ns.response(404, 'No Orders yet')
 class Order(Resource):
-    @ns.doc('List orders to made')
+    @ns.doc('List all orders made')
     def get(self):
         '''Geting all posted orders'''
         return orderAO.find_all_orders (),200
@@ -47,6 +47,15 @@ class Order(Resource):
         return orderAO.create_new_order(api.payload),201
 
 
+@ns.route('/<int:order_id>')
+@ns.response(200, 'Search was successful')
+@ns.response(404, 'Order not Found')
+@ns.param('order_id', 'The order unique identifier')
+class OrderSpecific(Resource):
+    @ns.doc('Retrieve specific order')
+    def get(self,order_id):
+        ''' Get the specific order searched'''
+        return orderAO.get_specific_order(order_id),200
 
 
 

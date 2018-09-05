@@ -70,5 +70,30 @@ class ManageOrdersDAO(object):
                 
             api.abort (404, "Food Item {} does not Exist, Please order another one".format(data['food_item']))  
 
-        api.abort (500, "An expected error occurred during data Validation")   
+        api.abort (500, "An expected error occurred during data Validation")
 
+
+    """
+        Method to retrieve specific order as per its id
+    """
+
+    def get_specific_order(self,order_id):
+
+        #check if id entered is valid
+        data_check = OrderDataValidator.orderIdValid(order_id)
+        
+        if data_check == True :    
+            #get all orders else error == none
+            orders=self.find_all_orders()
+
+            #loop through the orders present and find order whose id matches the one entered
+            for order in orders:
+                if order.get('order_id') == order_id:
+                    #assign order to be returned to order
+                    order=order
+                    return order
+            
+                #if id ws not found report back to user
+            api.abort (404, "Order: {} does not Exist, Please view the list of available orders then check again".format(order_id))
+
+        api.abort (500, "An expected error occurred during data Validation")
