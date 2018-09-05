@@ -101,3 +101,20 @@ def test_status_add_successfully():
     result=app.test_client()
     response= result.put('/api/v1/orders/3', data=json.dumps(mock_answers[1]) ,content_type='application/json')
     assert(response.status_code==200)
+
+
+"""
+    Test on deleting a specific order from the list of orders
+    Tests-----
+        -> Test on trying to delete order that does not exist
+        -> Test on deleting an existing order successfully
+"""
+def test_delete_not_existing_order():
+    result=app.test_client()
+    response= result.delete('/api/v1/orders/300' ,content_type='application/json')
+    assert(response.status_code==404)
+
+def test_delete_existing_order():
+    result=app.test_client()
+    response= result.delete('/api/v1/orders/3' ,content_type='application/json')
+    assert(response.status_code==204)

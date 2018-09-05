@@ -73,3 +73,12 @@ class OrderSpecific(Resource):
 
         return orderAO.update_order(order_id, api.payload),200
 
+    
+    @ns.doc('Delete an Order')
+    @ns.response(204, 'Order deleted')
+    @ns.response(404, 'Order not found')
+    def delete(self, order_id):
+        '''Delete a order given its identifier'''
+
+        orderAO.delete_order (order_id)
+        return '', 204

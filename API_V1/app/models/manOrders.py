@@ -104,18 +104,25 @@ class ManageOrdersDAO(object):
         Method to edit order and give it a status
     """
     def update_order(self,order_id,data):
-        #check if id entered is valid
-        data_check = OrderDataValidator.orderIdValid(order_id)
-        
         #check if status entered is well formated
-        data_check2 = OrderDataValidator.statusValid(data['status'])
+        data_check = OrderDataValidator.statusValid(data['status'])
         
-        if data_check and data_check2 == True:
+        if data_check == True:
 
             #locate the specific order
-            order=self.get_specific_order(order_id)
+            order = self.get_specific_order(order_id)
             order.update(data)
             return order
 
         api.abort (500, "An expected error occurred during data Validation")
 
+
+    """
+        Method to delete a food order
+    """
+    def delete_order(self,order_id):
+        to_delete = self.get_specific_order(order_id)
+
+        #delete the order
+        self.orders.remove(to_delete)
+        
