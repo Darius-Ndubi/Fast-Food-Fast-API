@@ -1,13 +1,15 @@
+#Language used
 language: python
 
+#python version used
 python:
   - "3.5.2"
 
+#packages to be installed
 install:
   - pip install -r requirements.txt
-  - pip install coverage
-  - pip install coveralls
 
+#run tests with
 script:
   - pytest
 
