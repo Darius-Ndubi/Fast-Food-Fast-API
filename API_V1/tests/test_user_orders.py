@@ -55,3 +55,27 @@ def test_order_food_item_successfully():
     new_num_orders = len (data)    
     assert old_num_orders + 1 == new_num_orders
     assert(response.status_code==201)
+
+
+""" Test on retrieving a specific order from the list of orders
+    Tests-----
+        -> Test on trying to retrieve an order of index negative eg -1,-2
+        -> Test on trying to retrieve order not created yet
+        -> Test getting a specific order successfully
+"""
+
+def test_get_order_negative_identifier():
+    result=app.test_client()
+    response= result.get('/api/v1/orders/-1' ,content_type='application/json')
+    assert(response.status_code == 404)
+
+
+def test_get_order_not_created():
+    result=app.test_client()
+    response= result.get('/api/v1/orders/100' ,content_type='application/json')
+    assert(response.status_code == 404)
+
+def test_get_order_successfully():
+    result=app.test_client()
+    response= result.get('/api/v1/orders/2' ,content_type='application/json')
+    assert(response.status_code == 200)
