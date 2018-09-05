@@ -1,22 +1,28 @@
 from app import api
+from app.utility.validOrder import OrderDataValidator
 
 
 """
     Food items that can be ordered
 """
-food_items=[{'item_id':1,'title':'Burger','description':'Sweeter than the Krubby Paddy','price':450,'type':'snack'}]
+food_items=[{'item_id':1,'title':'Burger','description':'Sweeter than the Krubby Paddy','price':450,'type':'snack'},
+            {'item_id':2,'title':'Fish','description':'Sweeter than the Krubby Paddy','price':400,'type':'meal'}]
 
 """
     Examples of orders created
 """
-orders=[{'order_id':1,'food_item':'Burger','price':450,'quantity':2,'total':900,'requester':'Squidward'},
-{'order_id':2,'food_item':'Pizza','price':600,'quantity':3,'total':1800,'requester':'Patrick'}]
+# orders=[{'order_id':1,'food_item':'Burger','price':450,'quantity':2,'total':900},
+#         {'order_id':2,'food_item':'Pizza','price':600,'quantity':3,'total':1800}]
 
 
 """
     A class to handle Orders
 """
 class ManageOrdersDAO(object):
+
+    def __init__(self):
+        self.id_counter = 0
+        self.orders=[]
     """ 
         Method to find all orders
         Steps:
@@ -26,8 +32,43 @@ class ManageOrdersDAO(object):
     
     def find_all_orders (self):
         #check if there is any item in orders
-        if len(orders)==0:
+        if len(self.orders)==0:
             api.abort(404, "No orders yet")
         
-        return orders      
+        return self.orders
+
+    """
+        Method to create and add a user order
+    """
+    def create_new_order(self,data):
+        #validate user order data
+        orderDataO = OrderDataValidator(data['quantity'],data['food_item'])
+        data_check= orderDataO.ordervalid()
+
+        if data_check == True:
+            #check that user has entered a quantity greater than 0
+            if data['quantity'] <= 0:
+                api.abort (400, "Sorry the minimum you can order is 1 you ordered {} ".format(data['quantity']))
+
+
+            #find food item name in food item list
+            for food_item in food_items:
+                if food_item.get('title')== data['food_item']:
+                    data['price']=food_item['price']
+
+                    #fing the number of orders and increment by 1
+                    data['order_id']=len(self.orders) + 1
+
+
+
+                    #compute the total amount payable
+                    data['total']=data['price']*data['quantity']
+
+                    self.orders.append(data)
+
+                    return self.find_all_orders ()
+                
+            api.abort (404, "Food Item {} does not Exist, Please order another one".format(data['food_item']))  
+
+        api.abort (500, "An expected error occurred during data Validation")   
 
