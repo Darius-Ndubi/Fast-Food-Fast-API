@@ -9,8 +9,7 @@ install:
   - pip install coveralls
 
 script:
-  - cd API_V1/tests
-  - nosetests  --with-coverage --cover-package=resources
+  - pytest
 
 after_success:
   - coveralls
