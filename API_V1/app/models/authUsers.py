@@ -19,6 +19,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 class ManageUsersDAO(object):
     def __init__(self):
         self.users=[]
+        self.logged_users=[]
         
     """ 
         Check email exixtance
@@ -54,8 +55,49 @@ class ManageUsersDAO(object):
 
             #append the user data dictionary to users list
             self.users.append(data)
-            print (self.users)
+            #print (self.users)
         
             return "Sign Up was successful proceed to Sign In",201
 
         api.abort (500, "An expected error occurred during data Validation")
+
+
+        """
+        User sign In method
+        Steps:
+            -> Validated user input to be of expected standards
+            -> Check if email of the user exists in the list of registered users
+            -> check if user is already signed in
+            -> Hash the entered password and verify it matches stored hash
+            -> if password hash match add users username to logged in list of users
+            -> if email is not found error out that user is not signed up
+    """
+
+    def user_signin(self,data):
+        #check inputs
+        data_check = UserAuthValidator.signinValidator(data['email'],data['password'])
+
+
+        if data_check == True and self.check_user_email(data['email']) != None:
+        
+            #find user with the entered email
+            for user in self.users:
+                if user.get('email') == data['email']:
+                    user=user
+
+            #block repeated signins from the same user
+            for i in self.logged_users:
+                if i == user['username']:
+                    api.abort(409, "You: {} are already logged in".format(data['email']))
+
+           #check if the created hash and stored hash match
+            if check_password_hash(user.get('password'),data['password']):
+                self.logged_users.append(user['username'])
+                return "Sign in Successful Go see our food Menu"
+
+            #if they dont match then the entered password is invalid
+            else:
+                api.abort(401, "Password: {} is invalid".format(data['password']))
+
+        #user is not registered
+        api.abort(404, "Sign in request for {} failed, user not signed up!".format(data['email']))

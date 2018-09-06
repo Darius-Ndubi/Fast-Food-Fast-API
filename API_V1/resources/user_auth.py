@@ -18,6 +18,14 @@ user_signup = api.model('Sign Up', {
     'confirm_password':fields.String(required=True, description='Confirm your password'),
 })
 
+""" 
+    Model for signin data to be entered by user
+"""
+user_signin = api.model('Sign In', {
+    'email': fields.String(required=True, description='Your Email'),
+    'password': fields.String(required=True, description='Your password')
+})
+
 """
     create an instance of class ManageUsersDAO
 """
@@ -35,5 +43,24 @@ class SignUp(Resource):
     @ns.expect(user_signup)
     @ns.response(201, 'Account created')
     def post(self):
+        ''' Sign Up User'''
+        
         return UserAO.add_user_details(api.payload)
 
+
+
+"""
+    User signin endpoint
+"""
+@ns.route('/signin')
+@ns.response(403, 'Email unknown')
+@ns.response(409, 'User already signed in')
+class Signin(Resource):
+    '''Allows a user to sign in'''
+    @ns.doc('Signed Up  user Sign In')
+    @ns.expect(user_signin)
+    @ns.response(200,'Sign In successful')
+    def post(self):
+        '''Sign In User'''
+
+        return UserAO.user_signin (api.payload),200
