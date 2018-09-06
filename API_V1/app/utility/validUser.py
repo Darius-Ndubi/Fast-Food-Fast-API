@@ -55,3 +55,29 @@ class UserAuthValidator(object):
             api.abort(400, "The username is less then 5 characters, You entered: {} ".format(self.username))
 
         return True
+
+
+    """
+        User signin data validator
+            -> Check if entered email is a str
+            -> Check if email consists of a char between a-z,A-Z,0-9 then @ then a-z,A-Z,0-9 then . then a-z,A-Z,0-9
+            -> Check if password is enterd as a string
+            -> Check if password consists of a char between a-z,A-Z,0-9 then @#$*& and has a minimum of 6 characters and maximum of 10     
+    """
+
+    @staticmethod
+    def signinValidator(email,password):
+        #check if email has @ and .com and is type string
+        if type(email) != str:
+            api.abort(400, "An email is a string not a number:{} ".format(email))
+        
+        elif not re.match(r"(^[a-zA-Z0-9.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]+$)" , email):
+            api.abort(400, "Email: {} is not well formatted (Must have @ and .com) and not contain spaces".format(email))
+
+        elif type(password) != str:
+            api.abort(400, "A password is a string not a number:{} ".format(password))
+
+        elif not re.match(r"[A-Za-z0-9@#$&*]{6,10}",password):
+             api.abort(400, "Password: {} is not well formatted".format(password))
+        
+        return True

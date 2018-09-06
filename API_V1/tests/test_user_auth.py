@@ -5,7 +5,9 @@ from app.models.authUsers import  ManageUsersDAO
 
 testusers = ManageUsersDAO()
 
-
+"""
+    Mock signup data to test the working of user sign up
+"""
 
 mock_reg=[{"email":"","username":"delight","password":"delight","confirm_password":"delight"},
           {"email":"yagamidelightgmail.com","username":"delight","password":"delight","confirm_password":"delight"},
@@ -23,6 +25,26 @@ mock_reg=[{"email":"","username":"delight","password":"delight","confirm_passwor
           {"email":"yagamidelight@gmail.com","username":"      ","password":"delight","confirm_password":"delight"}
 ]
 
+"""
+    Mock Signin data to test the working of user signin
+"""
+
+mock_log=[{"email":123,"password":"delight"},
+          {"email":"","password":"delight"},
+          {"email":"yagamidelight.com","password":"delight"},
+          {"email":"yagamidelight@gmail","password":"delight"},
+
+          {"email":"yagamidelight@gmail.com","password":123},
+          {"email":"yagamidelight@gmail.com","password":"deli"},
+
+          {"email":"yagamidelight@gmail.com","password":"string@12"}            
+]
+"""
+    User signUp tests
+    -> Email tests
+    -> Password tests
+    -> user name tests
+"""
 """
     Email input checks
         -> Tests input of empty string as email
@@ -105,3 +127,64 @@ def test_signup_correct_data():
     assert (response.status_code == 201)
 
 
+"""
+    User Sign In Tests
+    -> Email tests
+    -> password tests
+"""
+
+
+"""
+    Email input checks
+        -> Test input of int as email
+        -> Tests input of empty string as email
+        -> Tests input of email without @ 
+        -> Tests input of email without .com
+"""
+
+def test_signin_int_email():
+    result = app.test_client()
+    response = result.post('/api/v1/auth/signin', data=mock_log[0],content_type='application/json')
+    assert(response.status_code == 400)
+
+def test_signin_empty_email():
+    result = app.test_client()
+    response = result.post('/api/v1/auth/signin', data=mock_log[1],content_type='application/json')
+    assert(response.status_code == 400)
+
+def test_signin_wrong_email1():
+    result = app.test_client()
+    response = result.post('/api/v1/auth/signin', data=mock_log[2],content_type='application/json')
+    json.loads(response.data.decode('utf-8'))
+    assert(response.status_code == 400)
+
+def test_signin_wrong_email2():
+    result = app.test_client()
+    response = result.post('/api/v1/auth/signin', data=mock_log[3],content_type='application/json')
+    assert(response.status_code == 400)
+
+
+"""
+    Password Checks
+        -> Test int input as password
+        -> Test input of short password
+"""
+def test_signin_int_password():
+    result = app.test_client()
+    response = result.post('/api/v1/auth/signin', data=mock_log[4],content_type='application/json')
+    assert(response.status_code == 400)
+
+def test_signin_poor_password():
+    result = app.test_client()
+    response = result.post('/api/v1/auth/signin', data=mock_log[5],content_type='application/json')
+    assert(response.status_code == 400)
+
+
+"""
+    Test of sign in with correct data
+"""
+def test_signin_correct_data():
+    result = app.test_client()
+    response = result.post('/api/v1/auth/signin', data=json.dumps(mock_log[6]) ,content_type='application/json')
+    json.loads(response.data)
+    assert(response.status_code == 200)
