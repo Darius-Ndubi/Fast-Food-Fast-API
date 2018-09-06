@@ -12,5 +12,8 @@ api = Api(app, version='1.0', title='Fast Food Fast API',
 from resources.user_auth import ns as auth
 api.add_namespace(auth)
 
+from resources.food_items import ns as foods
+api.add_namespace(foods)
+
 from resources.user_orders import ns as orders
 api.add_namespace(orders)
