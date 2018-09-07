@@ -58,7 +58,8 @@ Endpoint available for this api are shown in the table below:
 |  GET        |  /api/v1/orders                | Get all Orders             | 
 |  GET        |  /api/v1/orders/order_id       | Get a specific order       | order_id required(int)                     
 |  DELETE     |  /api/v1/orders/order_id       | Delete order               | order_id required (int)
-|  POST       |  /api/v1/orders                | Add an order               | e.g {"food_item": "Burger", "quantity": 20}     |   PUT       |  /api/v1/orders/order_id       | Order status               |order_id required (int) eg{"status":"Declined"}
+|  POST       |  /api/v1/orders                | Add an order               | e.g {"food_item": "Burger", "quantity": 20}     
+|   PUT       |  /api/v1/orders/order_id       | Order status               |order_id required (int) eg{"status":"Declined"}
 ````
 
 Run application on postman
