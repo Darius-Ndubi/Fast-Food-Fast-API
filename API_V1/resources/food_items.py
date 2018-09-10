@@ -14,8 +14,8 @@ food_item = api.model('Food',{
     'title' : fields.String(required = True, description = 'Food Title'),
     'description' : fields.String(required = True, description = 'Food item description'),
     'price' : fields.Integer(required = True, description = 'Food item price'),
-    'type' : fields.String(required = True, description = 'The type of food you just added'),
-    'creator':fields.String(readOnly = True,description = 'Food item creator')
+    'creator' : fields.String(readOnly = True, description = 'name of restraunt'),
+    'type' : fields.String(required = True, description = 'The type of food you just added')
 })
 
 """
@@ -24,7 +24,7 @@ food_item = api.model('Food',{
 foodAO=ManageFoodsDAO()
 
 #Create a few foods
-foodAO.create_new_food_item({'title':'Fries','description':'Crunchier than ever','price':100,'type':'Snack'})
+foodAO.create_new_food_item({'title':'Fries','description':'Crunchier than ever','price':100,'creator':'','type':'Snack'})
 
 """
     user-food endpoints
