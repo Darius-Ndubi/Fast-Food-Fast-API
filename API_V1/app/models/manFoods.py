@@ -9,8 +9,9 @@ from app.utility.validFood import FoodDataValidator
 
 class ManageFoodsDAO(object):
 
-    # def __init__ (self):
-    #     self.food_items=[]
+    def __init__ (self):
+        #food item_id assigner
+        self.food_id_counter = 0
 
     """
         Method to create a food item
@@ -25,11 +26,13 @@ class ManageFoodsDAO(object):
                 if food_item.get('title') == data['title']:
                     api.abort(409, "food item creation for {} could not be completed due to existance of same item".format(data['title']))
                 
-                #if the check passes
+            #if the check passes assign food id to item
+            self.food_id_counter =self.food_id_counter +1
+            data['item_id']= self.food_id_counter
 
-            data['item_id']= len(food_items) + 1
+            #let food item creator to be always fast food fast restraunt name
+            data['creator'] = 'fast-food-fast'
 
-            data['creator'] = 'fastfoodfast'
             #add the new food item
             food_items.append(data)
             return food_items
