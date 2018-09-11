@@ -45,6 +45,9 @@ def test_food_item_empty_type():
     response= result.post('/api/v1/foods', data=mock_food[3] ,content_type='application/json')
     assert(response.status_code==400)
 
+"""
+    Test on successfull adding of food item"
+"""
 def test_create_food_successfully():
     result=app.test_client()
     old_num_items= len(food_items)
@@ -53,4 +56,15 @@ def test_create_food_successfully():
     new_num_items = len(data)
     assert old_num_items + 1 == new_num_items
     assert(response.status_code==201)
+
+
+"""
+    Test on retrieviving food items
+"""
+def test_retreving_all_food_items():
+    result=app.test_client()
+    response= result.get('/api/v1/foods',content_type='application/json')
+    assert response.status_code == 200
+
+    
 
