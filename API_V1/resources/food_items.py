@@ -44,3 +44,14 @@ class Food(Resource):
     def post(self):
         ''' Post a food item'''
         return foodAO.create_new_food_item(api.payload),201
+
+
+@ns.route('/<int:food_id>')
+@ns.response(200, 'Search was successful')
+@ns.response(404, 'Food not Found')
+@ns.param('food_id', 'Food item unique identifier')
+class SpecificFood(Resource):
+    @ns.doc('Retrieve specific food item')
+    def get(self,food_id):
+        ''' Get the specific food searched'''
+        return foodAO.get_specific_food(food_id),200
