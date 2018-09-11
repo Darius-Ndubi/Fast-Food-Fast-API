@@ -32,6 +32,12 @@ foodAO.create_new_food_item({'title':'Fries','description':'Crunchier than ever'
 @ns.route('')
 @ns.response(409, 'Conflict, Same Title')
 class Food(Resource):
+    @ns.doc('Retrieve all food items')
+    def get (self):
+        ''' Show all food items on sell '''
+        return foodAO.get_all_foods(),200
+
+
     @ns.doc('Create a new food item')
     @ns.expect(food_item)
     @ns.marshal_with(food_item, code = 201)

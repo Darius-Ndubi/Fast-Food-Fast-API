@@ -39,3 +39,14 @@ class ManageFoodsDAO(object):
         
         api.abort (500, "An expected error occurred during data Validation")    
     
+
+    """
+        Method to create all food items
+    """
+    def get_all_foods(self):
+        #if number of food items is 0 tell user no food item exist else show the items
+        if len(food_items) == 0:
+            api.abort(404, "No foods created yet yet")
+
+        #return the food items
+        return food_items
