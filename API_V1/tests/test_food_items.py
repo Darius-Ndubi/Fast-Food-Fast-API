@@ -67,4 +67,10 @@ def test_retreving_all_food_items():
     assert response.status_code == 200
 
     
-
+"""
+    Test on specific food item Retrival
+"""
+def test_retreving_specific_food_order():
+    result=app.test_client()
+    response= result.get('/api/v1/foods/1',content_type='application/json')
+    assert response.status_code == 200

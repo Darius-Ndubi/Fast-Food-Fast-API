@@ -1,6 +1,7 @@
 from app import api
 from app.models.manOrders import food_items
 from app.utility.validFood import FoodDataValidator
+from app.utility.validOrder import OrderDataValidator
 
 
 """
@@ -37,11 +38,11 @@ class ManageFoodsDAO(object):
             food_items.append(data)
             return food_items
         
-        api.abort (500, "An expected error occurred during data Validation")    
+        api.abort (500, "Un expected error occurred during data Validation")    
     
 
     """
-        Method to create all food items
+        Method to get all food items
     """
     def get_all_foods(self):
         #if number of food items is 0 tell user no food item exist else show the items
@@ -50,3 +51,27 @@ class ManageFoodsDAO(object):
 
         #return the food items
         return food_items
+
+
+    """
+        Method to retrieve specific food item
+    """
+    def get_specific_food(self,food_id):
+        #check if id entered is valid
+        data_check = OrderDataValidator.orderIdValid(food_id)
+        
+        if data_check == True :    
+            #get all foods else error == none
+            foods=self.get_all_foods()
+
+            #loop through the foods present and find food whose id matches the one entered
+            for food in foods:
+                if food.get('item_id') == food_id:
+                    #assign order to be returned to order
+                    food=food
+                    return food
+            
+                #if id ws not found report back to user
+            api.abort (404, "Food: {} does not Exist, Please view the list of available foods then check again".format(food_id))
+
+        api.abort (500, "Un expected error occurred during data Validation")
