@@ -55,3 +55,11 @@ class SpecificFood(Resource):
     def get(self,food_id):
         ''' Get the specific food searched'''
         return foodAO.get_specific_food(food_id),200
+
+
+    @ns.doc('Edit food item')
+    @ns.expect(food_item)
+    @ns.marshal_with(food_item, code = 200)
+    def put(self, food_id):
+        '''Updates the contents of a food item given its id and the data needed'''
+        return foodAO.update_food_item(food_id, api.payload),200
