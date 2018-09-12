@@ -12,12 +12,12 @@ class ManageFoodsDAO(object):
 
     def __init__ (self):
         #food item_id assigner
-        self.food_id_counter = 0
+        self.food_id_counter = 2
 
-    """
-        Method to create a food item
-    """
     def create_new_food_item(self,data):
+        """
+            Method to create a food item
+        """
         food_data = FoodDataValidator(data['title'],data['description'],data['price'],data['type'])
         data_check = food_data.foodvalid()
         
@@ -41,10 +41,10 @@ class ManageFoodsDAO(object):
         api.abort (500, "Un expected error occurred during data Validation")    
     
 
-    """
-        Method to get all food items
-    """
     def get_all_foods(self):
+        """
+            Method to get all food items
+        """
         #if number of food items is 0 tell user no food item exist else show the items
         if len(food_items) == 0:
             api.abort(404, "No foods created yet yet")
@@ -53,10 +53,10 @@ class ManageFoodsDAO(object):
         return food_items
 
 
-    """
-        Method to retrieve specific food item
-    """
     def get_specific_food(self,food_id):
+        """
+            Method to retrieve specific food item
+        """
         #check if id entered is valid
         data_check = OrderDataValidator.orderIdValid(food_id)
         
@@ -75,3 +75,30 @@ class ManageFoodsDAO(object):
             api.abort (404, "Food: {} does not Exist, Please view the list of available foods then check again".format(food_id))
 
         api.abort (500, "Un expected error occurred during data Validation")
+
+
+
+    def update_food_item(self,food_id,data):
+        """
+            Method to update food item data
+        """
+        #check the data entered
+        data_check1 = OrderDataValidator.orderIdValid(food_id)
+        food_data = FoodDataValidator(data['title'],data['description'],data['price'],data['type'])
+        data_check2 = food_data.foodvalid() 
+
+        #if both checks above are okay find the food item and update it
+        if  data_check1 and data_check2 == True:
+            #check it the item with name entered already exists
+            for food_item in food_items:
+                if food_item.get('title') == data['title']:
+                    api.abort(409, "food item creation for {} could not be completed due to existance of same item".format(data['title']))
+        
+            #find the specific food_item
+            f_item=self.get_specific_food(food_id)
+            data['creator'] = 'fast-food-fast'
+            f_item.update(data)
+
+            return f_item
+        
+        api.abort (500, "An expected error occurred during data Validation")
