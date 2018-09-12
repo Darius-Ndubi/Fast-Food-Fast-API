@@ -63,3 +63,12 @@ class SpecificFood(Resource):
     def put(self, food_id):
         '''Updates the contents of a food item given its id and the data needed'''
         return foodAO.update_food_item(food_id, api.payload),200
+
+
+    @ns.doc('Delete food item')
+    @ns.response(204, 'Item deleted')
+    @ns.response(404, 'Food Item not found')
+    def delete(self, food_id):
+        '''Delete an item given its identifier'''
+        foodAO.delete_food_item (food_id)
+        return '', 204

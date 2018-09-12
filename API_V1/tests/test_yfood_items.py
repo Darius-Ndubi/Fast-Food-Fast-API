@@ -124,3 +124,21 @@ def test_yupdate_food_successfully():
     result=app.test_client()
     response= result.put('/api/v1/foods/1', data = json.dumps (mock_up_food[4]) ,content_type='application/json')
     assert(response.status_code==200)
+
+
+
+"""
+    Test on deleting a specific food item from the list of food_items
+    Tests-----
+        -> Test on trying to delete food item that does not exist
+        -> Test on deleting an existing food item successfully
+"""
+def test_delete_not_existing_food_item():
+    result=app.test_client()
+    response= result.delete('/api/v1/foods/300' ,content_type='application/json')
+    assert(response.status_code==404)
+
+def test_delete_existing_food_item():
+    result=app.test_client()
+    response= result.delete('/api/v1/foods/3' ,content_type='application/json')
+    assert(response.status_code==204)
