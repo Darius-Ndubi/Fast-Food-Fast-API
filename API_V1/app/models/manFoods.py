@@ -102,3 +102,14 @@ class ManageFoodsDAO(object):
             return f_item
         
         api.abort (500, "An expected error occurred during data Validation")
+
+
+    def delete_food_item(self,food_id):
+        """
+            Method to delete a food item
+        """
+        to_remove=self.get_specific_food(food_id)
+
+        #delete food item
+        food_items.remove(to_remove)
+
