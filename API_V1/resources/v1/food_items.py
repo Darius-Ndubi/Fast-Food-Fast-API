@@ -1,7 +1,6 @@
 from flask_restplus import Api, Resource,fields
-from werkzeug.contrib.fixers import ProxyFix
 from app import api
-from app.models.manFoods import ManageFoodsDAO
+from app.v1.models.manFoods import ManageFoodsDAO
 
 ns = api.namespace('api/v1/foods', description='Foods and their operations')
 

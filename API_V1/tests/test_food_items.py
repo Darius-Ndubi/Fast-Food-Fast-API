@@ -1,8 +1,8 @@
 import pytest
 from flask import json
 from app import app
-from app.models.manFoods import ManageFoodsDAO
-from app.models.manOrders import food_items
+from app.v1.models.manFoods import ManageFoodsDAO
+from app.v1.models.manOrders import food_items
 
 testfoods = ManageFoodsDAO()
 
