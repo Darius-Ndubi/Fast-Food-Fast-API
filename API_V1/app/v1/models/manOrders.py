@@ -1,5 +1,5 @@
 from app import api
-from app.utility.validOrder import OrderDataValidator
+from app.v1.utility.validOrder import OrderDataValidator
 
 
 """
