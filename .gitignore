@@ -1,0 +1,10 @@
+#cache files
+
+.pytest_cache
+__pycache__/
+*.vscode
+*.coverage
+
+
+# local coverage files
+cover/
