@@ -1,5 +1,5 @@
 from app import api
-from app.models.manOrders import food_items
+from app.v1.models.manOrders import food_items
 from app.utility.validFood import FoodDataValidator
 
 

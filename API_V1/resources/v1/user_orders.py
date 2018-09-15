@@ -1,7 +1,6 @@
 from flask_restplus import Api, Resource,fields
-from werkzeug.contrib.fixers import ProxyFix
 from app import api
-from app.models.manOrders import ManageOrdersDAO
+from app.v1.models.manOrders import ManageOrdersDAO
 
 ns = api.namespace('api/v1/orders', description='Orders and their operations')
 
