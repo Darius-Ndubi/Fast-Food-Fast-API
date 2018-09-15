@@ -1,7 +1,7 @@
 import pytest
 from flask import json
 from app import app
-from app.models.authUsers import  ManageUsersDAO
+from app.v1.models.authUsers import  ManageUsersDAO
 
 testusers = ManageUsersDAO()
 
