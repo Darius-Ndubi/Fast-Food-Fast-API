@@ -1,8 +1,7 @@
 from flask import Flask
 from flask_restplus import Api, Resource, fields
-from werkzeug.contrib.fixers import ProxyFix
 from app import api
-from app.models.authUsers import ManageUsersDAO
+from app.v1.models.authUsers import ManageUsersDAO
 
 ns = api.namespace('api/v1/auth', description='User authentication operations')
 
