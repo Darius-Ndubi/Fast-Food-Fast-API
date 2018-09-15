@@ -15,6 +15,8 @@ import re
         -> Check if username is of type string
         -> Check if username consista of chars in a-z,A-Z,0-9 and minimum of 5 characters
 """
+#use methods to validate various inputs remove if else statements
+#reduce code repetition 
 
 class UserAuthValidator(object):
     def __init__(self,email,username,password,conPassword):

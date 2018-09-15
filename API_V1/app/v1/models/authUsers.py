@@ -1,5 +1,6 @@
 from app import api
-from app.utility.validUser import UserAuthValidator
+#from app.v1.utility.validUser import UserAuthValidator
+from app.v1.utility.validUser import UserAuthValidator
 from werkzeug.security import generate_password_hash,check_password_hash
 
 """ 
@@ -19,7 +20,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 class ManageUsersDAO(object):
     def __init__(self):
         self.users=[]
-        self.logged_users=[]
+        self.logged_users=''
         
     """ 
         Check email exixtance
@@ -92,7 +93,7 @@ class ManageUsersDAO(object):
 
            #check if the created hash and stored hash match
             if check_password_hash(user.get('password'),data['password']):
-                self.logged_users.append(user['username'])
+                self.logged_users = user['username']
                 return "Sign in Successful Go see our food Menu"
 
             #if they dont match then the entered password is invalid

@@ -1,5 +1,10 @@
 from app import api
-from app.utility.validOrder import OrderDataValidator
+from app.v1.utility.validOrder import OrderDataValidator
+from app.v1.models.authUsers import ManageUsersDAO
+
+
+present_user=ManageUsersDAO().logged_users
+print (present_user)
 
 
 """
@@ -59,7 +64,8 @@ class ManageOrdersDAO(object):
                     #fing the number of orders and increment by 1
                     data['order_id']=len(self.orders) + 1
 
-
+                    #order creator = logged in user
+                    data['creator'] = present_user
 
                     #compute the total amount payable
                     data['total']=data['price']*data['quantity']

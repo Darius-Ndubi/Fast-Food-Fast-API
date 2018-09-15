@@ -1,7 +1,6 @@
 from flask_restplus import Api, Resource,fields
-from werkzeug.contrib.fixers import ProxyFix
 from app import api
-from app.models.manOrders import ManageOrdersDAO
+from app.v1.models.manOrders import ManageOrdersDAO
 
 ns = api.namespace('api/v1/orders', description='Orders and their operations')
 
@@ -19,6 +18,7 @@ order = api.model('Orders',{
     'order_id': fields.Integer(readOnly = True, description = 'An orders unique identifier'),
     'food_item' : fields.String(readOnly = True, description = 'Food Title'),
     'price' : fields.Integer(readOnly = True, description = 'Food item price'),
+    'creator': fields.String(readOnly = True, description = 'Logged in user username'),
     'quantity' : fields.Integer(required = True, description = 'Number of food item ordered'),
     'total' : fields.Integer(readOnly = True, description = 'Total amount payable'),
 })
