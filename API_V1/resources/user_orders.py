@@ -1,5 +1,4 @@
 from flask_restplus import Api, Resource,fields
-from werkzeug.contrib.fixers import ProxyFix
 from app import api
 from app.models.manOrders import ManageOrdersDAO
 
