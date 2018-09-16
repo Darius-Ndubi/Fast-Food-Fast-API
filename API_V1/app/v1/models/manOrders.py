@@ -43,13 +43,25 @@ class ManageOrdersDAO(object):
         return self.orders
 
     """
+        Method to validate user order data
+    """
+    def order_data_validator(self,order_data):
+        orderdataO = OrderDataValidator()
+        check_quantity = orderdataO.validQuantity(order_data['quantity'])
+        check_food_item= orderdataO.validFoodItem(order_data['food_item'])
+
+        if check_quantity & check_food_item == True:
+            return True
+        return False
+
+
+    """
         Method to create and add a user order
     """
     def create_new_order(self,data):
         #validate user order data
-        orderDataO = OrderDataValidator(data['quantity'],data['food_item'])
-        data_check= orderDataO.ordervalid()
-
+        data_check= self.order_data_validator(data)
+        
         if data_check == True:
             #check that user has entered a quantity greater than 0
             if data['quantity'] <= 0:
@@ -86,7 +98,8 @@ class ManageOrdersDAO(object):
     def get_specific_order(self,order_id):
 
         #check if id entered is valid
-        data_check = OrderDataValidator.orderIdValid(order_id)
+        id_check = OrderDataValidator()
+        data_check = id_check.orderIdValid(order_id)
         
         if data_check == True :    
             #get all orders else error == none
@@ -111,7 +124,8 @@ class ManageOrdersDAO(object):
     """
     def update_order(self,order_id,data):
         #check if status entered is well formated
-        data_check = OrderDataValidator.statusValid(data['status'])
+        status_check = OrderDataValidator()
+        data_check = status_check.statusValid(data['status'])
         
         if data_check == True:
 

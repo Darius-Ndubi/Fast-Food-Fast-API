@@ -33,6 +33,18 @@ class ManageUsersDAO(object):
             if user.get('email') == email:
                 
                 return user
+    """
+        Method to validate sigin data
+    """
+    def signin_data_validator(self,signin_data):
+        signinvalidata = UserAuthValidator()
+        email_check = signinvalidata.validEmail(signin_data['email'])
+        passwd_check = signinvalidata.validSignInPassword(signin_data['password'])
+
+        if email_check & passwd_check == True:
+            return True
+        return False
+
 
     """
         Add new user
@@ -82,12 +94,9 @@ class ManageUsersDAO(object):
 
     def user_signin(self,data):
         #check inputs
-        #data_check = UserAuthValidator.signinValidator(data['email'],data['password'])
-        data_check_email = uservalidatorO.validEmail(data['email'])
-        data_check_pass = uservalidatorO.validSignInPassword(data['password'])
+        data_check = self.signin_data_validator(data)
 
-
-        if data_check_email & data_check_pass == True:
+        if data_check == True:
         
             #find user with the entered email
             existing_user = self.check_user_email(data['email'])
