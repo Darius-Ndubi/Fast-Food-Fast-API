@@ -6,43 +6,53 @@ import re
 """
 
 class FoodDataValidator(object):
-    def __init__ (self,title,description,price,food_type):
-        self.title = title
-        self.description = description
-        self.price = price
-        self.food_type = food_type
+    # def __init__ (self,title,description,price,food_type):
+    #     self.title = title
+    #     self.description = description
+    #     self.price = price
+    #     self.food_type = food_type
 
-    def foodvalid(self):
+         
+    def titleValidator(self,title):
         #check that title entered is a str
-        if type(self.title) != str:
-            api.abort(400, "Title entered :{} is not an string".format(self.title))
+        if type(title) != str:
+            api.abort(400, "Title entered :{} is not an string".format(title))
 
         #check if the contents of title have characters between a-z and A-Z
-        elif not re.match(r"(^[a-zA-Z_ ]+$)",self.title) or self.title.isspace() == True:
-            api.abort(400, "Title entered :{} is not a properly formatted string".format(self.title))
-        
-        #check that description entered is a str
-        elif type(self.description) != str:
-            api.abort(400, "Description entered :{} is not an string".format(self.description))
-
-        #check if the contents of description have characters between a-z and A-Z
-        elif not re.match(r"(^[a-zA-Z_ ]+$)",self.description) or self.description.isspace == True:
-            api.abort(400, "Description entered :{} is not a properly formatted string".format(self.description))
-
-        #check that price entered is a number
-        elif type(self.price) != int:
-            api.abort(400, "Price entered :{} is not an integer".format(self.price))
-
-        #check that food type entered is a str
-        elif type(self.food_type) != str:
-            api.abort(400, "Type entered :{} is not an string".format(self.food_type))
-
-        #check if the contents of title have characters between a-z and A-Z
-        elif not re.match(r"(^[a-zA-Z_ ]+$)",self.food_type) or self.food_type.isspace() == True:
-            api.abort(400, "Type entered :{} is not a properly formatted string".format(self.food_type))
-        
+        elif not re.match(r"(^[a-zA-Z_ ]+$)",title) or title.isspace() == True:
+            api.abort(400, "Title entered :{} is not a properly formatted string".format(title))
         
         return True
+
+    def descriptionValidator(self,description):
+        #check that description entered is a str
+        if type(description) != str:
+            api.abort(400, "Description entered :{} is not an string".format(description))
+
+        #check if the contents of description have characters between a-z and A-Z
+        elif not re.match(r"(^[a-zA-Z_ ]+$)",description) or description.isspace == True:
+            api.abort(400, "Description entered :{} is not a properly formatted string".format(description))
+
+        return True
+    
+    def pricevalidator(self,price):
+        #check that price entered is a number
+        if type(price) != int:
+            api.abort(400, "Price entered :{} is not an integer".format(price))
+
+        return True
+
+    def typeValidator(self,food_type):
+        #check that food type entered is a str
+        if type(food_type) != str:
+            api.abort(400, "Type entered :{} is not an string".format(food_type))
+
+        #check if the contents of title have characters between a-z and A-Z
+        elif not re.match(r"(^[a-zA-Z_ ]+$)",food_type) or food_type.isspace() == True:
+            api.abort(400, "Type entered :{} is not a properly formatted string".format(food_type))
         
+        return True
+
+
         
         

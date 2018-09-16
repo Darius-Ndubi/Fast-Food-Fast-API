@@ -28,8 +28,15 @@ class ManageFoodsDAO(object):
         Method tho check food data entered by user
     """
     def food_data_validator(self,data_entered):
-        data_validate = FoodDataValidator(data_entered['title'],data_entered['description'],data_entered['price'],data_entered['type'])
-        return data_validate.foodvalid()
+        data_validate = FoodDataValidator()
+        title_check = data_validate.titleValidator(data_entered['title'])
+        description_check = data_validate.descriptionValidator(data_entered['description'])
+        price_check = data_validate.pricevalidator(data_entered['price'])
+        type_check = data_validate.typeValidator(data_entered['type'])
+
+        if title_check & description_check & price_check & type_check == True:
+            return True
+        return False
 
     def create_new_food_item(self,data):
         """
@@ -97,9 +104,7 @@ class ManageFoodsDAO(object):
         """
         #check the data entered
         data_check1 = OrderDataValidator.orderIdValid(food_id)
-        #food_data = FoodDataValidator(data['title'],data['description'],data['price'],data['type'])
         food_data = self.food_data_validator(data)
-        #data_check2 = food_data.foodvalid()
 
         food_existance=self.check_foods_existance(data['title'])
          
