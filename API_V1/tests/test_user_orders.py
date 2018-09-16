@@ -1,7 +1,7 @@
 import pytest
 from flask import json
 from app import app
-from app.models.manOrders import ManageOrdersDAO
+from app.v1.models.manOrders import ManageOrdersDAO
 
 testorders=ManageOrdersDAO()
 
