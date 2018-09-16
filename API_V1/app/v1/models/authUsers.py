@@ -1,7 +1,10 @@
 from app import api
 #from app.v1.utility.validUser import UserAuthValidator
-from app.v1.utility.validUser import UserAuthValidator
+from app.utility.validUser import UserAuthValidator
 from werkzeug.security import generate_password_hash,check_password_hash
+
+""" instance of validation class"""
+uservalidatorO= UserAuthValidator()
 
 """ 
     A class to handle the
@@ -20,7 +23,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 class ManageUsersDAO(object):
     def __init__(self):
         self.users=[]
-        self.logged_users=''
+        self.logged_users=[]
         
     """ 
         Check email exixtance
@@ -29,7 +32,7 @@ class ManageUsersDAO(object):
         for user in self.users:
             if user.get('email') == email:
                 
-                return email
+                return user
 
     """
         Add new user
@@ -37,10 +40,13 @@ class ManageUsersDAO(object):
     def add_user_details(self,data):
 
         #user input validation checks
-        uservalidatorO=UserAuthValidator(data['email'],data['username'],data['password'],data['confirm_password'])
-        data_check = uservalidatorO.signupValidator()
+        #uservalidatorO=UserAuthValidator(data['email'],data['username'],data['password'],data['confirm_password'])
+        data_check_email = uservalidatorO.validEmail(data['email'])
+        data_check_pass  = uservalidatorO.validPasswd(data['password'],data['confirm_password'])
+        data_check_uname = uservalidatorO.validUsername(data['username'])
 
-        if data_check == True:
+
+        if data_check_email & data_check_pass & data_check_uname == True:
 
             #email existance check
             if self.check_user_email(data['email']) != None:
@@ -76,24 +82,24 @@ class ManageUsersDAO(object):
 
     def user_signin(self,data):
         #check inputs
-        data_check = UserAuthValidator.signinValidator(data['email'],data['password'])
+        #data_check = UserAuthValidator.signinValidator(data['email'],data['password'])
+        data_check_email = uservalidatorO.validEmail(data['email'])
+        data_check_pass = uservalidatorO.validSignInPassword(data['password'])
 
 
-        if data_check == True and self.check_user_email(data['email']) != None:
+        if data_check_email & data_check_pass == True:
         
             #find user with the entered email
-            for user in self.users:
-                if user.get('email') == data['email']:
-                    user=user
+            existing_user = self.check_user_email(data['email'])
 
             #block repeated signins from the same user
             for i in self.logged_users:
-                if i == user['username']:
+                if i == existing_user['username']:
                     api.abort(409, "You: {} are already logged in".format(data['email']))
 
            #check if the created hash and stored hash match
-            if check_password_hash(user.get('password'),data['password']):
-                self.logged_users = user['username']
+            if check_password_hash(existing_user.get('password'),data['password']):
+                self.logged_users.append(existing_user['username'])
                 return "Sign in Successful Go see our food Menu"
 
             #if they dont match then the entered password is invalid
