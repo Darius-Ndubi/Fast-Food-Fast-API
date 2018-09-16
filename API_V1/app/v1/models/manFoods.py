@@ -14,19 +14,32 @@ class ManageFoodsDAO(object):
         #food item_id assigner
         self.food_id_counter = 2
 
+    """
+        Method to check existance of food item
+    """
+    def check_foods_existance(self,heading):
+        for food_item in food_items:
+            if food_item.get('title') == heading:
+                api.abort(409, "food item creation for {} could not be completed due to existance of same item".format(heading))
+            
+            return True 
+    
+    """
+        Method tho check food data entered by user
+    """
+    def food_data_validator(self,data_entered):
+        data_validate = FoodDataValidator(data_entered['title'],data_entered['description'],data_entered['price'],data_entered['type'])
+        return data_validate.foodvalid()
+
     def create_new_food_item(self,data):
         """
             Method to create a food item
         """
-        food_data = FoodDataValidator(data['title'],data['description'],data['price'],data['type'])
-        data_check = food_data.foodvalid()
+        data_check = self.food_data_validator(data)
+
+        food_existance=self.check_foods_existance(data['title'])
         
-        if data_check == True:
-            #check it the item exists
-            for food_item in food_items:
-                if food_item.get('title') == data['title']:
-                    api.abort(409, "food item creation for {} could not be completed due to existance of same item".format(data['title']))
-                
+        if data_check & food_existance == True :
             #if the check passes assign food id to item
             self.food_id_counter =self.food_id_counter +1
             data['item_id']= self.food_id_counter
@@ -84,16 +97,14 @@ class ManageFoodsDAO(object):
         """
         #check the data entered
         data_check1 = OrderDataValidator.orderIdValid(food_id)
-        food_data = FoodDataValidator(data['title'],data['description'],data['price'],data['type'])
-        data_check2 = food_data.foodvalid() 
+        #food_data = FoodDataValidator(data['title'],data['description'],data['price'],data['type'])
+        food_data = self.food_data_validator(data)
+        #data_check2 = food_data.foodvalid()
 
+        food_existance=self.check_foods_existance(data['title'])
+         
         #if both checks above are okay find the food item and update it
-        if  data_check1 and data_check2 == True:
-            #check it the item with name entered already exists
-            for food_item in food_items:
-                if food_item.get('title') == data['title']:
-                    api.abort(409, "food item creation for {} could not be completed due to existance of same item".format(data['title']))
-        
+        if  data_check1 and food_data and food_existance == True:
             #find the specific food_item
             f_item=self.get_specific_food(food_id)
             data['creator'] = 'fast-food-fast'
