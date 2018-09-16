@@ -53,6 +53,17 @@ class ManageOrdersDAO(object):
         if check_quantity & check_food_item == True:
             return True
         return False
+    
+    """
+        Method to check validity of id entered
+    """
+    def order_id_validator(self,order_id):
+        orderIdO = OrderDataValidator()
+        check_id = orderIdO.orderIdValid(order_id)
+
+        if check_id == True:
+            return True
+        return False
 
 
     """
@@ -96,15 +107,10 @@ class ManageOrdersDAO(object):
     """
 
     def get_specific_order(self,order_id):
-
         #check if id entered is valid
-        id_check = OrderDataValidator()
-        data_check = id_check.orderIdValid(order_id)
+        data_check = self.order_id_validator(order_id)
         
         if data_check == True :    
-            #get all orders else error == none
-            #orders=self.find_all_orders()
-
             #loop through the orders present and find order whose id matches the one entered
             for order in self.orders:
                 if order.get('order_id') == order_id:
