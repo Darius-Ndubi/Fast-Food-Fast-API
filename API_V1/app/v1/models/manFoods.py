@@ -3,7 +3,7 @@ from app.v1.models.manOrders import food_items,ManageOrdersDAO
 from app.utility.validFood import FoodDataValidator
 from app.utility.validOrder import OrderDataValidator
 
-orderidO = ManageOrdersDAO()
+#orderidO = ManageOrdersDAO()
 
 """
     A class to handle food operations
@@ -99,14 +99,12 @@ class ManageFoodsDAO(object):
             Method to update food item data
         """
         #check the data entered
-        id_check = OrderDataValidator()
-        data_check1 = id_check.orderIdValid(food_id)
         food_data = self.food_data_validator(data)
 
         food_existance=self.check_foods_existance(data['title'])
          
         #if both checks above are okay find the food item and update it
-        if  data_check1 and food_data and food_existance == True:
+        if food_data and food_existance == True:
             #find the specific food_item
             f_item=self.get_specific_food(food_id)
             data['creator'] = 'fast-food-fast'
