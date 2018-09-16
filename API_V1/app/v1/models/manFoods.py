@@ -62,10 +62,10 @@ class ManageFoodsDAO(object):
         
         if data_check == True :    
             #get all foods else error == none
-            foods=self.get_all_foods()
+            #foods=self.get_all_foods()
 
             #loop through the foods present and find food whose id matches the one entered
-            for food in foods:
+            for food in food_items:
                 if food.get('item_id') == food_id:
                     #assign order to be returned to order
                     food=food

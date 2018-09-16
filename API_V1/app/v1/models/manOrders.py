@@ -4,7 +4,7 @@ from app.v1.models.authUsers import ManageUsersDAO
 
 
 present_user=ManageUsersDAO().logged_users
-print (present_user)
+#print (present_user)
 
 
 """
@@ -90,10 +90,10 @@ class ManageOrdersDAO(object):
         
         if data_check == True :    
             #get all orders else error == none
-            orders=self.find_all_orders()
+            #orders=self.find_all_orders()
 
             #loop through the orders present and find order whose id matches the one entered
-            for order in orders:
+            for order in self.orders:
                 if order.get('order_id') == order_id:
                     #assign order to be returned to order
                     order=order

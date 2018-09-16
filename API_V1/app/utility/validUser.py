@@ -9,62 +9,56 @@ import re
 class UserAuthValidator(object):
     # def __init__(self,email,username,password,conPassword):
     #     self.email=email
-    #     self.username=username
-    #     self.password=password
-    #     self.conPassword=conPassword
+    #     username=username
+    #     password=password
+    #     conPassword=conPassword
 
     """
         Email data validator for both signup and signin forms
     """
     def validEmail(self,email):
-        self.email = email
         #check if email type is a string
-        if type(self.email) != str:
-            api.abort(400, "An email is a string not a number:{} ".format(self.email))
+        if type(email) != str:
+            api.abort(400, "An email is a string not a number:{} ".format(email))
         
         #checking email entered through regular expressions
-        elif not re.match(r"(^[a-zA-Z0-9.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]+$)" , self.email):
-            api.abort(400, "Email: {} is not well formatted (Must have @ and .com) and not contain spaces".format(self.email))
+        elif not re.match(r"(^[a-zA-Z0-9.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]+$)",email):
+            api.abort(400, "Email: {} is not well formatted (Must have @ and .com) and not contain spaces".format(email))
         return True
     """
         Signup password and repeated password data validator
     """
     def validPasswd(self,password,conPassword):
-        self.password = password
-        self.conPassword = conPassword
-
         #check if password entered is a string
-        if type(self.password) != str:
-            api.abort(400, "A password is a string not a number:{} ".format(self.password))
+        if type(password) != str:
+            api.abort(400, "A password is a string not a number:{} ".format(password))
 
         #check if password and confirm password match
-        elif self.password !=self.conPassword:
-            api.abort(400, "Password: {} and confirm_password: {} don't match".format(self.password,self.conPassword))
+        elif password !=conPassword:
+            api.abort(400, "Password: {} and confirm_password: {} don't match".format(password,conPassword))
 
         #checking email entered through regular expressions
-        elif not re.match(r"([A-Za-z0-9@#$&*]{6,10})",self.password):
-             api.abort(400, "Password: {} is not well formatted or its too short".format(self.password))
+        elif not re.match(r"([A-Za-z0-9@#$&*]{6,10})",password):
+             api.abort(400, "Password: {} is not well formatted or its too short".format(password))
         return True
     
     """
         Username data validator
     """    
     def validUsername(self,username):
-        self.username = username
         #username check
-        if type(self.username) != str :
-            api.abort(400, "A username is not a number you enterd: {} ".format(self.username))
+        if type(username) != str :
+            api.abort(400, "A username is not a number you enterd: {} ".format(username))
 
         #username check
-        elif not re.match(r"([A-Za-z0-9]{5,})",self.username) :
-            api.abort(400, "The username is less then 5 characters, You entered: {} ".format(self.username))
+        elif not re.match(r"([A-Za-z0-9]{5,})",username) :
+            api.abort(400, "The username is less then 5 characters, You entered: {} ".format(username))
         return True
 
     """
         Sign In password checker
     """
     def validSignInPassword(self,password):
-        self.password = password
         if type(password) != str:
             api.abort(400, "A password is a string not a number:{} ".format(password))
 
