@@ -74,11 +74,9 @@ class ManageFoodsDAO(object):
 
 
     def get_specific_food(self,food_id):
-        """
-            Method to retrieve specific food item
-        """
         #check if id entered is valid
-        data_check = OrderDataValidator.orderIdValid(food_id)
+        id_check = OrderDataValidator()
+        data_check = id_check.orderIdValid(food_id)
         
         if data_check == True :    
             #get all foods else error == none
@@ -103,7 +101,8 @@ class ManageFoodsDAO(object):
             Method to update food item data
         """
         #check the data entered
-        data_check1 = OrderDataValidator.orderIdValid(food_id)
+        id_check = OrderDataValidator()
+        data_check1 = id_check.orderIdValid(food_id)
         food_data = self.food_data_validator(data)
 
         food_existance=self.check_foods_existance(data['title'])
