@@ -1,5 +1,6 @@
-from flask import Flask
-from flask_restplus import Api, Resource, fields
+from flask_restplus import Resource, fields
+
+#local imports
 from app import api
 from app.v1.models.authUsers import ManageUsersDAO
 

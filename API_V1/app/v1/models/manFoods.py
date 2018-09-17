@@ -3,7 +3,6 @@ from app.v1.models.manOrders import food_items,ManageOrdersDAO
 from app.utility.validFood import FoodDataValidator
 from app.utility.validOrder import OrderDataValidator
 
-#orderidO = ManageOrdersDAO()
 
 """
     A class to handle food operations
