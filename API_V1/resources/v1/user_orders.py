@@ -1,4 +1,6 @@
-from flask_restplus import Api, Resource,fields
+from flask_restplus import Resource,fields
+
+#local imports
 from app import api
 from app.v1.models.manOrders import ManageOrdersDAO
 
@@ -18,7 +20,7 @@ order = api.model('Orders',{
     'order_id': fields.Integer(readOnly = True, description = 'An orders unique identifier'),
     'food_item' : fields.String(readOnly = True, description = 'Food Title'),
     'price' : fields.Integer(readOnly = True, description = 'Food item price'),
-    'creator': fields.String(readOnly = True, description = 'Logged in user username'),
+    'creator': fields.String(readOnly = True, description = "order creator" ),
     'quantity' : fields.Integer(required = True, description = 'Number of food item ordered'),
     'total' : fields.Integer(readOnly = True, description = 'Total amount payable'),
 })
@@ -28,8 +30,8 @@ order = api.model('Orders',{
 """
 orderAO=ManageOrdersDAO()
 
-orderAO.create_new_order({'food_item':'Burger','quantity':2})
-orderAO.create_new_order({'food_item':'Fish','quantity':3})
+# orderAO.create_new_order({'food_item':'Burger','quantity':2})
+# orderAO.create_new_order({'food_item':'Fish','quantity':3})
 
 """
     User orders endpoint

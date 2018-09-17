@@ -1,10 +1,6 @@
 from app import api
 from app.utility.validOrder import OrderDataValidator
-from app.v1.models.authUsers import ManageUsersDAO
-
-
-present_user=ManageUsersDAO().logged_users
-#print (present_user)
+from app.v1.models.authUsers import ManageUsersDAO,logged_user
 
 
 """
@@ -36,11 +32,21 @@ class ManageOrdersDAO(object):
     """
     
     def find_all_orders (self):
-        #check if there is any item in orders
         if len(self.orders)==0:
             api.abort(404, "No orders yet")
         
         return self.orders
+
+    """
+        Method to check if user is signed in
+        before:
+            -> Creating  an order
+    """
+    def are_you_signed_in(self):
+        if len (logged_user) == 0:
+                api.abort (401, "You cannot perform this action without signing in")
+        return logged_user['user']
+
 
     """
         Method to validate user order data
@@ -70,31 +76,23 @@ class ManageOrdersDAO(object):
         Method to create and add a user order
     """
     def create_new_order(self,data):
-        #validate user order data
         data_check= self.order_data_validator(data)
         
         if data_check == True:
-            #check that user has entered a quantity greater than 0
             if data['quantity'] <= 0:
                 api.abort (400, "Sorry the minimum you can order is 1 you ordered {} ".format(data['quantity']))
 
-
-            #find food item name in food item list
             for food_item in food_items:
                 if food_item.get('title')== data['food_item']:
                     data['price']=food_item['price']
 
-                    #fing the number of orders and increment by 1
+                    uname=self.are_you_signed_in()
+                    data['creator'] = uname
+                    
                     data['order_id']=len(self.orders) + 1
-
-                    #order creator = logged in user
-                    data['creator'] = present_user
-
                     #compute the total amount payable
                     data['total']=data['price']*data['quantity']
-
                     self.orders.append(data)
-
                     return self.find_all_orders ()
                 
             api.abort (404, "Food Item {} does not Exist, Please order another one".format(data['food_item']))  
@@ -147,6 +145,7 @@ class ManageOrdersDAO(object):
         Method to delete a food order
     """
     def delete_order(self,order_id):
+
         to_delete = self.get_specific_order(order_id)
 
         #delete the order

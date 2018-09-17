@@ -23,10 +23,15 @@ mock_answers=[{'status':123},{'status':'Rejected'}]
     A test on list of orders endpoint
 """
 
-def test_orders_retrival():
+# def test_orders_retrival():
+#     result=app.test_client()
+#     response= result.get('/api/v1/orders',content_type='application/json')
+#     assert(response.status_code==200)
+
+def test_orders_retrival_no_orders_created():
     result=app.test_client()
     response= result.get('/api/v1/orders',content_type='application/json')
-    assert(response.status_code==200)
+    assert(response.status_code==404)
 
 """
     Testing the create new order endpoint
@@ -54,7 +59,7 @@ def test_orders_food_item_special_characters():
 
 def test_order_food_item_successfully():
     result=app.test_client()
-    old_num_orders=len(testorders.orders) + 2
+    old_num_orders=len(testorders.orders) 
     response= result.post('/api/v1/orders', data=json.dumps(mock_order[3]) ,content_type='application/json')
     data=json.loads(response.data)
     new_num_orders = len (data)    
@@ -82,7 +87,7 @@ def test_get_order_not_created():
 
 def test_get_order_successfully():
     result=app.test_client()
-    response= result.get('/api/v1/orders/2' ,content_type='application/json')
+    response= result.get('/api/v1/orders/1' ,content_type='application/json')
     assert(response.status_code == 200)
 
 
@@ -94,12 +99,12 @@ def test_get_order_successfully():
 """
 def test_status_data_type_not_str():
     result=app.test_client()
-    response= result.put('/api/v1/orders/3', data=mock_answers[0] ,content_type='application/json')
+    response= result.put('/api/v1/orders/1', data=mock_answers[0] ,content_type='application/json')
     assert(response.status_code==400)
 
 def test_status_add_successfully():
     result=app.test_client()
-    response= result.put('/api/v1/orders/3', data=json.dumps(mock_answers[1]) ,content_type='application/json')
+    response= result.put('/api/v1/orders/1', data=json.dumps(mock_answers[1]) ,content_type='application/json')
     assert(response.status_code==200)
 
 
@@ -116,5 +121,5 @@ def test_delete_not_existing_order():
 
 def test_delete_existing_order():
     result=app.test_client()
-    response= result.delete('/api/v1/orders/3' ,content_type='application/json')
+    response= result.delete('/api/v1/orders/1' ,content_type='application/json')
     assert(response.status_code==204)
