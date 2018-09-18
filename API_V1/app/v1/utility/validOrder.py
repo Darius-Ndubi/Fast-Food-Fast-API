@@ -1,6 +1,9 @@
-from app import api
 import re
 from werkzeug.exceptions import NotFound
+
+#local imports
+from app import api
+
 """
     class to validate data entered by user in the order
 """
@@ -25,8 +28,7 @@ class OrderDataValidator(object):
             api.abort(400, "Food Item entered :{} is not an string".format(self.food_item))
         
         return True
-    
-    
+     
     """
         Method to validate the order ID entered by user if it is from 1 or more
     """

@@ -1,4 +1,6 @@
-from flask_restplus import Api, Resource,fields
+from flask_restplus import Resource,fields
+
+#local imports
 from app import api
 from app.v1.models.manOrders import ManageOrdersDAO
 
@@ -26,9 +28,6 @@ order = api.model('Orders',{
     create an instance of class manageOrdersDAO
 """
 orderAO=ManageOrdersDAO()
-
-orderAO.create_new_order({'food_item':'Burger','quantity':2})
-orderAO.create_new_order({'food_item':'Fish','quantity':3})
 
 """
     User orders endpoint

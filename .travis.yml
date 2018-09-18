@@ -11,7 +11,7 @@ install:
 
 #run tests with
 script:
-  - cd API_V1/tests
+  - cd API_V1/tests/v1
   - nosetests  --with-coverage --cover-package=resources
 
 # command to run test coverage

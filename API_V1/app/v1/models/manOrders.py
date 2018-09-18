@@ -1,3 +1,4 @@
+#local imports
 from app import api
 from app.v1.utility.validOrder import OrderDataValidator
 
@@ -7,12 +8,6 @@ from app.v1.utility.validOrder import OrderDataValidator
 """
 food_items=[{'item_id':1,'title':'Burger','description':'Sweeter than the Krubby Paddy','price':450,'type':'snack'},
             {'item_id':2,'title':'Fish','description':'Sweeter than the Krubby Paddy','price':400,'type':'meal'}]
-
-"""
-    Examples of orders created
-"""
-# orders=[{'order_id':1,'food_item':'Burger','price':450,'quantity':2,'total':900},
-#         {'order_id':2,'food_item':'Pizza','price':600,'quantity':3,'total':1800}]
 
 
 """
@@ -57,26 +52,21 @@ class ManageOrdersDAO(object):
                     data['price']=food_item['price']
 
                     #fing the number of orders and increment by 1
-                    data['order_id']=len(self.orders) + 1
-
-
+                    self.id_counter = self.id_counter +1
+                    data['order_id']=self.id_counter
 
                     #compute the total amount payable
                     data['total']=data['price']*data['quantity']
-
                     self.orders.append(data)
-
                     return self.find_all_orders ()
                 
             api.abort (404, "Food Item {} does not Exist, Please order another one".format(data['food_item']))  
 
         api.abort (500, "An expected error occurred during data Validation")
 
-
     """
         Method to retrieve specific order as per its id
     """
-
     def get_specific_order(self,order_id):
 
         #check if id entered is valid
@@ -98,8 +88,6 @@ class ManageOrdersDAO(object):
 
         api.abort (500, "An expected error occurred during data Validation")
 
-
-
     """
         Method to edit order and give it a status
     """
@@ -115,7 +103,6 @@ class ManageOrdersDAO(object):
             return order
 
         api.abort (500, "An expected error occurred during data Validation")
-
 
     """
         Method to delete a food order
