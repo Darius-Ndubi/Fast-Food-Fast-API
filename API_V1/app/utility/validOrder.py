@@ -1,6 +1,9 @@
-from app import api
 import re
 from werkzeug.exceptions import NotFound
+
+#local imports
+from app import api
+
 """
     class to validate data entered by user in the order
 """

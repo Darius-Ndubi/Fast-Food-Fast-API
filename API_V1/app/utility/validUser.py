@@ -1,6 +1,7 @@
-from app import api
 import re
 
+#local imports
+from app import api
 
 """
     Class to validate user entered information
