@@ -30,9 +30,6 @@ order = api.model('Orders',{
 """
 orderAO=ManageOrdersDAO()
 
-# orderAO.create_new_order({'food_item':'Burger','quantity':2})
-# orderAO.create_new_order({'food_item':'Fish','quantity':3})
-
 """
     User orders endpoint
 """
