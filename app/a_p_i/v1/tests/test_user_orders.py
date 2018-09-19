@@ -3,7 +3,7 @@ from flask import json
 
 #local imports
 from app import app
-from app.v1.models.manOrders import ManageOrdersDAO
+from app.a_p_i.v1.models.manOrders import ManageOrdersDAO
 
 testorders=ManageOrdersDAO()
 
@@ -123,6 +123,8 @@ def test_delete_existing_order():
 
 
 
-    #tear down your tests
-
+"""
+    Teardown test data from data structures
+"""
+#testorders.orders = []
     

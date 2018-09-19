@@ -1,6 +1,6 @@
 #local imports
 from app import api
-from app.v1.utility.validOrder import OrderDataValidator
+from app.a_p_i.utility.validOrder import OrderDataValidator
 
 
 """
@@ -28,7 +28,7 @@ class ManageOrdersDAO(object):
     def find_all_orders (self):
         #check if there is any item in orders
         if len(self.orders)==0:
-            api.abort(404, "No orders yet")
+            api.abort(404, "No orders yet, create soem then check them here")
         
         return self.orders
 
