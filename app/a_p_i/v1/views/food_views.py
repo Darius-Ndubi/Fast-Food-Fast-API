@@ -1,10 +1,10 @@
-from flask_restplus import Resource,fields
+from flask_restplus import Resource,fields,Namespace
 
 #local imports
 from app import api
-from app.v1.models.manFoods import ManageFoodsDAO
+from app.a_p_i.v1.models.manFoods import ManageFoodsDAO
 
-ns = api.namespace('api/v1/foods', description='Foods and their operations')
+ns = Namespace('foods', description='Foods and their operations')
 
 
 """
@@ -30,7 +30,7 @@ foodAO.create_new_food_item({'title':'Fries','description':'Crunchier than ever'
 """
     user-food endpoints
 """
-@ns.route('')
+@ns.route('/foods')
 @ns.response(409, 'Conflict, Same Title')
 class Food(Resource):
     @ns.doc('Retrieve all food items')
@@ -47,7 +47,7 @@ class Food(Resource):
         return foodAO.create_new_food_item(api.payload),201
 
 
-@ns.route('/<int:food_id>')
+@ns.route('/foods/<int:food_id>')
 @ns.response(200, 'Search was successful')
 @ns.response(404, 'Food not Found')
 @ns.param('food_id', 'Food item unique identifier')

@@ -18,7 +18,7 @@ class FoodDataValidator(object):
     def titleValidator(self,title):
         #check that title entered is a str
         if type(title) != str:
-            api.abort(400, "Title entered :{} is not an string".format(title))
+            api.abort(400, "Title entered :{} is not a string".format(title))
 
         #check if the contents of title have characters between a-z and A-Z
         elif not re.match(r"(^[a-zA-Z_ ]+$)",title) or title.isspace() == True:

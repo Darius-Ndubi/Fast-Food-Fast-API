@@ -3,8 +3,8 @@ from flask import json
 
 #local imports
 from app import app
-from app.v1.models.manFoods import ManageFoodsDAO
-from app.v1.models.manOrders import food_items
+from app.a_p_i.v1.models.manFoods import ManageFoodsDAO
+from app.a_p_i.v1.models.manOrders import food_items
 
 testfoods = ManageFoodsDAO()
 

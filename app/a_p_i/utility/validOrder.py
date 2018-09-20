@@ -31,7 +31,7 @@ class OrderDataValidator(object):
             api.abort(400, "Food Item entered :{} is not an string".format(food_item))
     
         #check if the contents of food_item have characters between a-z and A-Z
-        elif not re.match(r"(^[a-zA-Z]+$)",food_item):
+        elif not re.match(r"(^[a-zA-Z ]+$)",food_item):
             api.abort(400, "Food Item entered :{} is not an string".format(food_item)) 
         return True
 
