@@ -1,10 +1,10 @@
-from flask_restplus import Resource,fields
+from flask_restplus import Resource,fields,Namespace
 
 #local imports
 from app import api
-from app.v1.models.manOrders import ManageOrdersDAO
+from app.a_p_i.v1.models.manOrders import ManageOrdersDAO
 
-ns = api.namespace('api/v1/orders', description='Orders and their operations')
+ns = Namespace('orders', description='Orders and their operations')
 
 """
     Model for adding status to an order
@@ -18,7 +18,7 @@ status = api.model('Status',{
 """
 order = api.model('Orders',{
     'order_id': fields.Integer(readOnly = True, description = 'An orders unique identifier'),
-    'food_item' : fields.String(readOnly = True, description = 'Food Title'),
+    'food_item' : fields.String(required = True, description = 'Food Title'),
     'price' : fields.Integer(readOnly = True, description = 'Food item price'),
     'creator': fields.String(readOnly = True, description = "order creator" ),
     'quantity' : fields.Integer(required = True, description = 'Number of food item ordered'),
@@ -33,7 +33,7 @@ orderAO=ManageOrdersDAO()
 """
     User orders endpoint
 """
-@ns.route('')
+@ns.route('/orders')
 @ns.response(200, 'This are the orders')
 @ns.response(400, 'Bad Request')
 @ns.response(404, 'No Orders yet')
@@ -52,7 +52,7 @@ class Order(Resource):
         return orderAO.create_new_order(api.payload),201
 
 
-@ns.route('/<int:order_id>')
+@ns.route('/orders/<int:order_id>')
 @ns.response(200, 'Search was successful')
 @ns.response(404, 'Order not Found')
 @ns.param('order_id', 'The order unique identifier')

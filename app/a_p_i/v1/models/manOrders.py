@@ -1,6 +1,6 @@
 from app import api
-from app.utility.validOrder import OrderDataValidator
-from app.v1.models.authUsers import ManageUsersDAO,logged_user
+from app.a_p_i.utility.validOrder import OrderDataValidator
+from app.a_p_i.v1.models.authUsers import ManageUsersDAO,logged_user
 
 
 """
@@ -53,9 +53,9 @@ class ManageOrdersDAO(object):
     """
     def order_data_validator(self,order_data):
         orderdataO = OrderDataValidator()
-        check_quantity = orderdataO.validQuantity(order_data['quantity'])
         check_food_item= orderdataO.validFoodItem(order_data['food_item'])
-
+        check_quantity = orderdataO.validQuantity(order_data['quantity'])
+        
         if check_quantity & check_food_item == True:
             return True
         return False

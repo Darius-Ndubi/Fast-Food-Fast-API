@@ -1,10 +1,10 @@
-from flask_restplus import Resource, fields
+from flask_restplus import Resource, fields,Namespace
 
 #local imports
 from app import api
-from app.v1.models.authUsers import ManageUsersDAO
+from app.a_p_i.v1.models.authUsers import ManageUsersDAO
 
-ns = api.namespace('api/v1/auth', description='User authentication operations')
+ns = Namespace('auth', description='User authentication operations')
 
 """
     User model for user signup data to be entered
@@ -34,7 +34,7 @@ UserAO=ManageUsersDAO()
 """
     User signup enpoint
 """
-@ns.route('/signup')
+@ns.route('/auth/signup')
 @ns.response(409, 'Email Conflict')
 @ns.response(400, 'Incorrect Input')
 class SignUp(Resource):
@@ -52,7 +52,7 @@ class SignUp(Resource):
 """
     User signin endpoint
 """
-@ns.route('/signin')
+@ns.route('/auth/signin')
 @ns.response(403, 'Email unknown')
 @ns.response(409, 'User already signed in')
 class Signin(Resource):

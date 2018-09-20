@@ -3,7 +3,7 @@ from flask import json
 
 #local imports
 from app import app
-from app.v1.models.authUsers import  ManageUsersDAO
+from app.a_p_i.v1.models.authUsers import  ManageUsersDAO,logged_user
 
 testusers = ManageUsersDAO()
 
@@ -187,6 +187,9 @@ def test_signin_poor_password():
 """
 def test_signin_correct_data():
     result = app.test_client()
+    old_log_users = len(logged_user)
     response = result.post('/api/v1/auth/signin', data=json.dumps(mock_log[6]) ,content_type='application/json')
     json.loads(response.data)
+    new_log_users=len(logged_user)
+    assert old_log_users + 1 == new_log_users
     assert(response.status_code == 200)

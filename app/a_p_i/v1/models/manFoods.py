@@ -1,7 +1,7 @@
 from app import api
-from app.v1.models.manOrders import food_items,ManageOrdersDAO
-from app.utility.validFood import FoodDataValidator
-from app.utility.validOrder import OrderDataValidator
+from app.a_p_i.v1.models.manOrders import food_items,ManageOrdersDAO
+from app.a_p_i.utility.validFood import FoodDataValidator
+from app.a_p_i.utility.validOrder import OrderDataValidator
 
 
 """
