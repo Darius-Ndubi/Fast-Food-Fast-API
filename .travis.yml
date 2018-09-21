@@ -11,7 +11,7 @@ install:
 
 #run tests with
 script:
-  - cd tests/v1
+  - cd tests/v1/
   - nosetests  --with-coverage --cover-package=app/a_p_i/v1/views
 
 # command to run test coverage
