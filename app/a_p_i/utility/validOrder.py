@@ -25,15 +25,15 @@ class OrderDataValidator(object):
     """
         Method to validate food_item entered
     """
-    def validFoodItem(self,food_item):
-        #check if the food item is of string type
-        if  type(food_item) != str:
-            api.abort(400, "Food Item entered :{} is not an string".format(food_item))
+    # def validFoodItem(self,food_item):
+    #     #check if the food item is of string type
+    #     if  type(food_item) != str:
+    #         api.abort(400, "Food Item entered :{} is not an string".format(food_item))
     
-        #check if the contents of food_item have characters between a-z and A-Z
-        elif not re.match(r"(^[a-zA-Z ]+$)",food_item):
-            api.abort(400, "Food Item entered :{} is not an string".format(food_item)) 
-        return True
+    #     #check if the contents of food_item have characters between a-z and A-Z
+    #     elif not re.match(r"(^[a-zA-Z ]+$)",food_item):
+    #         api.abort(400, "Food Item entered :{} is not an string".format(food_item)) 
+    #     return True
 
     
     """

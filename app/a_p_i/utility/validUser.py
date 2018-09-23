@@ -52,7 +52,7 @@ class UserAuthValidator(object):
             api.abort(400, "A username is not a number you enterd: {} ".format(username))
 
         #username check
-        elif not re.match(r"([A-Za-z0-9]{5,})",username) :
+        elif not re.match(r"([A-Za-z0-9-]{5,})",username) :
             api.abort(400, "The username is less then 5 characters, You entered: {} ".format(username))
         return True
 

@@ -5,6 +5,10 @@ language: python
 python:
   - "3.5.2"
 
+#Environment variable for the build
+env: 
+- PRIV=fast-food-fast
+
 #packages to be installed
 install:
   - pip install -r requirements.txt

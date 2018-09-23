@@ -1,4 +1,3 @@
-import pytest
 from flask import json
 
 #local imports
@@ -63,8 +62,8 @@ def test_create_food_successfully():
     result=app.test_client()
     old_num_items= len(food_items)
     response= result.post('/api/v1/foods', data = json.dumps (mock_food[4]) ,content_type='application/json')
-    data=json.loads(response.data)
-    new_num_items = len(data)
+    json.loads(response.data)
+    new_num_items = len(food_items)
     assert old_num_items + 1 == new_num_items
     assert(response.status_code==201)
 
