@@ -40,6 +40,7 @@ orderAO = ManageOrdersDAO()
 @ns.response(200, 'This are the orders')
 @ns.response(400, 'Bad Request')
 @ns.response(404, 'No Orders yet')
+@ns.response(401, 'Please sign in First')
 class Order(Resource):
     """
         Class to get all orders and add an order
@@ -61,6 +62,7 @@ class Order(Resource):
 @ns.route('/orders/<int:order_id>')
 @ns.response(200, 'Search was successful')
 @ns.response(404, 'Order not Found')
+@ns.response(401, 'Please sign in First')
 @ns.param('order_id', 'The order unique identifier')
 class OrderSpecific(Resource):
     """class to get a specfic order, add order status and delete an order"""
