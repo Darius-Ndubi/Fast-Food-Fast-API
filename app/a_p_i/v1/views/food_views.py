@@ -30,6 +30,7 @@ foodAO=ManageFoodsDAO()
 """
 @ns.route('/foods')
 @ns.response(409, 'Conflict, Same Title')
+@ns.response(401, 'Please sign in First')
 class Food(Resource):
     @ns.doc('Retrieve all food items')
     def get (self):
@@ -38,7 +39,7 @@ class Food(Resource):
 
 
     @ns.doc('Create a new food item')
-    # @ns.expect(food_item)
+    @ns.expect(food_item)
     @ns.marshal_with(food_item, code = 201)
     def post(self):
         ''' Post a food item'''
@@ -48,6 +49,7 @@ class Food(Resource):
 @ns.route('/foods/<int:food_id>')
 @ns.response(200, 'Search was successful')
 @ns.response(404, 'Food not Found')
+@ns.response(401, 'Please sign in First')
 @ns.param('food_id', 'Food item unique identifier')
 class SpecificFood(Resource):
     @ns.doc('Retrieve specific food item')
