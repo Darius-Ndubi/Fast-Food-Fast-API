@@ -1,11 +1,11 @@
 from app import api
-from app.a_p_i.v1.models.manOrders import food_items,ManageOrdersDAO
+from app.a_p_i.v1.models.manOrders import food_items
 from app.a_p_i.v1.models.authUsers import ManageUsersDAO
 from app.a_p_i.utility.validFood import FoodDataValidator
 from app.a_p_i.utility.validOrder import OrderDataValidator
 
 usersAO = ManageUsersDAO()
-
+foodAO = OrderDataValidator()
 
 """
     A class to handle food operations
@@ -82,14 +82,13 @@ class ManageFoodsDAO(object):
 
     def get_specific_food(self,food_id):
         #check if id entered is valid
-        orderidO = ManageOrdersDAO()
-        data_check = orderidO.order_id_validator(food_id)
+        data_check = foodAO.orderIdValid(food_id)
         
         if data_check == True :    
             #loop through the foods present and find food whose id matches the one entered
             for food in food_items:
                 if food.get('item_id') == food_id:
-                    #assign order to be returned to order
+                    #assign food to be returned to food
                     food=food
                     return food
             

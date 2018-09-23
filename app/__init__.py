@@ -15,7 +15,3 @@ api.add_namespace(foods, path = '/api/v1')
 
 from app.a_p_i.v1.views.order_views import ns as orders
 api.add_namespace(orders, path = '/api/v1')
-
-
-#whats your expefctation for us
-#
