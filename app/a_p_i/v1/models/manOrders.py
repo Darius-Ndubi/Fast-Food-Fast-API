@@ -1,9 +1,12 @@
 from app import api
+#from app.a_p_i.v1.models.manFoods import ManageFoodsDAO
 from app.a_p_i.utility.validOrder import OrderDataValidator
 from app.a_p_i.v1.models.authUsers import ManageUsersDAO,logged_user
 
-#insstance onf class MAnageUSersDAO
+#instance onf class MAnageUSersDAO,ManageFoodsDAO,OrderDataValidator
 usersAO = ManageUsersDAO()
+#foodsAO = ManageFoodsDAO()
+orderIdO = OrderDataValidator()
 
 """
     Food items that can be ordered
@@ -45,10 +48,10 @@ class ManageOrdersDAO(object):
     """
     def order_data_validator(self,order_data):
         orderdataO = OrderDataValidator()
-        #check_food_item= orderdataO.validFoodItem(order_data['food_item'])
+        check_food_id= orderdataO.orderIdValid(order_data['food_id'])
         check_quantity = orderdataO.validQuantity(order_data['quantity'])
         
-        if check_quantity:
+        if check_quantity and check_food_id == True:
             return True
         return False
     
@@ -56,9 +59,8 @@ class ManageOrdersDAO(object):
         Method to check validity of id entered
     """
     def order_id_validator(self,order_id):
-        orderIdO = OrderDataValidator()
         check_id = orderIdO.orderIdValid(order_id)
-
+    
         if check_id == True:
             return True
         return False
@@ -68,33 +70,36 @@ class ManageOrdersDAO(object):
         Method to create and add a user order
     """
     def create_new_order(self,data):
-        data_check= self.order_data_validator(data)
-
         uname = usersAO.are_you_signed_in()
-        
-        if data_check == True:
-            if data['quantity'] <= 0:
-                api.abort (400, "Sorry the minimum you can order is 1 you ordered {} ".format(data['quantity']))
+        data_check = self.order_data_validator(data)
 
+        if data_check:
+            #check that user has entered a quantity greater than 0
+            if data['quantity'] <= 0:
+                api.abort(400, "Sorry the minimum you can order is 1 you ordered {} ".format(data['quantity']))
+
+            #find food item name in food item list
             for food_item in food_items:
-                if food_item.get('item_id')== data['food_id']:
-                    # food_item = food_item
-                    data['price']=food_item['price']
+                if food_item.get('item_id') == data['food_id']:
+                    data['price'] = food_item['price']
+
+                    #fing the number of orders and increment by 1
+                    self.id_counter = self.id_counter +1
+                    data['order_id'] = self.id_counter
                     data['food_item'] = food_item['title']
 
                     data['creator'] = uname
                     data['status'] ='Pending'
-                        
-                    data['order_id']=len(self.orders) + 1
+
                     #compute the total amount payable
-                    data['total']=data['price']*data['quantity']
+                    data['total'] = data['price']*data['quantity']
                     self.orders.append(data)
                     return data
-                
-                api.abort (404, "Food Item {} does not Exist, Please order another one".format(data['food_id']))  
 
-        api.abort (500, "An expected error occurred during data Validation")
+            api.abort(404, "Food Item {} does not Exist, Please order another one".format(data['food_id']))  
 
+        api.abort(500, "An expected error occurred during data Validation")
+                   
 
     """
         Method to retrieve specific order as per its id
