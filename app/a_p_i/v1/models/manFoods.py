@@ -1,7 +1,10 @@
 from app import api
 from app.a_p_i.v1.models.manOrders import food_items,ManageOrdersDAO
+from app.a_p_i.v1.models.authUsers import ManageUsersDAO
 from app.a_p_i.utility.validFood import FoodDataValidator
 from app.a_p_i.utility.validOrder import OrderDataValidator
+
+usersAO = ManageUsersDAO()
 
 
 """
@@ -46,17 +49,21 @@ class ManageFoodsDAO(object):
 
         food_existance=self.check_foods_existance(data['title'])
         
-        if data_check & food_existance == True :
+        uname = usersAO.are_you_signed_in()
+
+        usersAO.restraunt_actions()
+
+        if data_check & food_existance == True:
             #if the check passes assign food id to item
             self.food_id_counter =self.food_id_counter +1
             data['item_id']= self.food_id_counter
 
             #let food item creator to be always fast food fast restraunt name
-            data['creator'] = 'fast-food-fast'
+            data['creator'] = uname
 
             #add the new food item
             food_items.append(data)
-            return food_items
+            return data
         
         api.abort (500, "Un expected error occurred during data Validation")    
     
@@ -99,25 +106,28 @@ class ManageFoodsDAO(object):
         """
         #check the data entered
         food_data = self.food_data_validator(data)
-
+        uname = usersAO.are_you_signed_in()
+        usersAO.restraunt_actions()
         food_existance=self.check_foods_existance(data['title'])
          
         #if both checks above are okay find the food item and update it
         if food_data and food_existance == True:
             #find the specific food_item
             f_item=self.get_specific_food(food_id)
-            data['creator'] = 'fast-food-fast'
+            data['creator'] = uname
             f_item.update(data)
 
             return f_item
         
-        api.abort (500, "An expected error occurred during data Validation")
+        api.abort (500, "Un expected error occurred during data Validation")
 
 
     def delete_food_item(self,food_id):
         """
             Method to delete a food item
         """
+        usersAO.restraunt_actions()
+
         to_remove=self.get_specific_food(food_id)
 
         #delete food item

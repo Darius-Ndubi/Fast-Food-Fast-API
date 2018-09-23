@@ -2,6 +2,8 @@ from app import api
 from app.a_p_i.utility.validOrder import OrderDataValidator
 from app.a_p_i.v1.models.authUsers import ManageUsersDAO,logged_user
 
+#insstance onf class MAnageUSersDAO
+usersAO = ManageUsersDAO()
 
 """
     Food items that can be ordered
@@ -37,26 +39,16 @@ class ManageOrdersDAO(object):
         
         return self.orders
 
-    """
-        Method to check if user is signed in
-        before:
-            -> Creating  an order
-    """
-    def are_you_signed_in(self):
-        if len (logged_user) == 0:
-                api.abort (401, "You cannot perform this action without signing in")
-        return logged_user['user']
-
-
+    
     """
         Method to validate user order data
     """
     def order_data_validator(self,order_data):
         orderdataO = OrderDataValidator()
-        check_food_item= orderdataO.validFoodItem(order_data['food_item'])
+        #check_food_item= orderdataO.validFoodItem(order_data['food_item'])
         check_quantity = orderdataO.validQuantity(order_data['quantity'])
         
-        if check_quantity & check_food_item == True:
+        if check_quantity:
             return True
         return False
     
@@ -77,25 +69,29 @@ class ManageOrdersDAO(object):
     """
     def create_new_order(self,data):
         data_check= self.order_data_validator(data)
+
+        uname = usersAO.are_you_signed_in()
         
         if data_check == True:
             if data['quantity'] <= 0:
                 api.abort (400, "Sorry the minimum you can order is 1 you ordered {} ".format(data['quantity']))
 
             for food_item in food_items:
-                if food_item.get('title')== data['food_item']:
+                if food_item.get('item_id')== data['food_id']:
+                    # food_item = food_item
                     data['price']=food_item['price']
+                    data['food_item'] = food_item['title']
 
-                    uname=self.are_you_signed_in()
                     data['creator'] = uname
-                    
+                    data['status'] ='Pending'
+                        
                     data['order_id']=len(self.orders) + 1
                     #compute the total amount payable
                     data['total']=data['price']*data['quantity']
                     self.orders.append(data)
-                    return self.find_all_orders ()
+                    return data
                 
-            api.abort (404, "Food Item {} does not Exist, Please order another one".format(data['food_item']))  
+                api.abort (404, "Food Item {} does not Exist, Please order another one".format(data['food_id']))  
 
         api.abort (500, "An expected error occurred during data Validation")
 
@@ -129,6 +125,8 @@ class ManageOrdersDAO(object):
     def update_order(self,order_id,data):
         #check if status entered is well formated
         status_check = OrderDataValidator()
+        uname = usersAO.are_you_signed_in()
+        usersAO.restraunt_actions()
         data_check = status_check.statusValid(data['status'])
         
         if data_check == True:
@@ -150,4 +148,4 @@ class ManageOrdersDAO(object):
 
         #delete the order
         self.orders.remove(to_delete)
-        
+    

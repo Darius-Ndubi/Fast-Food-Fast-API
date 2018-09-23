@@ -8,3 +8,6 @@ __pycache__/
 
 # local coverage files
 cover/
+
+#environmental variables file
+.env

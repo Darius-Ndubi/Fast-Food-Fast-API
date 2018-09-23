@@ -1,4 +1,5 @@
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
 
 from app import api
 from app.a_p_i.utility.validUser import UserAuthValidator
@@ -92,10 +93,33 @@ class ManageUsersDAO(object):
             if logged_user.get('user') == existing_user['username']:
                 api.abort(409, "You: {} are already logged in".format(data['email']))
 
-            if check_password_hash(existing_user.get('password'),data['password']):    
+            if check_password_hash(existing_user.get('password'),data['password']):
+                if existing_user['username'] == os.getenv('PRIV'):
+                    logged_user['user'] = existing_user['username']
+                    logged_user['priv'] = True
+                    return "Sign in Successful, with Great power comes great responsibility"
                 logged_user['user'] = existing_user['username']
+                logged_user['priv'] = False
                 return "Sign in Successful Go see our food Menu"
             else:
                 api.abort(401, "Password: {} is invalid".format(data['password']))
 
         api.abort(404, "Sign in request for {} failed, user not signed up!".format(data['email']))
+
+
+    """
+        Method to check if user is signed in
+        before:
+            -> Creating  an order
+    """
+    def are_you_signed_in(self):
+        if len (logged_user) == 0:
+                api.abort (401, "You cannot perform this action without signing in")
+        return logged_user['user']
+
+    def restraunt_actions(self):
+        """Method to check a users privileges before an action
+        """
+        self.are_you_signed_in()
+        if logged_user['priv'] == False:
+            api.abort(401, "Sorry your privileges won't allow you to perform this action")
