@@ -125,7 +125,7 @@ class ManageOrdersDAO(object):
     def update_order(self,order_id,data):
         #check if status entered is well formated
         status_check = OrderDataValidator()
-        uname = usersAO.are_you_signed_in()
+        usersAO.are_you_signed_in()
         usersAO.restraunt_actions()
         data_check = status_check.statusValid(data['status'])
         
