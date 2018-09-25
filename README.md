@@ -29,6 +29,10 @@ On the working directory, open terminal.
 
 * Run the command: virtualenv venv
 * Activating virtual environment : source venv\bin\activate
+* Create a file named .env_sample
+   - Inside it add export PRIV="fast-food-fast" save and close.
+   - While the virtual environment is activated run: source .env_sample
+  
 
 ----
 

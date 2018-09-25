@@ -7,7 +7,7 @@
 """
 from flask_restplus import Resource, fields, Namespace
 
-#local imports
+# local imports
 from app import api
 from app.a_p_i.v1.models.manOrders import ManageOrdersDAO
 
@@ -25,7 +25,7 @@ status = api.model('Status', {
 """
 order = api.model('Orders', {
     'food_id': fields.Integer(required=True, description='Food  unique identifier'),
-    'quantity' : fields.Integer(required=True, description='Number of food item ordered')
+    'quantity': fields.Integer(required=True, description='Number of food item ordered')
 })
 
 """
@@ -36,6 +36,8 @@ orderAO = ManageOrdersDAO()
 """
     User orders endpoint
 """
+
+
 @ns.route('/orders')
 @ns.response(200, 'This are the orders')
 @ns.response(400, 'Bad Request')
@@ -49,7 +51,6 @@ class Order(Resource):
     def get(self):
         '''Geting all posted orders'''
         return orderAO.find_all_orders(), 200
-
 
     @ns.doc('Create food order')
     @ns.expect(order)
@@ -70,8 +71,6 @@ class OrderSpecific(Resource):
     def get(self, order_id):
         ''' Get the specific order searched'''
         return orderAO.get_specific_order(order_id), 200
-
-
 
     @ns.doc('Add status to an order')
     @ns.expect(status)

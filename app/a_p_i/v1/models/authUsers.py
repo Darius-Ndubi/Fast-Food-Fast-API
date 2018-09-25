@@ -1,6 +1,9 @@
-from werkzeug.security import generate_password_hash, check_password_hash
-import os
+"""Module to help in signup and signin of user"""
 
+import os
+from werkzeug.security import generate_password_hash, check_password_hash
+
+# Local imports
 from app import api
 from app.a_p_i.utility.validUser import UserAuthValidator
 
@@ -10,70 +13,55 @@ logged_user = {}
 uservalidatorO = UserAuthValidator()
 
 
-""" 
-    A class to handle the
-        -> Signup of new users
-        Steps
-            -> It check if the user email is linked to another account
-                if linked it errors out that there is a conflict
-            
-            -> It validates user input using modules in the utility
-                if input is not of expected format an error is outputed
-            
-            -> If the above checks pass it allows user to signup
-        
-"""
-
 class ManageUsersDAO(object):
+    """A class to handle the
+        -> Signup of new users
+        -> Signin of known users"""
+
     def __init__(self):
         self.users = []
-        
-    """ 
-        Check email exixtance
-    """
-    def check_user_email(self,email):
+
+    def check_user_email(self, email):
+        """ Check email exixtance"""
         for user in self.users:
             if user.get('email') == email:
-                
                 return user
-    """
-        Method to validate sigin data
-    """
-    def signin_data_validator(self,signin_data):
+
+    def signin_data_validator(self, signin_data):
+        """Method to validate sigin data"""
         signinvalidata = UserAuthValidator()
         email_check = signinvalidata.validEmail(signin_data['email'])
-        passwd_check = signinvalidata.validSignInPassword(signin_data['password'])
+        passwd_check = signinvalidata.validSignInPassword(
+            signin_data['password'])
 
-        if email_check & passwd_check == True:
+        if email_check & passwd_check:
             return True
         return False
 
-
-    """
-        Add new user
-    """
-    def add_user_details(self,data):
+    def add_user_details(self, data):
+        """Add new user"""
         data_check_email = uservalidatorO.validEmail(data['email'])
-        data_check_pass  = uservalidatorO.validPasswd(data['password'],data['confirm_password'])
+        data_check_pass = uservalidatorO.validPasswd(
+            data['password'], data['confirm_password'])
         data_check_uname = uservalidatorO.validUsername(data['username'])
 
-        if data_check_email & data_check_pass & data_check_uname == True:
+        if data_check_email & data_check_pass & data_check_uname:
 
-            if self.check_user_email(data['email']) != None:
-                api.abort(409, "Sign up request for {} could not be completed due to existance of same email".format(data['email']))
-            
+            if self.check_user_email(data['email']):
+                api.abort(409, "Sign up request for {} could not be completed due to existance of same email".format(
+                    data['email']))
+
             data['id'] = len(self.users)+1
             password_hash = generate_password_hash(data['password'])
 
             data['password'] = password_hash
-            data['confirm_password']='#'
+            data['confirm_password'] = '#'
 
             self.users.append(data)
-            return "Sign Up was successful proceed to Sign In",201
+            return "Sign Up was successful proceed to Sign In", 201
+        api.abort(500, "An expected error occurred during data Validation")
 
-        api.abort (500, "An expected error occurred during data Validation")
-
-
+    def user_signin(self, data):
         """
         User sign In method
         Steps:
@@ -81,19 +69,18 @@ class ManageUsersDAO(object):
             -> Check if email of the user exists in the list of registered users
             -> check if user is already signed in
             -> Hash the entered password and verify it matches stored hash
-            -> if password hash match add users username to logged in list of users
-            -> if email is not found error out that user is not signed up
-    """
+            -> if password hash match add users username to logged in list of users and there respective priviledges
+        """
 
-    def user_signin(self,data):
         data_check = self.signin_data_validator(data)
         existing_user = self.check_user_email(data['email'])
 
         if data_check == True and existing_user != None:
             if logged_user.get('user') == existing_user['username']:
-                api.abort(409, "You: {} are already logged in".format(data['email']))
+                api.abort(
+                    409, "You: {} are already logged in".format(data['email']))
 
-            if check_password_hash(existing_user.get('password'),data['password']):
+            if check_password_hash(existing_user.get('password'), data['password']):
                 if existing_user['username'] == os.getenv('PRIV'):
                     logged_user['user'] = existing_user['username']
                     logged_user['priv'] = True
@@ -101,25 +88,31 @@ class ManageUsersDAO(object):
                 logged_user['user'] = existing_user['username']
                 logged_user['priv'] = False
                 return "Sign in Successful Go see our food Menu"
-            else:
-                api.abort(401, "Password: {} is invalid".format(data['password']))
 
-        api.abort(404, "Sign in request for {} failed, user not signed up!".format(data['email']))
+            api.abort(401, "Password: {} is invalid".format(
+                data['password']))
 
+        api.abort(404, "Sign in request for {} failed, user not signed up!".format(
+            data['email']))
 
-    """
+    def are_you_signed_in(self):
+        """
         Method to check if user is signed in
         before:
             -> Creating  an order
-    """
-    def are_you_signed_in(self):
-        if len (logged_user) == 0:
-                api.abort (401, "You cannot perform this action without signing in")
+            -> Adding food item to menu
+            -> deleting food item from menu
+            -> deleting order item
+            -> editing status of food item
+        """
+        if len(logged_user) == 0:
+            api.abort(401, "You cannot perform this action without signing in")
         return logged_user['user']
 
     def restraunt_actions(self):
         """Method to check a users privileges before an action
         """
         self.are_you_signed_in()
-        if logged_user['priv'] == False:
-            api.abort(401, "Sorry your privileges won't allow you to perform this action")
+        if not logged_user['priv']:
+            api.abort(
+                401, "Sorry your privileges won't allow you to perform this action")
