@@ -4,6 +4,7 @@
 __pycache__/
 *.vscode
 *.coverage
+*.idea
 
 
 # local coverage files
