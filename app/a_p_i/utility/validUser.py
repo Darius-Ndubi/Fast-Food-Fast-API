@@ -4,6 +4,7 @@ import re
 
 # local imports
 from app import api
+from app.a_p_i.utility.messages import success_messages, error_messages
 
 
 class UserAuthValidator():
@@ -20,12 +21,12 @@ class UserAuthValidator():
         """
         # check if email type is a string
         if type(email) != str:
-            api.abort(400, "An email is a string not a number:{} ".format(email))
+            api.abort(400, error_messages[3]['Incorrect_email'])
 
         # checking email entered through regular expressions
         elif not re.match(r"(^[a-zA-Z0-9.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]+$)", email):
             api.abort(
-                400, "Email: {} is not well formatted (Must have @ and .com) and not contain spaces".format(email))
+                400, error_messages[2]['Invalid_email'])
         return True
 
     def validPasswd(self, password, conPassword):
@@ -34,17 +35,16 @@ class UserAuthValidator():
         # check if password entered is a string
         if type(password) != str:
             api.abort(
-                400, "A password is a string not a number:{} ".format(password))
+                400, error_messages[4]['incorrect_passwd'])
 
         # check if password and confirm password match
         elif password != conPassword:
-            api.abort(400, "Password: {} and confirm_password: {} don't match".format(
-                password, conPassword))
+            api.abort(400, error_messages[5]['unmatching'])
 
         # checking email entered through regular expressions
         elif not re.match(r"([A-Za-z0-9@#$&*]{6,10})", password):
             api.abort(
-                400, "Password: {} is not well formatted or its too short".format(password))
+                400, error_messages[6]['poor_pass'])
         return True
 
     def validUsername(self, username):
@@ -53,12 +53,12 @@ class UserAuthValidator():
         # username check
         if type(username) != str:
             api.abort(
-                400, "A username is not a number you enterd: {} ".format(username))
+                400, error_messages[7]['invalid_uname'])
 
         # username check
         elif not re.match(r"([A-Za-z0-9-]{5,})", username):
             api.abort(
-                400, "The username is less then 5 characters, You entered: {} ".format(username))
+                400, error_messages[8]['poor_uname'])
         return True
 
     def validSignInPassword(self, password):
