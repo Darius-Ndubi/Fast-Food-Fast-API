@@ -1,5 +1,6 @@
 """ model to handle siging up, and loging in user to db """
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import create_access_token
 
 # local imports
 from app import api
@@ -58,3 +59,25 @@ class ManageUserDAO():
             connection.close()
             return success_messages[0]['account_created'], 201
         api.abort(500, error_messages[1]['validation_error'])
+
+    @staticmethod
+    def loginUser(email, password):
+        """Method to validata user on login and checking if they exist
+        if they do it compares the password hashes
+        if this pasess it create user access token"""
+        data_check_email = uservalidatorO.validEmail(email)
+        data_check_pass = uservalidatorO.validSignInPassword(password)
+        connection = connDb()
+        curs = connection.cursor()
+        curs.execute("SELECT * FROM users WHERE email =%(email)s",
+                     {'email': email})
+        existance = curs.fetchall()
+        curs.close()
+        connection.close()
+        
+        if data_check_email and data_check_pass and existance:
+            if check_password_hash(existance[0][3], password):
+                access_token = create_access_token(existance[0][0])
+                return access_token
+            api.abort(401, error_messages[9]['invalid_password'])
+        api.abort(404, error_messages[10]['not_signed_up'])

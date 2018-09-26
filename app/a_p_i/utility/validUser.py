@@ -66,8 +66,8 @@ class UserAuthValidator():
         """
         if type(password) != str:
             api.abort(
-                400, "A password is a string not a number:{} ".format(password))
+                400, error_messages[4]['incorrect_passwd'])
 
         elif not re.match(r"[A-Za-z0-9@#$&*]{6,10}", password):
-            api.abort(400, "Password: {} is not well formatted".format(password))
+            api.abort(400, error_messages[6]['poor_pass'])
         return True
