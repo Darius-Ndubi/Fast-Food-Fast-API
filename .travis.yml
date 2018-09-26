@@ -5,18 +5,16 @@ language: python
 python:
   - "3.5.2"
 
-#Environment variable for the build
-env: 
-- PRIV=fast-food-fast
-
 #packages to be installed
 install:
   - pip install -r requirements.txt
 
-#run tests with
-script:
-  - nosetests  --with-coverage --cover-package=app/a_p_i/v1/views
+before_script:
+#command for creating role in database
+- psql -c "CREATE ROLE dario WITH SUPERUSER LOGIN PASSWORD 'riot';" -U postgres
+#command to create testdb
+- psql -c 'CREATE DATABASE testfastfoodfast;' -U postgres
 
-# command to run test coverage
-after_success:
-  - coveralls
+# command to start postgresql
+services:
+  - postgresql
