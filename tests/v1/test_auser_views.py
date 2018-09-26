@@ -8,7 +8,6 @@ from app.a_p_i.v1.models.authUsers import ManageUsersDAO, logged_user
 testusers = ManageUsersDAO()
 
 
-
 """
     Mock signup data to test the working of user sign up
 """
@@ -29,7 +28,7 @@ mock_reg = [{"email": "", "username": "delight", "password": "delight", "confirm
             {"email": "yagamidelight@gmail.com", "username": "delight",
                 "password": "delight@11", "confirm_password": "delight@1"},
             {"email": "yagamidelight@gmail.com", "username": "delight",
-                "password": "delight", "confirm_password": "deli"},
+                "password": "deli", "confirm_password": "deli"},
 
             {"email": "yagamidelight@gmail.com", "username": 12334,
                 "password": "delight", "confirm_password": "delight"},

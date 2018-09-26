@@ -21,8 +21,11 @@ before_script:
 
 script: 
   #command to run tests
-  - cd tests/v2
-  - pytest 
+  - cd tests/v2/
+  - coverage run -m pytest
+
+after_success:
+  - coveralls
 
 # command to start postgresql
 services:

@@ -13,3 +13,18 @@ def connDb():
         return psycopg2.connect(connectdb)
     except:
         print("Sorry connection to database failed")
+
+
+def dropTdb():
+    """Method to destroy the test database after testing
+    """
+    connection = connDb()
+    curs = connection.cursor()
+    dropper = ["""DROP TABLE users""",
+               """DROP TABLE orders""", """DROP TABLE foods"""]
+    for table in dropper:
+        curs.execute(table)
+
+    curs.close()
+    connection.commit()
+    connection.close()
