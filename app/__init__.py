@@ -1,5 +1,9 @@
 from flask import Flask
 from flask_restplus import Api
+from flask_jwt_extended import JWTManager
+from datetime import timedelta
+import os
+
 
 # local imports
 from app.a_p_i.v2.db.create_tables import create_dtb
@@ -8,8 +12,12 @@ from app.a_p_i.v2.db.create_tables import create_dtb
 create_dtb()
 
 app = Flask(__name__)
+jwt = JWTManager(app)
 
-api = Api(app, version='1.0', title='Fast Food Fast API',
+app.config['JWT_SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=5)
+
+api = Api(app, version='2.0', title='Fast Food Fast API',
           description='Fast-Food-Fast is a food delivery service app for a restaurant',)
 
 

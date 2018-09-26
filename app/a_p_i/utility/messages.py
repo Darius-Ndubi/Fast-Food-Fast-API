@@ -7,7 +7,9 @@ error_messages = [{'email_conflict': 'Sign up request for could not be completed
                   {'unmatching': 'Password and confirm_password don\'t match'},
                   {'poor_pass': "Password should contain @,#,$,& or * with minimum of 6 chars and maximum of 10"},
                   {'invalid_uname': "A username is not a number"},
-                  {'poor_uname': "The username is less then 5 characters or doesn't contain letters a-z or A-Z or - "}
+                  {'poor_uname': "The username is less then 5 characters or doesn't contain letters a-z or A-Z or - "},
+                  {'invalid_password': "Password is invalid"},
+                  {'not_signed_up': "Sign in request failed, user not signed up!"}
                   ]
 
 success_messages = [

@@ -9,6 +9,8 @@ from app.a_p_i.v2.db.connDB import connDb, dropTdb
 from tests.v1.test_auser_views import mock_reg, mock_log
 from app.a_p_i.utility.messages import error_messages, success_messages
 
+#First user token 
+tok = None
 
 @pytest.fixture
 def client():
@@ -37,11 +39,11 @@ def id_picker():
     connection = connDb()
     curs = connection.cursor()
     curs.execute(
-        "SELECT * FROM users WHERE username = {}".format(mock_log[6]['email']))
+        "SELECT * FROM users WHERE email = %(email)s",{'email':mock_log[6]['email']})
     user_data = curs.fetchall()
     curs.close()
     connection.close()
-    return user_data['user_id']
+    return user_data[0][0]
 
 
 def create_token():
@@ -179,6 +181,7 @@ def test_login_int_email(client):
     """Test input of int as email"""
     response = client.post('/api/v2/auth/login',
                            data=json.dumps(mock_log[0]), content_type='application/json')
+    json.loads(response.data.decode('utf-8'))
     assert response.json == {'message': error_messages[3]['Incorrect_email']}
     assert(response.status_code == 400)
 
@@ -187,6 +190,7 @@ def test_login_empty_email(client):
     """Tests input of empty string as email"""
     response = client.post('/api/v2/auth/login',
                            data=json.dumps(mock_log[1]), content_type='application/json')
+    json.loads(response.data.decode('utf-8'))
     assert response.json == {'message': error_messages[2]['Invalid_email']}
     assert(response.status_code == 400)
 
@@ -195,6 +199,7 @@ def test_login_wrong_email1(client):
     """Tests input of email without @ """
     response = client.post('/api/v2/auth/login',
                            data=json.dumps(mock_log[2]), content_type='application/json')
+    json.loads(response.data.decode('utf-8'))
     assert response.json == {'message': error_messages[2]['Invalid_email']}
     assert(response.status_code == 400)
 
@@ -203,6 +208,7 @@ def test_login_wrong_email2(client):
     """Tests input of email without .com"""
     response = client.post('/api/v2/auth/login',
                            data=json.dumps(mock_log[3]), content_type='application/json')
+    json.loads(response.data.decode('utf-8'))
     assert response.json == {'message': error_messages[2]['Invalid_email']}
     assert(response.status_code == 400)
 
@@ -216,6 +222,7 @@ def test_login_int_password(client):
     """Test int input as password"""
     response = client.post('/api/v2/auth/login',
                            data=json.dumps(mock_log[4]), content_type='application/json')
+    json.loads(response.data.decode('utf-8'))
     assert response.json == {'message': error_messages[4]['incorrect_passwd']}
     assert(response.status_code == 400)
 
@@ -224,17 +231,21 @@ def test_login_poor_password(client):
     """Test input of short password"""
     response = client.post('/api/v2/auth/login',
                            data=json.dumps(mock_log[5]), content_type='application/json')
+    json.loads(response.data.decode('utf-8'))
     assert response.json == {'message': error_messages[6]['poor_pass']}
     assert(response.status_code == 400)
 
 
 def test_login_known_user(client):
-    """Test of admin sign in
+    """Test on user login
     """
-    response = client.post(
-        '/api/v2/auth/login', data=json.dumps(mock_log[6]), content_type='application/json')
-    assert(response.status_code == 200)
-    assert response == create_token()
+    
+    with app.app_context():
+        response = client.post(
+            '/api/v2/auth/login', data=json.dumps(mock_log[6]), content_type='application/json')
+        json.loads(response.data.decode('utf-8'))
+        assert(response.status_code == 200)
+        assert response != create_token()
 
 
 """drop tables after testing"""

@@ -5,15 +5,13 @@ language: python
 python:
   - "3.5.2"
 
-#Environment variable for the build
-env:
- - export TDB_URL="dbname='testfastfoodfast' host='localhost' user='dario' password='riot'"
- 
 #packages to be installed
 install:
   - pip install -r requirements.txt
 
 before_script:
+- export TDB_URL="dbname='testfastfoodfast' host='localhost' user='dario' password='riot'"
+- export SECRET="f7fc15525d64cbc8985fe15281c822deb8f19a482650107a"
 #command for creating role in database
 - psql -c "CREATE ROLE dario WITH SUPERUSER LOGIN PASSWORD 'riot';" -U postgres
 #command to create testdb
