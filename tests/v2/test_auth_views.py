@@ -9,9 +9,6 @@ from app.a_p_i.v2.db.connDB import connDb, dropTdb
 from tests.v1.test_auser_views import mock_reg, mock_log
 from app.a_p_i.utility.messages import error_messages, success_messages
 
-# First user token
-tok = None
-
 
 @pytest.fixture
 def client():
@@ -35,23 +32,28 @@ def registered():
     return len(all)
 
 
-def id_picker():
+def id_picker(email):
     """Function to pick the users id from db that will be used to create the access token"""
     connection = connDb()
     curs = connection.cursor()
     curs.execute(
-        "SELECT * FROM users WHERE email = %(email)s", {'email': mock_log[6]['email']})
+        "SELECT * FROM users WHERE email = %(email)s", {'email': email})
     user_data = curs.fetchall()
     curs.close()
     connection.close()
     return user_data[0][0]
 
 
-def create_token():
-    """Method to creat test token for the user"""
-    u_id = id_picker()
-    user_access_token = create_access_token(u_id)
-    return user_access_token
+def user_token_creator():
+    u_id = id_picker(mock_log[6].get('email'))
+    tok = create_access_token(u_id)
+    return tok
+
+
+def admin_token_creator():
+    u_id = id_picker(mock_log[7].get('email'))
+    tok1 = create_access_token(u_id)
+    return tok1
 
 
 """
@@ -171,6 +173,18 @@ def test_signup_correct_data(client):
     assert (response.status_code == 201)
 
 
+def test_signup_test_admin(client):
+    """Test of sign up of test admin
+    """
+    old_num_users = registered()
+    response = client.post(
+        '/api/v2/auth/signup', data=json.dumps(mock_reg[11]), content_type='application/json')
+    new_num_users = registered()
+    assert old_num_users + 1 == new_num_users
+    assert response.get_json() == success_messages[0]['account_created']
+    assert (response.status_code == 201)
+
+
 """
     User Sign In Tests
     -> Email tests
@@ -242,12 +256,25 @@ def test_login_known_user(client):
     """
 
     with app.app_context():
+        #global tok
         response = client.post(
             '/api/v2/auth/login', data=json.dumps(mock_log[6]), content_type='application/json')
         json.loads(response.data.decode('utf-8'))
-        tok = create_token()
         assert(response.status_code == 200)
-        assert response != tok
+        assert response != user_token_creator()
+
+
+def test_login_admin_user(client):
+    """Test on user test admin login
+    """
+
+    with app.app_context():
+        #global tok1
+        response = client.post(
+            '/api/v2/auth/login', data=json.dumps(mock_log[7]), content_type='application/json')
+        json.loads(response.data.decode('utf-8'))
+        assert(response.status_code == 200)
+        assert response != admin_token_creator()
 
 
 """drop tables after testing"""

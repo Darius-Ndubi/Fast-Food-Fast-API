@@ -11,6 +11,7 @@ def create_dtb():
         user_id SERIAL PRIMARY KEY NOT NULL,
         email VARCHAR NOT NULL,
         username VARCHAR(20) NOT NULL,
+        priv BOOL DEFAULT FALSE,
         password VARCHAR NOT NULL
         )
         """,
