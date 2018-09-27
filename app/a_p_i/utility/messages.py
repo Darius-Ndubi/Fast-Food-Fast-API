@@ -9,7 +9,14 @@ error_messages = [{'email_conflict': 'Sign up request for could not be completed
                   {'invalid_uname': "A username is not a number"},
                   {'poor_uname': "The username is less then 5 characters or doesn't contain letters a-z or A-Z or - "},
                   {'invalid_password': "Password is invalid"},
-                  {'not_signed_up': "Sign in request failed, user not signed up!"}
+                  {'not_signed_up': "Sign in request failed, user not signed up!"},
+                  {'Int_title': "Title entered is not a string"},
+                  {'wrong_format_title': "Title entered should have letter between a-z or A-Z or _"},
+                  {'int_des': "Description entered is not an string"},
+                  {'wrong_format_des': "description entered should have letter between a-z or A-Z or _ "},
+                  {'str_price': "Price entered is not an integer"},
+                  {'int_type': "Type entered is not an string"},
+                  {'wrong_format_ty': "Title entered should have letter between a-z or A-Z or _"}
                   ]
 
 success_messages = [
