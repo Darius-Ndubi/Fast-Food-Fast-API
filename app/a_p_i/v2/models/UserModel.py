@@ -74,7 +74,7 @@ class ManageUserDAO():
         existance = curs.fetchall()
         curs.close()
         connection.close()
-        
+
         if data_check_email and data_check_pass and existance:
             if check_password_hash(existance[0][3], password):
                 access_token = create_access_token(existance[0][0])
