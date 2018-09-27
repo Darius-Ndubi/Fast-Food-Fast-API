@@ -60,14 +60,14 @@ class ManageOrdersDAO():
             }
             user_orders.append(order)
         return user_orders
-    
-    def find_specific_order(self,order_id):
+
+    def find_specific_order(self, order_id):
         """Method to retrieve a specific order"""
         for order in self.find_all_orders():
             if order.get('order_id') == order_id:
                 return order
 
-            return api.abort(404,error_messages[20]['item_not_found'])
+            return api.abort(404, error_messages[20]['item_not_found'])
 
     def create_new_order(self, data):
         """Method that adds user order data to the db"""

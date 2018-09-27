@@ -69,6 +69,7 @@ class OrderList(Resource):
         foodAO.admin_only(user_id)
         return orderAO.find_all_orders(), 200
 
+
 @ns.route('/orders/<int:order_id>')
 @ns.response(200, 'This are the orders')
 @ns.response(401, 'Not authorized')
@@ -76,9 +77,8 @@ class OrderActions(Resource):
     """class to retrive a single order as nterd by user"""
     @ns.doc('Find single order item')
     @jwt_required
-    def get(self,order_id):
+    def get(self, order_id):
         user_id = get_jwt_identity()
         '''Geting all posted orders'''
         foodAO.admin_only(user_id)
         return orderAO.find_specific_order(order_id), 200
-
