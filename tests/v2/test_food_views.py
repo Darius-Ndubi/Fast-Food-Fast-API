@@ -72,13 +72,23 @@ def test_food_item_empty_type(client):
 
 
 def test_create_food_successfully(client):
-    """Is the item being successfuly ordered"""
+    """Is the item being created successfully"""
     with app.app_context():
         tok = admin_token_creator()
         response = client.post(
             '/api/v2/menu', data=json.dumps(mock_food[4]), content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
         json.loads(response.data.decode('utf-8'))
         assert(response.status_code == 201)
+
+
+def test_try_to_create_food_again(client):
+    """Is the being added repeatatively"""
+    with app.app_context():
+        tok = admin_token_creator()
+        response = client.post(
+            '/api/v2/menu', data=json.dumps(mock_food[4]), content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
+        json.loads(response.data.decode('utf-8'))
+        assert(response.status_code == 404)
 
 
 def test_on_retrieving_all_menu_items(client):
