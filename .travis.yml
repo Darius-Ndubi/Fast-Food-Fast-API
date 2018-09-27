@@ -8,19 +8,19 @@ python:
 #packages to be installed
 install:
   - pip install -r requirements.txt
+env:
+- export PRIV="fast-food-fast"
+- export SECRET_KEY="f7fc15525d64cbc8985fe15281c822deb8f19a482650107a"
+- export JWT_SECRET_KEY="f7fc789385fe15281c822deb8f19a482650107a"
 
 before_script:
-- export TDB_URL="dbname='testfastfoodfast' host='localhost' user='dario' password='riot'"
-- export SECRET="f7fc15525d64cbc8985fe15281c822deb8f19a482650107a"
-#command for creating role in database
-- psql -c "CREATE ROLE dario WITH SUPERUSER LOGIN PASSWORD 'riot';" -U postgres
 #command to create testdb
 - psql -c 'CREATE DATABASE testfastfoodfast;' -U postgres
 
 script: 
   #command to run tests
   - cd tests
-  - pytest 
+  - pytest --cov=v2/
 
 after_success:
   - coveralls

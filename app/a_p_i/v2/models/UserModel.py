@@ -1,6 +1,7 @@
-""" model to handle siging up, and loging in user to db """
+""" module to handle siging up, and loging in user to db """
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
+import os
 
 # local imports
 from app import api
@@ -39,6 +40,11 @@ class ManageUserDAO():
         data_check_pass = uservalidatorO.validPasswd(
             self.password, self.confirm_password)
         data_check_uname = uservalidatorO.validUsername(self.username)
+        if str(self.username) == os.getenv('PRIV'):
+            print(self.username)
+            user_priv = True
+        else:
+            user_priv = False
 
         if data_check_email & data_check_pass & data_check_uname:
 
@@ -51,8 +57,8 @@ class ManageUserDAO():
 
             self.passwd_hash = generate_password_hash(self.password)
 
-            curs.execute("INSERT INTO users (email,username,password) VALUES(%s,%s,%s)",
-                         (self.email, self.username, self.passwd_hash))
+            curs.execute("INSERT INTO users (email,username,priv,password) VALUES(%s,%s,%s,%s)",
+                         (self.email, self.username, user_priv, self.passwd_hash))
 
             curs.close()
             connection.commit()
@@ -76,7 +82,7 @@ class ManageUserDAO():
         connection.close()
 
         if data_check_email and data_check_pass and existance:
-            if check_password_hash(existance[0][3], password):
+            if check_password_hash(existance[0][4], password):
                 access_token = create_access_token(existance[0][0])
                 return access_token
             api.abort(401, error_messages[9]['invalid_password'])
