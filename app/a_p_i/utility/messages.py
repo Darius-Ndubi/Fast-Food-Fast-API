@@ -21,7 +21,9 @@ error_messages = [{'email_conflict': 'Sign up request for could not be completed
                   {'unmet_priv': "Sorry your privileges won't allow you to perform this action"},
                   {'item_not_found': "Item or items do not exist"},
                   {"invalid_quantity": "Quantity entered is not an integer"},
-                  {"None_zero": "Order id cannot be found, Orders are identified from 1 onwards"}
+                  {"None_zero": "Order id cannot be found, Orders are identified from 1 onwards"},
+                  {"invalid_status": "Order status  is not an string"},
+                  {"incorect_status": "Order status can either be Processing , Cancelled or Complete"}
                   ]
 
 success_messages = [

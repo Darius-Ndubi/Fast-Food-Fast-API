@@ -5,7 +5,7 @@ from flask import json
 # local imports
 from app import app
 from app.a_p_i.v2.db.connDB import connDb
-from tests.v1.test_order_views import mock_order
+from tests.v1.test_order_views import mock_order, mock_answers
 from tests.v2.test_auth_views import user_token_creator, admin_token_creator
 from app.a_p_i.utility.messages import error_messages, success_messages
 
@@ -79,6 +79,7 @@ def test_admin_get_all_orders(client):
                                   'title': 'Mokimo',
                                   'total': 1500}]
 
+
 def test_admin_get_specific_order(client):
     """test on retrival of a specific order"""
     with app.app_context():
@@ -87,13 +88,13 @@ def test_admin_get_specific_order(client):
             '/api/v2/orders/1', content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
         assert(response.status_code == 200)
         assert response.json == {'creator': 'delight',
-                                  'food_id': 1,
-                                  'order_id': 1,
-                                  'price': 500,
-                                  'quantity': 3,
-                                  'status': 'NEW',
-                                  'title': 'Mokimo',
-                                  'total': 1500}
+                                 'food_id': 1,
+                                 'order_id': 1,
+                                 'price': 500,
+                                 'quantity': 3,
+                                 'status': 'NEW',
+                                 'title': 'Mokimo',
+                                 'total': 1500}
 
 
 def test_admin_get_specific_order_not_existing(client):
@@ -104,3 +105,25 @@ def test_admin_get_specific_order_not_existing(client):
             '/api/v2/orders/1000', content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
         assert(response.status_code == 404)
         #assert response.json == {'message':error_messages[20]['item_not_found']}
+
+
+def test_admin_edit_order_status_with_id(client):
+    """test on retrival of a specific order"""
+    with app.app_context():
+        tok = admin_token_creator()
+        response = client.put(
+            '/api/v2/orders/1', data=json.dumps(mock_answers[0]), content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
+        assert(response.status_code == 400)
+        assert response.json == {
+            'message': error_messages[20]['item_not_found']}
+
+
+def test_admin_edit_order_status_successfully(client):
+    """test on retrival of a specific order"""
+    with app.app_context():
+        tok = admin_token_creator()
+        response = client.put(
+            '/api/v2/orders/1', data=json.dumps(mock_answers[0]), content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
+        assert(response.status_code == 400)
+        assert response.json == {
+            'message': error_messages[20]['item_not_found']}

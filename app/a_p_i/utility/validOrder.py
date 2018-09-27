@@ -44,11 +44,10 @@ class OrderDataValidator():
         # check if the order status is of string type
         if type(order_status) != str:
             api.abort(
-                400, "Order status :{} is not an string".format(order_status))
+                400, error_messages[24]["invalid_status"])
 
         # check if the contents of order status have characters between a-z and A-Z
-        elif not re.match(r"(^[a-zA-Z]+$)", order_status):
+        elif not re.match(r"(^[a-zA-Z]+$)", order_status) or 'Processing' or 'Cancelled' or 'Complete':
             api.abort(
-                400, "Order status :{} is not well formatted ".format(order_status))
-
+                400,  error_messages[25]["incorect_status"])
         return True
