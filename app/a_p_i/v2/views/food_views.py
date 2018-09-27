@@ -18,7 +18,13 @@ foodAO = ManageFoodDAO()
 @ns.response(401, 'Please sign in First')
 @ns.response(500, 'Expired token')
 @ns.response(201, 'Food added successfuly')
+@ns.response(404, 'No menu items yet')
 class Food(Resource):
+    """A class to handle adding a menu item and getting all food items on menu"""
+    @ns.doc('Retrieve all food items')
+    def get(self):
+        ''' Show all food items on sell '''
+        return foodAO.get_all_foods(), 200
 
     @ns.doc('Create a new food item')
     @ns.expect(food_item)

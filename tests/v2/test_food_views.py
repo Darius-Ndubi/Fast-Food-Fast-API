@@ -86,4 +86,3 @@ def test_on_retrieving_all_menu_items(client):
     response = client.get(
         '/api/v2/menu', content_type='application/json')
     assert(response.status_code == 200)
-

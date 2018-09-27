@@ -147,7 +147,7 @@ mock_up_food = [{'title': "", 'description': 'The best you will ever eat East of
 
 
 # """
-#     Test on deleting a specific food item from the list of food_items 
+#     Test on deleting a specific food item from the list of food_items
 # """
 
 
