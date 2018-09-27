@@ -19,8 +19,8 @@ before_script:
 
 script: 
   #command to run tests
-  - cd tests/v2/
-  - coverage run -m pytest
+  - cd tests
+  - pytest 
 
 after_success:
   - coveralls
