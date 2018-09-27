@@ -73,7 +73,7 @@ class ManageFoodDAO():
         curs = connection.cursor()
         curs.execute("SELECT * FROM foods")
         menu = curs.fetchall()
-        foods=[]
+        foods = []
         if len(menu) == 0:
             api.abort(404, error_messages[20]['item_not_found'])
         for item in menu:

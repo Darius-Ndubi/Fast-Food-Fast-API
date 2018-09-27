@@ -2,6 +2,7 @@
 
 import re
 from werkzeug.exceptions import NotFound
+from app.a_p_i.utility.messages import error_messages
 
 # local imports
 from app import api
@@ -21,21 +22,20 @@ class OrderDataValidator():
         # check that quantity entered is a number
         if type(quantity) != int:
             api.abort(
-                400, "Quantity entered :{} is not an integer".format(quantity))
+                400, error_messages[21]["invalid_quantity"])
         return True
 
     def orderIdValid(self, user_order_id):
         """Method to validate the order ID entered by user if it is from 1 or more
         """
         if user_order_id == 0:
-            api.abort(404, "Order id  :{} cannot be found, Orders are identified from 1 onwards".format(
-                user_order_id))
+            api.abort(404, error_messages[22]["None_zero"])
 
         elif user_order_id > 0:
             return True
 
         #api.abort(404, "Order id  :{} cannot be found, Orders are identified from 1 onwards".format(user_order_id))
-        e = NotFound("Seached Fast Food order not found")
+        e = NotFound(error_messages[20]['item_not_found'])
         e.data = {'custom': 404}
         raise e
 
