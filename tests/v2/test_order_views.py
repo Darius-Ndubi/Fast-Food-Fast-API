@@ -6,7 +6,7 @@ from flask import json
 from app import app
 from app.a_p_i.v2.db.connDB import connDb
 from tests.v1.test_order_views import mock_order
-from tests.v2.test_auth_views import user_token_creator
+from tests.v2.test_auth_views import user_token_creator,admin_token_creator
 from app.a_p_i.utility.messages import error_messages, success_messages
 
 
@@ -48,6 +48,9 @@ def test_order_food_item_successfully(client):
         data = json.loads(response.data)
         new_num_orders = are_orders_added()
         assert old_num_orders + 1 == new_num_orders
+        response.json =={
+            'message':success_messages[3]["order_created1"]
+        }
         assert(response.status_code == 201)
 
 
@@ -58,3 +61,19 @@ def test_orders_retrieval(client):
         response = client.get(
             '/api/v2/users/orders', content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
         assert(response.status_code == 200)
+
+def test_admin_get_all_orders(client):
+    """test on retrival of all endpoints by admin"""
+    with app.app_context():
+        tok = admin_token_creator()
+        response = client.get(
+            '/api/v2/orders/', content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
+        assert(response.status_code == 200)
+        assert response.json == {'users':[
+        {
+            'id': 1,
+            'email': 'ndubidarius@gmail.com',
+            'username': 'dario',
+            'password': 'masaysay'     
+        }
+    ]}
