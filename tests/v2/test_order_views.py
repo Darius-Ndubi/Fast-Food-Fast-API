@@ -38,7 +38,6 @@ def test_orders_quantity_not_int(client):
         assert(response.status_code == 400)
 
 
-
 def test_order_food_item_successfully(client):
     """test input of correct quantity and food item"""
     with app.app_context():
@@ -50,6 +49,7 @@ def test_order_food_item_successfully(client):
         new_num_orders = are_orders_added()
         assert old_num_orders + 1 == new_num_orders
         assert(response.status_code == 201)
+
 
 def test_orders_retrieval(client):
     """test input of correct quantity and food item"""

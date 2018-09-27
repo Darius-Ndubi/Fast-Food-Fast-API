@@ -41,7 +41,7 @@ class ManageUserDAO():
             self.password, self.confirm_password)
         data_check_uname = uservalidatorO.validUsername(self.username)
         if str(self.username) == os.getenv('PRIV'):
-            
+
             user_priv = True
         else:
             user_priv = False
@@ -96,7 +96,5 @@ class ManageUserDAO():
         curs.execute("SELECT * FROM users WHERE user_id = %(user_id)s",
                      {'user_id': user_id})
         known_user = curs.fetchone()
-        
+
         return known_user[2]
-        
-    
