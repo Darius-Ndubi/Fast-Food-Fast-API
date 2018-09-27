@@ -66,3 +66,23 @@ class ManageFoodDAO():
             connection.close()
             return success_messages[1]['food_created'], 201
         api.abort(500, error_messages[1]['validation_error'])
+
+    def get_all_foods(self):
+        """Method to retrieve all food menu item"""
+        connection = connDb()
+        curs = connection.cursor()
+        curs.execute("SELECT * FROM foods")
+        menu = curs.fetchall()
+        foods=[]
+        if len(menu) == 0:
+            api.abort(404, error_messages[20]['item_not_found'])
+        for item in menu:
+            food_item = {
+                'food_id': item[0],
+                'title': item[1],
+                'description': item[2],
+                'price': item[3],
+                'type': item[4]
+            }
+            foods.append(food_item)
+        return (foods)

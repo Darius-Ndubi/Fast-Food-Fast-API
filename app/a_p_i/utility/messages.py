@@ -18,7 +18,8 @@ error_messages = [{'email_conflict': 'Sign up request for could not be completed
                   {'int_type': "Type entered is not an string"},
                   {'wrong_format_ty': "Title entered should have letter between a-z or A-Z or _"},
                   {'food_exist': "food item creation could not be completed due to existance of same item"},
-                  {'unmet_priv': "Sorry your privileges won't allow you to perform this action"}
+                  {'unmet_priv': "Sorry your privileges won't allow you to perform this action"},
+                  {'item_not_found': "Item or items do not exist"}
                   ]
 
 success_messages = [
