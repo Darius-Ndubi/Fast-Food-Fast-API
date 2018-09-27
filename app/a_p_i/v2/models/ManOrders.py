@@ -38,6 +38,29 @@ class ManageOrdersDAO():
             u_orders.append(order)
         return u_orders
 
+    def find_all_orders(self):
+        """Method to retrieve all orders"""
+        connection = connDb()
+        curs = connection.cursor()
+        curs.execute("SELECT * FROM orders")
+        all_orders = curs.fetchall()
+        curs.close()
+        connection.close()
+        user_orders = []
+        for order in all_orders:
+            order = {
+                'order_id': order[0],
+                'food_id': order[1],
+                'title': order[2],
+                'price': order[3],
+                'quantity': order[4],
+                'total': order[5],
+                'status': order[6],
+                'creator': order[7]
+            }
+            user_orders.append(order)
+        return user_orders
+
     def create_new_order(self, data):
         """Method that adds user order data to the db"""
         check_quantity = orderdataValidatorO.validQuantity(data['quantity'])
@@ -55,7 +78,7 @@ class ManageOrdersDAO():
             existing = curs.fetchall()
 
             if existing:
-                api.abort(403, error_messages[23]["order_created"])
+                api.abort(403, success_messages[3]["order_created1"])
             curs.close()
             connection.close()
 
