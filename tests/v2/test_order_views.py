@@ -78,3 +78,29 @@ def test_admin_get_all_orders(client):
                                   'status': 'NEW',
                                   'title': 'Mokimo',
                                   'total': 1500}]
+
+def test_admin_get_specific_order(client):
+    """test on retrival of a specific order"""
+    with app.app_context():
+        tok = admin_token_creator()
+        response = client.get(
+            '/api/v2/orders/1', content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
+        assert(response.status_code == 200)
+        assert response.json == [{'creator': 'delight',
+                                  'food_id': 1,
+                                  'order_id': 1,
+                                  'price': 500,
+                                  'quantity': 3,
+                                  'status': 'NEW',
+                                  'title': 'Mokimo',
+                                  'total': 1500}]
+
+
+def test_admin_get_specific_order_not_existing(client):
+    """test on retrival of a specific order"""
+    with app.app_context():
+        tok = admin_token_creator()
+        response = client.get(
+            '/api/v2/orders/1000', content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
+        assert(response.status_code == 404)
+        assert response.json == {'message':error_messages[20]['item_not_found']}
