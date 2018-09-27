@@ -79,3 +79,11 @@ def test_create_food_successfully(client):
             '/api/v2/menu', data=json.dumps(mock_food[4]), content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
         json.loads(response.data.decode('utf-8'))
         assert(response.status_code == 201)
+
+
+def test_on_retrieving_all_menu_items(client):
+    """retrieving all menu items"""
+    response = client.get(
+        '/api/v2/menu', content_type='application/json')
+    assert(response.status_code == 200)
+
