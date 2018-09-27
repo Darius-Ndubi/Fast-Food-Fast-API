@@ -31,7 +31,7 @@ class OrderDataValidator():
         if user_order_id == 0:
             api.abort(404, error_messages[22]["None_zero"])
 
-        elif user_order_id > 0:
+        elif int(user_order_id) > 0:
             return True
 
         #api.abort(404, "Order id  :{} cannot be found, Orders are identified from 1 onwards".format(user_order_id))
