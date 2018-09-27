@@ -41,7 +41,7 @@ class ManageUserDAO():
             self.password, self.confirm_password)
         data_check_uname = uservalidatorO.validUsername(self.username)
         if str(self.username) == os.getenv('PRIV'):
-            print(self.username)
+            
             user_priv = True
         else:
             user_priv = False
@@ -87,3 +87,16 @@ class ManageUserDAO():
                 return access_token
             api.abort(401, error_messages[9]['invalid_password'])
         api.abort(404, error_messages[10]['not_signed_up'])
+
+    @staticmethod
+    def get_username(user_id):
+        """method to return a users username given their id"""
+        connection = connDb()
+        curs = connection.cursor()
+        curs.execute("SELECT * FROM users WHERE user_id = %(user_id)s",
+                     {'user_id': user_id})
+        known_user = curs.fetchone()
+        
+        return known_user[2]
+        
+    

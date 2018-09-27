@@ -27,5 +27,5 @@ api.add_namespace(auth, path='/api/v2')
 from app.a_p_i.v2.views.food_views import ns as menu
 api.add_namespace(menu, path='/api/v2')
 
-# from app.a_p_i.v1.views.order_views import ns as orders
-# api.add_namespace(orders, path='/api/v1')
+from app.a_p_i.v2.views.order_views import ns as orders
+api.add_namespace(orders, path='/api/v2')

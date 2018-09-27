@@ -26,7 +26,7 @@ def client():
     return app.test_client()
 
 
-def test_orders_quantity_not_int():
+def test_orders_quantity_not_int(client):
     """test input of string as quantity"""
     with app.app_context():
         tok = user_token_creator()
@@ -38,19 +38,8 @@ def test_orders_quantity_not_int():
         assert(response.status_code == 400)
 
 
-def test_orders_foodid_not_int():
-    """test input of string as quantity"""
-    with app.app_context():
-        tok = user_token_creator()
-        response = client.post(
-            '/api/v2/users/orders', data=json.dumps(mock_order[1]), content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
-        json.loads(response.data.decode('utf-8'))
-        assert response.json == {
-            'message': error_messages[21]["invalid_quantity"]}
-        assert(response.status_code == 400)
 
-
-def test_order_food_item_successfully():
+def test_order_food_item_successfully(client):
     """test input of correct quantity and food item"""
     with app.app_context():
         tok = user_token_creator()

@@ -88,7 +88,7 @@ def test_try_to_create_food_again(client):
         response = client.post(
             '/api/v2/menu', data=json.dumps(mock_food[4]), content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
         json.loads(response.data.decode('utf-8'))
-        assert(response.status_code == 404)
+        assert(response.status_code == 409)
 
 
 def test_on_retrieving_all_menu_items(client):

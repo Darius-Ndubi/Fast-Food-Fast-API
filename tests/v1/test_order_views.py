@@ -14,7 +14,7 @@ testorders = ManageOrdersDAO()
     Mock data that is used to test the working of user create order endpoint
 """
 mock_order = [{'quantity': '3', 'food_id': 'Burger', 'creator': ''},
-              {'quantity': 3, 'food_id': "1", 'creator': ''},
+              {'quantity': 3, 'food_id': "#", 'creator': ''},
               {'quantity': 3, 'food_id': '$%^&@!', 'creator': ''},
               {'quantity': 3, 'food_id': 1, 'creator': ''}]
 
