@@ -21,7 +21,7 @@ mock_order = [{'quantity': '3', 'food_id': 'Burger', 'creator': ''},
 """
     Mock answer data to test the working of user edit order
 """
-mock_answers = [{'status': 123}, {'status': 'Rejected'}]
+mock_answers = [{'status': 123}, {'status': 'Complete'}]
 
 
 # def test_orders_retrival():

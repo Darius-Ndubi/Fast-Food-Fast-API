@@ -6,8 +6,8 @@ error_messages = [{'email_conflict': 'Sign up request for could not be completed
                   {'incorrect_passwd': "A password is a string not a number"},
                   {'unmatching': 'Password and confirm_password don\'t match'},
                   {'poor_pass': "Password should contain @,#,$,& or * with minimum of 6 chars and maximum of 10"},
-                  {'invalid_uname': "A username is not a number"},
-                  {'poor_uname': "The username is less then 5 characters or doesn't contain letters a-z or A-Z or - "},
+                  {'invalid_uname': "A username is not a number,spaces or empty"},
+                  {'poor_uname': "The username is less then 5 characters or doesn't contain letters a-z or A-Z or - ONLY"},
                   {'invalid_password': "Password is invalid"},
                   {'not_signed_up': "Sign in request failed, user not signed up!"},
                   {'Int_title': "Title entered is not a string"},
@@ -22,7 +22,7 @@ error_messages = [{'email_conflict': 'Sign up request for could not be completed
                   {'item_not_found': "Item or items do not exist"},
                   {"invalid_quantity": "Quantity entered is not an integer"},
                   {"None_zero": "Order id cannot be found, Orders are identified from 1 onwards"},
-                  {"invalid_status": "Order status  is not an string"},
+                  {"invalid_status": "Order status  should be a string"},
                   {"incorect_status": "Order status can either be Processing , Cancelled or Complete"}
                   ]
 
@@ -30,4 +30,5 @@ success_messages = [
     {'account_created': 'Sign Up was successful proceed to Sign In'},
     {"food_created": "Food item was successfully created"},
     {'order_created': "order was successfully created"},
-    {"order_created1": "Order has been created you,You can edit it to make modifications"}]
+    {"order_created1": "Order has been created you,You can edit it to make modifications"},
+    {'edit_success': 'Status update was successfull'}]

@@ -115,7 +115,7 @@ def test_admin_edit_order_status_with_id(client):
             '/api/v2/orders/1', data=json.dumps(mock_answers[0]), content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
         assert(response.status_code == 400)
         assert response.json == {
-            'message': error_messages[20]['item_not_found']}
+            'message': error_messages[23]["invalid_status"]}
 
 
 def test_admin_edit_order_status_successfully(client):
@@ -123,7 +123,6 @@ def test_admin_edit_order_status_successfully(client):
     with app.app_context():
         tok = admin_token_creator()
         response = client.put(
-            '/api/v2/orders/1', data=json.dumps(mock_answers[0]), content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
-        assert(response.status_code == 400)
-        assert response.json == {
-            'message': error_messages[20]['item_not_found']}
+            '/api/v2/orders/1', data=json.dumps(mock_answers[1]), content_type='application/json', headers={'Authorization': 'Bearer ' + tok})
+        assert(response.status_code == 200)
+        assert response.json == success_messages[4]['edit_success']
