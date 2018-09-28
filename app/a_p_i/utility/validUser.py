@@ -59,6 +59,13 @@ class UserAuthValidator():
         elif not re.match(r"([A-Za-z0-9-]{5,})", username):
             api.abort(
                 400, error_messages[8]['poor_uname'])
+
+        chars = '!#@&*?:\"0123456789'
+
+        for i in chars:
+            if i in str(username):
+                api.abort(
+                    400, error_messages[8]['poor_uname'])
         return True
 
     def validSignInPassword(self, password):

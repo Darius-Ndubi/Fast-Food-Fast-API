@@ -80,7 +80,7 @@ class ManageOrdersDAO():
             connection = connDb()
             curs = connection.cursor()
 
-            curs.execute("SELECT * FROM orders WHERE food_id = %(food_id)s AND status = %(status)s ANd creator = %(creator)s", {
+            curs.execute("SELECT * FROM orders WHERE food_id = %(food_id)s AND status = %(status)s AND creator = %(creator)s", {
                 'food_id': food_id, 'status': self.status, 'creator': data['username']})
 
             existing = curs.fetchall()
@@ -108,4 +108,20 @@ class ManageOrdersDAO():
             connection.commit()
             connection.close()
             return success_messages[2]['order_created']
+        api.abort(500, error_messages[1]['validation_error'])
+
+    def update_status(self, data, order_id):
+        status_check = OrderDataValidator()
+        status_checkO = status_check.statusValid(data['status'])
+        if status_checkO:
+            connection = connDb()
+            curs = connection.cursor()
+            curs.execute("UPDATE orders SET status = %(status)s WHERE order_id = %(order_id)s", {
+                'status': data['status'], 'order_id': order_id})
+            curs.close()
+            connection.commit()
+            connection.close()
+
+            return success_messages[4]['edit_success']
+
         api.abort(500, error_messages[1]['validation_error'])

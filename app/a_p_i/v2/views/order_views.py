@@ -7,7 +7,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import api
 from app.a_p_i.v2.models.ManOrders import ManageOrdersDAO
 from app.a_p_i.v2.models.UserModel import ManageUserDAO
-from app.a_p_i.v1.views.order_views import order
+#from app.a_p_i.v1.views.order_views import order, status
 from app.a_p_i.v2.models.FoodModel import ManageFoodDAO
 
 ns = Namespace('orders', description='Orders and their operations')
@@ -22,23 +22,16 @@ foodAO = ManageFoodDAO()
 
 
 @ns.route('/users/orders')
-@ns.response(200, 'This are the orders')
-@ns.response(400, 'Bad Request')
-@ns.response(404, 'No Orders yet')
-@ns.response(401, 'Please sign in First')
 class Order(Resource):
     """
         Class to get all orders and add an order
     """
-    @ns.doc('List all orders made by a specific user')
     @jwt_required
     def get(self):
         user_id = get_jwt_identity()
         '''Geting all posted by an individual'''
         return orderAO.find_user_orders(ManageUserDAO.get_username(user_id)), 200
 
-    @ns.doc('Create food order')
-    @ns.expect(order)
     @jwt_required
     # @ns.marshal_with(order, code=201)
     def post(self):
@@ -55,13 +48,10 @@ class Order(Resource):
 
 
 @ns.route('/orders/')
-@ns.response(200, 'This are the orders')
-@ns.response(401, 'Not authorized')
 class OrderList(Resource):
     """
         Class to get all orders orders created by a user
     """
-    @ns.doc('List all orders made all users')
     @jwt_required
     def get(self):
         user_id = get_jwt_identity()
@@ -71,14 +61,21 @@ class OrderList(Resource):
 
 
 @ns.route('/orders/<int:order_id>')
-@ns.response(200, 'This are the orders')
-@ns.response(401, 'Not authorized')
 class OrderActions(Resource):
     """class to retrive a single order as nterd by user"""
-    @ns.doc('Find single order item')
     @jwt_required
     def get(self, order_id):
         user_id = get_jwt_identity()
         '''Geting all posted orders'''
         foodAO.admin_only(user_id)
         return orderAO.find_specific_order(order_id), 200
+
+    @jwt_required
+    def put(self, order_id):
+        user_id = get_jwt_identity()
+        '''Geting all posted orders'''
+        foodAO.admin_only(user_id)
+        new_status = {
+            'status': request.json['status']
+        }
+        return orderAO.update_status(new_status, order_id), 200
