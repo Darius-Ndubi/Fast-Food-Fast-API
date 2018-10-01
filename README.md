@@ -80,7 +80,11 @@ on terminal run:
 * Flask
 * flask-restplus
 
-***
+*********
+#### Documentation
+https://documenter.getpostman.com/view/5492229/RWgjb2eb
+
+*********
 
 #### Versioning
 Most recent version: version 2
