@@ -46,6 +46,8 @@ create a .env_sample and in it add
   - export DB_URL="dbname='fastfoodfast' host='localhost' user='you_username' password='your_password'"
   - export TDB_URL="dbname='testfastfoodfast' host='localhost' user='you_username' password='your_password'"
   - export JWT_SECRET_KEY='a secretive sequence of numbers,letlers and cspecial characters'
+  
+Save the file and on terminal run source .env_sample
 
 #### Postman
 User order features. 
@@ -59,7 +61,12 @@ Endpoint available for this api are shown in the table below:
 |  POST       |  /api/v2/auth/login           | Known user signin          | eg {"email": "string@user.com","password":"string123"}
 |   GET       |   /api/v2/menu                 | Get all food items menu    |
 |  POST       |   /api/v2/menu                 | Add a food item            | eg{"price": 450,"description": "Better than mom's food","title": "King of Burgers","creator": "fast-food-fast","type": "Snack"}
-`````
+|  POST       |  /api/v2/users/orders          | User create an order        | e.g {"food_id": 1, "quantity": 20} 
+|  GET        |  /api/v2/users/orders          | User retrieve theitr oen orders|
+|  GET        |  /api/v2/orders/               | Admin user retrieve orders |
+|  GET        |  /api/v2/orders/order_id       | Admin user retrieve order  |
+|  PUT        |  /api/v2/orders/order_id       | Admin edit order status    |
+````
  
 Run application on postman
 
