@@ -1,13 +1,11 @@
 """Module on user order endpoint"""
 from flask_restplus import Resource, Namespace
-from flask import request, json
+from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # local imports
-from app import api
 from app.a_p_i.v2.models.ManOrders import ManageOrdersDAO
 from app.a_p_i.v2.models.UserModel import ManageUserDAO
-#from app.a_p_i.v1.views.order_views import order, status
 from app.a_p_i.v2.models.FoodModel import ManageFoodDAO
 
 ns = Namespace('orders', description='Orders and their operations')
@@ -28,14 +26,15 @@ class Order(Resource):
     """
     @jwt_required
     def get(self):
+        """Geting all posted by an individual"""
         user_id = get_jwt_identity()
-        '''Geting all posted by an individual'''
-        return orderAO.find_user_orders(ManageUserDAO.get_username(user_id)), 200
+        return orderAO.find_user_orders(ManageUserDAO.get_username(user_id)),
+        200
 
     @jwt_required
     # @ns.marshal_with(order, code=201)
     def post(self):
-        '''Post an order'''
+        """Post an order"""
         user_id = get_jwt_identity()
 
         new_order = {
@@ -54,8 +53,8 @@ class OrderList(Resource):
     """
     @jwt_required
     def get(self):
-        user_id = get_jwt_identity()
         '''Geting all posted orders'''
+        user_id = get_jwt_identity()
         foodAO.admin_only(user_id)
         return orderAO.find_all_orders(), 200
 
@@ -65,15 +64,15 @@ class OrderActions(Resource):
     """class to retrive a single order as nterd by user"""
     @jwt_required
     def get(self, order_id):
-        user_id = get_jwt_identity()
         '''Geting all posted orders'''
+        user_id = get_jwt_identity()
         foodAO.admin_only(user_id)
         return orderAO.find_specific_order(order_id), 200
 
     @jwt_required
     def put(self, order_id):
-        user_id = get_jwt_identity()
         '''Geting all posted orders'''
+        user_id = get_jwt_identity()
         foodAO.admin_only(user_id)
         new_status = {
             'status': request.json['status']

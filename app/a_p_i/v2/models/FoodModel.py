@@ -26,7 +26,7 @@ class ManageFoodDAO():
         self.admin_user = curs.fetchone()
         curs.close()
         connection.close()
-        if self.admin_user[3] != True:
+        if self.admin_user[3] is not True:
             api.abort(401, error_messages[19]['unmet_priv'])
 
         else:
@@ -59,8 +59,11 @@ class ManageFoodDAO():
             data['creator'] = self.admin_user[2]
             connection = connDb()
             curs = connection.cursor()
-            curs.execute("INSERT INTO foods (title,description,price,type,creator) VALUES(%s,%s,%s,%s,%s)",
-                         (data['title'], data['description'], data['price'], data['type'], data['creator']))
+            curs.execute("INSERT INTO foods (title,description,price,type," +
+                         "creator) VALUES(%s,%s,%s,%s,%s)",
+                         (data['title'], data['description'], data['price'],
+                          data['type'], data['creator']))
+
             curs.close()
             connection.commit()
             connection.close()

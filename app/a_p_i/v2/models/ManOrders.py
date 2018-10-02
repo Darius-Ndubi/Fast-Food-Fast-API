@@ -10,7 +10,9 @@ orderdataValidatorO = OrderDataValidator()
 
 
 class ManageOrdersDAO():
+    """class to manage orders"""
     # default order status
+
     def __init__(self):
         self.status = 'NEW'
 
@@ -19,7 +21,9 @@ class ManageOrdersDAO():
         connection = connDb()
         curs = connection.cursor()
         curs.execute(
-            "SELECT * FROM orders WHERE creator = %(creator)s", {'creator': uname})
+            "SELECT * FROM orders WHERE creator = %(creator)s",
+            {'creator': uname})
+
         your_orders = curs.fetchall()
         curs.close()
         connection.close()
@@ -80,8 +84,10 @@ class ManageOrdersDAO():
             connection = connDb()
             curs = connection.cursor()
 
-            curs.execute("SELECT * FROM orders WHERE food_id = %(food_id)s AND status = %(status)s AND creator = %(creator)s", {
-                'food_id': food_id, 'status': self.status, 'creator': data['username']})
+            curs.execute("SELECT * FROM orders WHERE food_id = %(food_id)s" +
+                         "AND status = %(status)s AND creator = %(creator)s", {
+                             'food_id': food_id, 'status': self.status,
+                             'creator': data['username']})
 
             existing = curs.fetchall()
 
@@ -102,8 +108,11 @@ class ManageOrdersDAO():
             title = order_food[1]
             price = order_food[3]
 
-            curs.execute("INSERT INTO orders (food_id,title,price,quantity,total,status,creator) VALUES (%s,%s,%s,%s,%s,%s,%s)",
-                         [food_id, title, price, quant, total, self.status, uname],)
+            curs.execute("INSERT INTO orders (food_id,title,price,quantity," +
+                         "total,status,creator) VALUES (%s,%s,%s,%s,%s,%s,%s)",
+                         [food_id, title, price, quant, total, self.status,
+                          uname],)
+
             curs.close()
             connection.commit()
             connection.close()
@@ -111,13 +120,15 @@ class ManageOrdersDAO():
         api.abort(500, error_messages[1]['validation_error'])
 
     def update_status(self, data, order_id):
+        """Method to update th status of an order"""
         status_check = OrderDataValidator()
         status_checkO = status_check.statusValid(data['status'])
         if status_checkO:
             connection = connDb()
             curs = connection.cursor()
-            curs.execute("UPDATE orders SET status = %(status)s WHERE order_id = %(order_id)s", {
-                'status': data['status'], 'order_id': order_id})
+            curs.execute("UPDATE orders SET status = %(status)s" +
+                         "WHERE order_id = %(order_id)s", {
+                             'status': data['status'], 'order_id': order_id})
             curs.close()
             connection.commit()
             connection.close()
