@@ -4,17 +4,12 @@ import re
 
 # local imports
 from app import api
-from app.a_p_i.utility.messages import success_messages, error_messages
+from app.a_p_i.utility.messages import error_messages
 
 
 class UserAuthValidator():
     """Class to validate user entered information
     """
-    # def __init__(self,email,username,password,conPassword):
-    #     self.email=email
-    #     username=username
-    #     password=password
-    #     conPassword=conPassword
 
     def validEmail(self, email):
         """Email data validator for both signup and signin forms
@@ -30,7 +25,8 @@ class UserAuthValidator():
         return True
 
     def validPasswd(self, password, conPassword):
-        """Signup password and repeated password data validator
+        """Signup password and repeated password
+         data validator
         """
         # check if password entered is a string
         if type(password) != str:

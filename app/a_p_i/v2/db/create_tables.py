@@ -5,9 +5,9 @@ from app.a_p_i.v2.db.connDB import connDb
 
 
 def create_dtb():
+    """Function to create tablels into db"""
     tables = [
-        """ 
-        CREATE TABLE IF NOT EXISTS users(
+        """CREATE TABLE IF NOT EXISTS users(
         user_id SERIAL PRIMARY KEY NOT NULL,
         email VARCHAR NOT NULL,
         username VARCHAR(20) NOT NULL,

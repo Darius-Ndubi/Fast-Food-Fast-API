@@ -1,12 +1,12 @@
-"""Module to test endpoints related to food only"""
-from flask import json
+# """Module to test endpoints related to food only"""
+# from flask import json
 
-# local imports
-from app import app
-from app.a_p_i.v1.models.manFoods import ManageFoodsDAO
-from app.a_p_i.v1.models.manOrders import food_items
+# # local imports
+# from app import app
+# from app.a_p_i.v1.models.manFoods import ManageFoodsDAO
+# from app.a_p_i.v1.models.manOrders import food_items
 
-testfoods = ManageFoodsDAO()
+# testfoods = ManageFoodsDAO()
 
 """
     mock data on food items data to be entered

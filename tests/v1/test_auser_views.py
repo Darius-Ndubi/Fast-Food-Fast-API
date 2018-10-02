@@ -1,11 +1,11 @@
-"""Test user authentication endpoints"""
-from flask import json
+# """Test user authentication endpoints"""
+# from flask import json
 
-# local imports
-from app import app
-from app.a_p_i.v1.models.authUsers import ManageUsersDAO, logged_user
+# # local imports
+# from app import app
+# from app.a_p_i.v1.models.authUsers import ManageUsersDAO, logged_user
 
-testusers = ManageUsersDAO()
+# testusers = ManageUsersDAO()
 
 
 """

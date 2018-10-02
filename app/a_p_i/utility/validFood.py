@@ -11,11 +11,6 @@ from app.a_p_i.utility.messages import error_messages, success_messages
 class FoodDataValidator(object):
     """Class to validate data entered in food item
     """
-    # def __init__ (self,title,description,price,food_type):
-    #     self.title = title
-    #     self.description = description
-    #     self.price = price
-    #     self.food_type = food_type
 
     def titleValidator(self, title):
         """Method to check data entered as food title"""
@@ -23,7 +18,7 @@ class FoodDataValidator(object):
             api.abort(400, error_messages[11]['Int_title'])
 
         # check if the contents of title have characters between a-z and A-Z
-        elif not re.match(r"(^[a-zA-Z_ ]+$)", title) or title.isspace() == True:
+        elif not re.match(r"(^[a-zA-Z_ ]+$)", title) or title.isspace():
             api.abort(
                 400, error_messages[12]['wrong_format_title'])
 
@@ -54,7 +49,7 @@ class FoodDataValidator(object):
             api.abort(400, error_messages[16]['int_type'])
 
         # check if the contents of title have characters between a-z and A-Z
-        elif not re.match(r"(^[a-zA-Z_ ]+$)", food_type) or food_type.isspace() == True:
+        elif not re.match(r"(^[a-zA-Z_ ]+$)", food_type) or food_type.isspace():
             api.abort(
                 400, error_messages[17]['wrong_format_ty'])
 

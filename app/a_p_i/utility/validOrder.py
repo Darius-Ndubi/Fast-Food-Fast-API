@@ -12,10 +12,6 @@ class OrderDataValidator():
     """Class to validate data entered by user in the order
     """
 
-    # def __init__(self,quantity,food_item):
-    #     self.quantity = quantity
-    #     self.food_item = food_item
-
     def validQuantity(self, quantity):
         """Method to validate order quantity entered
         """
@@ -34,7 +30,6 @@ class OrderDataValidator():
         elif int(user_order_id) > 0:
             return True
 
-        #api.abort(404, "Order id  :{} cannot be found, Orders are identified from 1 onwards".format(user_order_id))
         e = NotFound(error_messages[20]['item_not_found'])
         e.data = {'custom': 404}
         raise e
@@ -46,11 +41,10 @@ class OrderDataValidator():
             api.abort(
                 400, error_messages[23]["invalid_status"])
 
-        # check if the contents of order status have characters between a-z and A-Z
         elif not re.match(r"(^[a-zA-Z]+$)", order_status):
             api.abort(
-                400,  error_messages[24]["incorect_status"])
+                400, error_messages[24]["incorect_status"])
         elif str(order_status) == 'Processing' or str(order_status) == 'Cancelled' or str(order_status) == 'Complete':
             return True
         api.abort(
-            400,  error_messages[24]["incorect_status"])
+            400, error_messages[24]["incorect_status"])

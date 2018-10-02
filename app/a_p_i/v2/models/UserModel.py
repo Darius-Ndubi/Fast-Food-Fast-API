@@ -1,7 +1,8 @@
 """ module to handle siging up, and loging in user to db """
+import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
-import os
+
 
 # local imports
 from app import api
@@ -14,6 +15,8 @@ uservalidatorO = UserAuthValidator()
 
 
 class ManageUserDAO():
+    """Class to manage operations on a user"""
+
     def __init__(self, email, username, password, confirm_password):
         self.email = email
         self.username = username
@@ -57,7 +60,8 @@ class ManageUserDAO():
 
             self.passwd_hash = generate_password_hash(self.password)
 
-            curs.execute("INSERT INTO users (email,username,priv,password) VALUES(%s,%s,%s,%s)",
+            curs.execute("INSERT INTO users (email,username,priv,password)" +
+                         "VALUES(%s,%s,%s,%s)",
                          (self.email, self.username, user_priv, self.passwd_hash))
 
             curs.close()

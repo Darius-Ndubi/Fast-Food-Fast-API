@@ -20,7 +20,7 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=5)
 api = Api(app, version='2.0', title='Fast Food Fast API',
           description='Fast-Food-Fast is a food delivery service app for a restaurant',)
 
-#catching the token expired message
+# catching the token expired message
 jwt._set_error_handler_callbacks(api)
 
 

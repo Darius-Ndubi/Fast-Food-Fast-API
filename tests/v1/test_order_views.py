@@ -1,13 +1,13 @@
-"""Tests on order_vies endpoints"""
+# """Tests on order_vies endpoints"""
 
-from flask import json
+# from flask import json
 
-# local imports
-from app import app
-from app.a_p_i.v1.models.manOrders import ManageOrdersDAO
+# # local imports
+# from app import app
+# from app.a_p_i.v1.models.manOrders import ManageOrdersDAO
 
-# instance of manageorders class
-testorders = ManageOrdersDAO()
+# # instance of manageorders class
+# testorders = ManageOrdersDAO()
 
 
 """

@@ -1,14 +1,14 @@
 """module to handle connections to the diffrent DBs"""
 
-import psycopg2
 import os
+import psycopg2
 
 
 def connDb():
     """function to set up connection to either of the dbs
     """
     connectdb = os.getenv('TDB_URL', 'postgresql:///testfastfoodfast')
-    #connectdb = os.getenv('DB_URL')
+    # connectdb = os.getenv('DB_URL')
     try:
         return psycopg2.connect(connectdb)
     except:
