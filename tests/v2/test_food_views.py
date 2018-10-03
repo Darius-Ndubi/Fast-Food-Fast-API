@@ -3,7 +3,7 @@ from flask import json
 
 # local imports
 from app import app
-from app.a_p_i.utility.messages import error_messages
+from app.api.utility.messages import error_messages
 from tests.v1.test_yfood_views import mock_food
 from tests.v2.test_auth_views import admin_token_creator
 

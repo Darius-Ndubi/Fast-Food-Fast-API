@@ -19,9 +19,9 @@ before_script:
 
 script: 
   #command to run tests
-  - cd tests
-  - pytest --cov=v2/
-
+  - coverage run --source app/api/v2/ -m pytest -s -vv
+  - coverage report
+  
 after_success:
   - coveralls
 

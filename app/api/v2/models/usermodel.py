@@ -2,13 +2,14 @@
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
+from flask import jsonify
 
 
 # local imports
 from app import api
-from app.a_p_i.utility.validUser import UserAuthValidator
-from app.a_p_i.v2.db.connDB import connDb
-from app.a_p_i.utility.messages import success_messages, error_messages
+from app.api.utility.validUser import UserAuthValidator
+from app.api.v2.db.conndb import connectdb
+from app.api.utility.messages import success_messages, error_messages
 
 """ instance of validation class"""
 uservalidatorO = UserAuthValidator()
@@ -23,10 +24,10 @@ class ManageUserDAO():
         self.password = password
         self.confirm_password = confirm_password
 
-    def CheckUserExistance(self):
+    def check_user_existance(self):
         """Method to check if user exists
         Check if a matching email exists in the DataBase"""
-        connection = connDb()
+        connection = connectdb()
         curs = connection.cursor()
         curs.execute("SELECT * FROM users WHERE email = %(email)s",
                      {'email': self.email})
@@ -44,18 +45,17 @@ class ManageUserDAO():
             self.password, self.confirm_password)
         data_check_uname = uservalidatorO.validUsername(self.username)
         if str(self.username) == os.getenv('PRIV'):
-
             user_priv = True
         else:
             user_priv = False
 
         if data_check_email & data_check_pass & data_check_uname:
 
-            if self.CheckUserExistance():
+            if self.check_user_existance():
                 api.abort(
                     409, error_messages[0]['email_conflict'])
 
-            connection = connDb()
+            connection = connectdb()
             curs = connection.cursor()
 
             self.passwd_hash = generate_password_hash(self.password)
@@ -77,7 +77,7 @@ class ManageUserDAO():
         if this pasess it create user access token"""
         data_check_email = uservalidatorO.validEmail(email)
         data_check_pass = uservalidatorO.validSignInPassword(password)
-        connection = connDb()
+        connection = connectdb()
         curs = connection.cursor()
         curs.execute("SELECT * FROM users WHERE email =%(email)s",
                      {'email': email})
@@ -88,14 +88,14 @@ class ManageUserDAO():
         if data_check_email and data_check_pass and existance:
             if check_password_hash(existance[0][4], password):
                 access_token = create_access_token(existance[0][0])
-                return access_token
+                return {"Your access token": access_token}
             api.abort(401, error_messages[9]['invalid_password'])
         api.abort(404, error_messages[10]['not_signed_up'])
 
     @staticmethod
     def get_username(user_id):
         """method to return a users username given their id"""
-        connection = connDb()
+        connection = connectdb()
         curs = connection.cursor()
         curs.execute("SELECT * FROM users WHERE user_id = %(user_id)s",
                      {'user_id': user_id})

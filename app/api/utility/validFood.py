@@ -5,7 +5,7 @@ import re
 
 # local imports
 from app import api
-from app.a_p_i.utility.messages import error_messages, success_messages
+from app.api.utility.messages import error_messages, success_messages
 
 
 class FoodDataValidator(object):

@@ -19,7 +19,7 @@ error_messages = [{'email_conflict':
                   {'poor_uname':
                    "The username is less then 5 characters or doesn't " +
                    "contain letters a-z or A-Z or - ONLY"},
-                  {'invalid_password': "Password is invalid"},
+                  {'invalid_password': "Password or email invalid"},
                   {'not_signed_up':
                    "Sign in request failed, user not signed up!"},
                   {'Int_title': "Title entered is not a string"},
@@ -46,13 +46,18 @@ error_messages = [{'email_conflict':
                    " onwards"},
                   {"invalid_status": "Order status  should be a string"},
                   {"incorect_status":
-                   "Order status can either be Processing , Cancelled or" +
-                   " Complete"}
+                   "Order status can either be processing , cancelled or" +
+                   " complete. Ensure you have no spaces at the begining" +
+                   " or end of status entered"}
                   ]
 
 success_messages = [
     {'account_created': 'Sign Up was successful proceed to Sign In'},
     {"food_created": "Food item was successfully created"},
     {'order_created': "order was successfully created"},
-    {"order_created1": "Order has been created you,You can edit it to make modifications"},
-    {'edit_success': 'Status update was successfull'}]
+    {"order_created1": "Order has been created you,You can edit it to" +
+     " make modifications"},
+    {'edit_success': 'Status update was successfull'},
+    {'user_orders': "All user orders"},
+    {'user_order': 'Your orders'},
+]

@@ -3,15 +3,15 @@ from flask import json
 
 # local imports
 from app import app
-from app.a_p_i.v2.db.connDB import connDb
-from app.a_p_i.utility.messages import error_messages, success_messages
+from app.api.v2.db.conndb import connectdb
+from app.api.utility.messages import error_messages, success_messages
 from tests.v1.test_order_views import mock_order, mock_answers
 from tests.v2.test_auth_views import user_token_creator, admin_token_creator
 
 
 def are_orders_added():
     """function to find if order is successfully ordered"""
-    connection = connDb()
+    connection = connectdb()
     curs = connection.cursor()
     curs.execute("SELECT * FROM orders")
     all_orders = curs.fetchall()
@@ -47,7 +47,15 @@ def test_order_food_item_successfully(client):
         new_num_orders = are_orders_added()
         assert old_num_orders + 1 == new_num_orders
         assert response.status_code == 201
-        assert response.json == success_messages[2]["order_created"]
+        assert response.json == ({
+            "food id": [1],
+            "Total expenditure": 1500,
+            "Order Creator": "delight",
+            "Order Status": "NEW",
+            "price per food": [500],
+            "ordered foods": ["Mokimo"],
+            "Quantity per food": [3]
+        })
 
 
 def test_orders_retrieval(client):
@@ -68,14 +76,16 @@ def test_admin_get_all_orders(client):
             '/api/v2/orders/', content_type='application/json',
             headers={'Authorization': 'Bearer ' + tok})
         assert response.status_code == 200
-        assert response.json == [{'creator': 'delight',
-                                  'food_id': 1,
-                                  'order_id': 1,
-                                  'price': 500,
-                                  'quantity': 3,
-                                  'status': 'NEW',
-                                  'title': 'Mokimo',
-                                  'total': 1500}]
+        assert response.json == {'All user orders': [{
+            "food_id": ['1'],
+            "order_id": 1,
+            "total": 1500,
+            "creator": "delight",
+            "status": "NEW",
+            "price": ['500'],
+            "title": ["Mokimo"],
+            "quantity": ['3']
+        }]}
 
 
 def test_admin_get_specific_order(client):
@@ -86,14 +96,16 @@ def test_admin_get_specific_order(client):
             '/api/v2/orders/1', content_type='application/json',
             headers={'Authorization': 'Bearer ' + tok})
         assert response.status_code == 200
-        assert response.json == {'creator': 'delight',
-                                 'food_id': 1,
-                                 'order_id': 1,
-                                 'price': 500,
-                                 'quantity': 3,
-                                 'status': 'NEW',
-                                 'title': 'Mokimo',
-                                 'total': 1500}
+        assert response.json == ({
+            "food_id": ['1'],
+            "order_id": 1,
+            "total": 1500,
+            "creator": "delight",
+            "status": "NEW",
+            "price": ['500'],
+            "title": ["Mokimo"],
+            "quantity": ['3']
+        })
 
 
 def test_admin_get_specific_order_not_existing(client):
@@ -116,7 +128,7 @@ def test_admin_edit_order_status_with_id(client):
             headers={'Authorization': 'Bearer ' + tok})
         assert response.status_code == 400
         assert response.json == {
-            'message': error_messages[23]["invalid_status"]}
+            'message': error_messages[24]["incorect_status"]}
 
 
 def test_admin_edit_order_status_successfully(client):
@@ -128,4 +140,14 @@ def test_admin_edit_order_status_successfully(client):
             content_type='application/json',
             headers={'Authorization': 'Bearer ' + tok})
         assert response.status_code == 200
-        assert response.json == success_messages[4]['edit_success']
+        assert response.json == {success_messages[4]['edit_success']: {
+            "food_id": ['1'],
+            "order_id": 1,
+            "total": 1500,
+            "creator": "delight",
+            "status": "Complete",
+            "price": ['500'],
+            "title": ["Mokimo"],
+            "quantity": ['3']
+        }}
+        

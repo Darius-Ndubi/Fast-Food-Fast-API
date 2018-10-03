@@ -4,7 +4,7 @@ import re
 
 # local imports
 from app import api
-from app.a_p_i.utility.messages import error_messages
+from app.api.utility.messages import error_messages
 
 
 class UserAuthValidator():
@@ -19,7 +19,7 @@ class UserAuthValidator():
             api.abort(400, error_messages[3]['Incorrect_email'])
 
         # checking email entered through regular expressions
-        elif not re.match(r"(^[a-zA-Z0-9.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]+$)", email):
+        elif not re.match(r"(^[a-zA-Z0-9.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$)", email):
             api.abort(
                 400, error_messages[2]['Invalid_email'])
         return True

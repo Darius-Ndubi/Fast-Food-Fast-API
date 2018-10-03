@@ -6,7 +6,7 @@ import os
 
 
 # local imports
-from app.a_p_i.v2.db.create_tables import create_dtb
+from app.api.v2.db.create_tables import create_dtb
 
 """create the necesarry tables"""
 create_dtb()
@@ -24,11 +24,11 @@ api = Api(app, version='2.0', title='Fast Food Fast API',
 jwt._set_error_handler_callbacks(api)
 
 
-from app.a_p_i.v2.views.auth_views import ns as auth
+from app.api.v2.views.auth_views import fff as auth
 api.add_namespace(auth, path='/api/v2')
 
-from app.a_p_i.v2.views.food_views import ns as menu
+from app.api.v2.views.food_views import fff as menu
 api.add_namespace(menu, path='/api/v2')
 
-from app.a_p_i.v2.views.order_views import ns as orders
+from app.api.v2.views.order_views import fff as orders
 api.add_namespace(orders, path='/api/v2')

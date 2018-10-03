@@ -1,7 +1,7 @@
 """Module to create the required tables in database"""
 
 # local imports
-from app.a_p_i.v2.db.connDB import connDb
+from app.api.v2.db.conndb import connectdb
 
 
 def create_dtb():
@@ -28,18 +28,19 @@ def create_dtb():
         """
         CREATE TABLE IF NOT EXISTS orders(
         order_id SERIAL PRIMARY KEY NOT NULL,
-        food_id INT NOT NULL REFERENCES foods(food_id),
-        title VARCHAR(20) NOT NULL,
-        price INT NOT NULL,
-        quantity INT NOT NULL,
+        food_id TEXT [],
+        title TEXT [],
+        price TEXT [],
+        quantity TEXT [],
         total INT NOT NULL,
         status VARCHAR NOT NULL,
         creator VARCHAR(20) NOT NULL
         )
         """
     ]
-    connection = connDb()
+    connection = connectdb()
     curs = connection.cursor()
+    # food_id INT NOT NULL REFERENCES foods(food_id)
 
     for table in tables:
         curs.execute(table)
