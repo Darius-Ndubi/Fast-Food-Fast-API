@@ -3,9 +3,9 @@ from flask_restplus import Resource, Namespace
 from flask import request
 
 # local imports
-from app.a_p_i.v2.models.UserModel import ManageUserDAO
+from app.api.v2.models.usermodel import ManageUserDAO
 
-ns = Namespace('auth', description='User authentication operations')
+fff = Namespace('auth', description='User authentication operations')
 
 
 """
@@ -13,7 +13,7 @@ ns = Namespace('auth', description='User authentication operations')
 """
 
 
-@ns.route('/auth/signup')
+@fff.route('/auth/signup')
 class SignUp(Resource):
     '''Allows a user to sign up'''
 
@@ -26,13 +26,13 @@ class SignUp(Resource):
             'confirm_password': request.json['confirm_password'],
         }
         # print (new_user)
-        UserAO = ManageUserDAO(
+        userao = ManageUserDAO(
             new_user['email'], new_user['username'], new_user['password'],
             new_user['confirm_password'])
-        return UserAO.SignUpNewUser()
+        return userao.SignUpNewUser()
 
 
-@ns.route('/auth/login')
+@fff.route('/auth/login')
 class Signin(Resource):
     '''Allows a user to login'''
 

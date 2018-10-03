@@ -4,14 +4,14 @@ from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # local imports
-from app.a_p_i.v2.models.ManOrders import ManageOrdersDAO
-from app.a_p_i.v2.models.UserModel import ManageUserDAO
-from app.a_p_i.v2.models.FoodModel import ManageFoodDAO
+from app.api.v2.models.ordersmodel import ManageOrdersDAO
+from app.api.v2.models.usermodel import ManageUserDAO
+from app.api.v2.models.foodmodel import ManageFoodDAO
 
-ns = Namespace('orders', description='Orders and their operations')
+fff = Namespace('orders', description='Orders and their operations')
 
-orderAO = ManageOrdersDAO()
-foodAO = ManageFoodDAO()
+orderao = ManageOrdersDAO()
+foodao = ManageFoodDAO()
 
 
 """
@@ -19,7 +19,7 @@ foodAO = ManageFoodDAO()
 """
 
 
-@ns.route('/users/orders')
+@fff.route('/users/orders')
 class Order(Resource):
     """
         Class to get all orders and add an order
@@ -28,11 +28,11 @@ class Order(Resource):
     def get(self):
         """Geting all posted by an individual"""
         user_id = get_jwt_identity()
-        return orderAO.find_user_orders(ManageUserDAO.get_username(user_id)),
+        return orderao.find_user_orders(ManageUserDAO.get_username(user_id)),
         200
 
     @jwt_required
-    # @ns.marshal_with(order, code=201)
+    # @fff.marshal_with(order, code=201)
     def post(self):
         """Post an order"""
         user_id = get_jwt_identity()
@@ -43,10 +43,10 @@ class Order(Resource):
         }
         new_order['username'] = ManageUserDAO.get_username(user_id)
 
-        return orderAO.create_new_order(new_order), 201
+        return orderao.create_new_order(new_order), 201
 
 
-@ns.route('/orders/')
+@fff.route('/orders/')
 class OrderList(Resource):
     """
         Class to get all orders orders created by a user
@@ -55,26 +55,26 @@ class OrderList(Resource):
     def get(self):
         '''Geting all posted orders'''
         user_id = get_jwt_identity()
-        foodAO.admin_only(user_id)
-        return orderAO.find_all_orders(), 200
+        foodao.admin_only(user_id)
+        return orderao.find_all_orders(), 200
 
 
-@ns.route('/orders/<int:order_id>')
-class OrderActions(Resource):
+@fff.route('/orders/<int:order_id>')
+class OrderActiofff(Resource):
     """class to retrive a single order as nterd by user"""
     @jwt_required
     def get(self, order_id):
         '''Geting all posted orders'''
         user_id = get_jwt_identity()
-        foodAO.admin_only(user_id)
-        return orderAO.find_specific_order(order_id), 200
+        foodao.admin_only(user_id)
+        return orderao.find_specific_order(order_id), 200
 
     @jwt_required
     def put(self, order_id):
         '''Geting all posted orders'''
         user_id = get_jwt_identity()
-        foodAO.admin_only(user_id)
+        foodao.admin_only(user_id)
         new_status = {
             'status': request.json['status']
         }
-        return orderAO.update_status(new_status, order_id), 200
+        return orderao.update_status(new_status, order_id), 200

@@ -4,7 +4,7 @@ import os
 import psycopg2
 
 
-def connDb():
+def connectdb():
     """function to set up connection to either of the dbs
     """
     connectdb = os.getenv('TDB_URL', 'postgresql:///testfastfoodfast')
@@ -12,10 +12,10 @@ def connDb():
     try:
         return psycopg2.connect(connectdb)
     except:
-        print("Sorry connection to database failed")
+        return ("Sorry connection to database failed")
 
 
-def dropTdb():
+def droptestdb():
     """Method to destroy the test database after testing
     """
     connection = connDb()

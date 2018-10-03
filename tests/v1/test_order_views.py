@@ -16,12 +16,12 @@
 mock_order = [{'quantity': '3', 'food_id': 'Burger', 'creator': ''},
               {'quantity': 3, 'food_id': "#", 'creator': ''},
               {'quantity': 3, 'food_id': '$%^&@!', 'creator': ''},
-              {'quantity': 3, 'food_id': 1, 'creator': ''}]
+              {'quantity': [3], 'food_id': [1]}]
 
 """
     Mock answer data to test the working of user edit order
 """
-mock_answers = [{'status': 123}, {'status': 'Complete'}]
+mock_answers = [{'status': '123'}, {'status': 'complete'}]
 
 
 # def test_orders_retrival():

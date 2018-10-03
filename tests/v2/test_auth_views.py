@@ -4,8 +4,8 @@ from flask_jwt_extended import create_access_token
 
 # local imports
 from app import app
-from app.a_p_i.v2.db.connDB import connDb
-from app.a_p_i.utility.messages import error_messages, success_messages
+from app.api.v2.db.conndb import connectdb
+from app.api.utility.messages import error_messages, success_messages
 from tests.v1.test_auser_views import mock_reg, mock_log
 
 
@@ -13,7 +13,7 @@ def registered():
     """A function helps to validate if a user signup is successfull
     by querrying if data is actually entered into db"""
 
-    connection = connDb()
+    connection = connectdb()
     curs = connection.cursor()
 
     curs.execute("SELECT * FROM users")
@@ -26,8 +26,9 @@ def registered():
 
 
 def id_picker(email):
-    """Function to pick the users id from db that will be used to create the access token"""
-    connection = connDb()
+    """Function to pick the users id from db that will be used to
+     create the access token"""
+    connection = connectdb()
     curs = connection.cursor()
     curs.execute(
         "SELECT * FROM users WHERE email = %(email)s", {'email': email})
