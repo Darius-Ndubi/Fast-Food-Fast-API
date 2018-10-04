@@ -10,7 +10,7 @@ def create_dtb():
         """CREATE TABLE IF NOT EXISTS users(
         user_id SERIAL PRIMARY KEY NOT NULL,
         email VARCHAR NOT NULL,
-        username VARCHAR(20) NOT NULL,
+        username VARCHAR(20) NOT NULL UNIQUE,
         priv BOOL DEFAULT FALSE,
         password VARCHAR NOT NULL
         )
@@ -34,7 +34,7 @@ def create_dtb():
         quantity TEXT [],
         total INT NOT NULL,
         status VARCHAR NOT NULL,
-        creator VARCHAR(20) NOT NULL
+        creator VARCHAR REFERENCES users(username)
         )
         """
     ]

@@ -2,10 +2,11 @@
 
 import re
 from werkzeug.exceptions import NotFound
-from app.api.utility.messages import error_messages
+
 
 # local imports
 from app import api
+from app.api.utility.messages import error_messages
 
 
 class OrderDataValidator():
@@ -41,7 +42,7 @@ class OrderDataValidator():
 
     def statusValid(self, order_status):
         """Method to handle the validity checking of status entered """
-        #check if the order status is of string type
+        # check if the order status is of string type
         if type(order_status) != str:
             api.abort(
                 400, error_messages[23]["invalid_status"])

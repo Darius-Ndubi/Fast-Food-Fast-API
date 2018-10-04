@@ -2,8 +2,8 @@
 
 # local imports
 from app import api
-from app.a_p_i.utility.validOrder import OrderDataValidator
-from app.a_p_i.v1.models.authUsers import ManageUsersDAO
+from app.api.utility.valid_order import OrderDataValidator
+from app.api.v1.models.authUsers import ManageUsersDAO
 
 # instance onf class MAnageUSersDAO,OrderDataValidator
 usersAO = ManageUsersDAO()

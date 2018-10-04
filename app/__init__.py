@@ -24,11 +24,11 @@ api = Api(app, version='2.0', title='Fast Food Fast API',
 jwt._set_error_handler_callbacks(api)
 
 
-from app.api.v2.views.auth_views import fff as auth
+from app.api.v2.views.auth_views import fastfood as auth
 api.add_namespace(auth, path='/api/v2')
 
-from app.api.v2.views.food_views import fff as menu
+from app.api.v2.views.food_views import fastfood as menu
 api.add_namespace(menu, path='/api/v2')
 
-from app.api.v2.views.order_views import fff as orders
+from app.api.v2.views.order_views import fastfood as orders
 api.add_namespace(orders, path='/api/v2')

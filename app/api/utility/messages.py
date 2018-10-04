@@ -2,7 +2,7 @@
 
 error_messages = [{'email_conflict':
                    'Sign up request for could not be completed due to' +
-                   'existance of same email'},
+                   ' existance of same email'},
                   {'validation_error':
                    "An expected error occurred during data Validation"},
                   {'Invalid_email':
@@ -13,7 +13,7 @@ error_messages = [{'email_conflict':
                   {'unmatching': 'Password and confirm_password don\'t match'},
                   {'poor_pass':
                    "Password should contain @,#,$,& or * with minimum of 6" +
-                   "chars and maximum of 10"},
+                   " chars and maximum of 10"},
                   {'invalid_uname':
                    "A username is not a number,spaces or empty"},
                   {'poor_uname':
@@ -48,7 +48,9 @@ error_messages = [{'email_conflict':
                   {"incorect_status":
                    "Order status can either be processing , cancelled or" +
                    " complete. Ensure you have no spaces at the begining" +
-                   " or end of status entered"}
+                   " or end of status entered"},
+                  {"invalid_data": "You have either not entered anything" +
+                   " in the body or the json object is invalid"}
                   ]
 
 success_messages = [
@@ -59,5 +61,5 @@ success_messages = [
      " make modifications"},
     {'edit_success': 'Status update was successfull'},
     {'user_orders': "All user orders"},
-    {'user_order': 'Your orders'},
+    {'user_order': 'Your orders'}
 ]

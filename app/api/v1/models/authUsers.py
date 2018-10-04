@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # Local imports
 from app import api
-from app.a_p_i.utility.validUser import UserAuthValidator
+from app.api.utility.valid_user import UserAuthValidator
 
 logged_user = {}
 

@@ -40,16 +40,12 @@ def id_picker(email):
 
 def user_token_creator():
     """function to generate normal user token"""
-    u_id = id_picker(mock_log[6].get('email'))
-    tok = create_access_token(u_id)
-    return tok
+    return create_access_token(id_picker(mock_log[6].get('email')))
 
 
 def admin_token_creator():
     """Function to generate admin token"""
-    u_id = id_picker(mock_log[7].get('email'))
-    tok1 = create_access_token(u_id)
-    return tok1
+    return create_access_token(id_picker(mock_log[7].get('email')))
 
 
 def test_signup_empty_email(client):
@@ -152,6 +148,16 @@ def test_signup_spaces_username(client):
     assert response.status_code == 400
 
 
+def test_signup_empty_json(client):
+    """A test on input of an empty json when signup"""
+    response = client.post(
+        '/api/v2/auth/signup', data=json.dumps(mock_reg[12]),
+        content_type='application/json')
+    json.loads(response.data.decode('utf-8'))
+    assert response.json == {'message': error_messages[25]['invalid_data']}
+    assert response.status_code == 400
+
+
 def test_signup_correct_data(client):
     """Test of sign up with correct data
     """
@@ -163,6 +169,15 @@ def test_signup_correct_data(client):
     assert old_num_users + 1 == new_num_users
     assert response.get_json() == success_messages[0]['account_created']
     assert response.status_code == 201
+
+def test_signup_repeatedly(client):
+    """Test of sign up repeatedly with credentials already used
+    """
+    response = client.post(
+        '/api/v2/auth/signup', data=json.dumps(mock_reg[4]),
+        content_type='application/json')
+    assert response.get_json() == {'message': error_messages[0]['email_conflict']}
+    assert response.status_code == 409
 
 
 def test_signup_test_admin(client):
@@ -238,26 +253,52 @@ def test_login_poor_password(client):
     assert response.status_code == 400
 
 
+def test_login_empty_json(client):
+    """A test on input of an empty json when logining in"""
+    response = client.post(
+        '/api/v2/auth/login', data=json.dumps(mock_log[8]),
+        content_type='application/json')
+    json.loads(response.data.decode('utf-8'))
+    assert response.json == {'message': error_messages[25]['invalid_data']}
+    assert response.status_code == 400
+
+def test_login_invalid_password(client):
+    """A test on input of a password that does not match the one stored for the user"""
+    response = client.post(
+        '/api/v2/auth/login', data=json.dumps(mock_log[9]),
+        content_type='application/json')
+    json.loads(response.data.decode('utf-8'))
+    assert response.json == {'message': error_messages[9]['invalid_password']}
+    assert response.status_code == 403
+
+def test_login_with_unknown_email_password(client):
+    """A test on input of a password and email not in the system"""
+    response = client.post(
+        '/api/v2/auth/login', data=json.dumps(mock_log[10]),
+        content_type='application/json')
+    json.loads(response.data.decode('utf-8'))
+    assert response.json == {'message': error_messages[10]['not_signed_up']}
+    assert response.status_code == 401
+
+
 def test_login_known_user(client):
     """Test on user login
     """
     with app.app_context():
-        # global tok
         response = client.post(
             '/api/v2/auth/login', data=json.dumps(mock_log[6]),
             content_type='application/json')
         json.loads(response.data.decode('utf-8'))
         assert response.status_code == 200
-        assert response != user_token_creator()
+        #assert response == user_token_creator()
 
 
 def test_login_admin_user(client):
     """Test on user test admin login
     """
     with app.app_context():
-        # global tok1
         response = client.post(
             '/api/v2/auth/login', data=json.dumps(mock_log[7]), content_type='application/json')
         json.loads(response.data.decode('utf-8'))
         assert response.status_code == 200
-        assert response != admin_token_creator()
+        #assert response != admin_token_creator()
