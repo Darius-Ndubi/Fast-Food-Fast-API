@@ -3,7 +3,7 @@ from flask_restplus import Resource, Namespace
 from flask import request
 
 # local imports
-from app import api
+from app import API
 from app.api.utility.messages import error_messages
 from app.api.v2.models.user_model import ManageUserDAO
 from app.api.v1.views.user_views import user_signup, user_signin
@@ -35,7 +35,7 @@ class SignUp(Resource):
                 'confirm_password': request.json['confirm_password'],
             }
         except:
-            api.abort(400, error_messages[25]['invalid_data'])
+            API.abort(400, error_messages[25]['invalid_data'])
 
         userobject = ManageUserDAO(
             new_user['email'], new_user['username'], new_user['password'],
@@ -61,7 +61,7 @@ class Signin(Resource):
                 'password': request.json['password']
             }
         except:
-            api.abort(400, error_messages[25]['invalid_data'])
+            API.abort(400, error_messages[25]['invalid_data'])
 
         return ManageUserDAO.loginUser(existing_user['email'],
                                        existing_user['password'])

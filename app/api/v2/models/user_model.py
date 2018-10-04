@@ -6,7 +6,7 @@ from flask import jsonify
 
 
 # local imports
-from app import api
+from app import API
 from app.api.utility.valid_user import UserAuthValidator
 from app.api.v2.db.conndb import connectdb
 from app.api.utility.messages import success_messages, error_messages
@@ -25,13 +25,13 @@ class ManageUserDAO():
         self.password = password
         self.confirm_password = confirm_password
 
-    def check_user_existance(self):
+    def check_user_existance(self,email):
         """Method to check if user exists
         Check if a matching email exists in the DataBase"""
         connection = connectdb()
         curs = connection.cursor()
         curs.execute("SELECT * FROM users WHERE email = %(email)s",
-                     {'email': self.email})
+                     {'email': email})
         existing_user = curs.fetchall()
         curs.close()
         connection.close()
@@ -45,15 +45,15 @@ class ManageUserDAO():
         data_check_pass = uservalidatoro.validPasswd(
             self.password, self.confirm_password)
         data_check_uname = uservalidatoro.validUsername(self.username)
-        if str(self.username) == os.getenv('PRIV'):
+        if self.username == os.getenv('PRIV'):
             user_priv = True
         else:
             user_priv = False
 
         if data_check_email & data_check_pass & data_check_uname:
 
-            if self.check_user_existance():
-                api.abort(
+            if self.check_user_existance(self.email.lower()):
+                API.abort(
                     409, error_messages[0]['email_conflict'])
 
             connection = connectdb()
@@ -63,13 +63,13 @@ class ManageUserDAO():
 
             curs.execute("INSERT INTO users (email,username,priv,password)" +
                          "VALUES(%s,%s,%s,%s)",
-                         (self.email, self.username, user_priv, self.passwd_hash))
+                         (self.email.lower(),self.username, user_priv, self.passwd_hash))
 
             curs.close()
             connection.commit()
             connection.close()
             return success_messages[0]['account_created'], 201
-        api.abort(500, error_messages[1]['validation_error'])
+        API.abort(500, error_messages[1]['validation_error'])
 
     @staticmethod
     def loginUser(email, password):
@@ -78,10 +78,11 @@ class ManageUserDAO():
         if this pasess it create user access token"""
         data_check_email = uservalidatoro.validEmail(email)
         data_check_pass = uservalidatoro.validSignInPassword(password)
+        
         connection = connectdb()
         curs = connection.cursor()
         curs.execute("SELECT * FROM users WHERE email =%(email)s",
-                     {'email': email})
+                     {'email': email.lower()})
         existance = curs.fetchall()
         curs.close()
         connection.close()
@@ -89,9 +90,10 @@ class ManageUserDAO():
         if data_check_email and data_check_pass and existance:
             if check_password_hash(existance[0][4], password):
                 access_token = create_access_token(existance[0][0])
-                return {"Your access token": access_token}
-            api.abort(403, error_messages[9]['invalid_password'])
-        api.abort(401, error_messages[10]['not_signed_up'])
+                return {"Mesaage":"Login Successful","Token": access_token}
+                
+            API.abort(403, error_messages[9]['invalid_password'])
+        API.abort(401, error_messages[10]['not_signed_up'])
 
     @staticmethod
     def get_username(user_id):
@@ -112,4 +114,4 @@ class ManageUserDAO():
                      {'username': username})
         user_exixtance = curs.fetchone()
         if user_exixtance[3]:
-            api.abort(403, error_messages[19]['unmet_priv'])
+            API.abort(403, error_messages[19]['unmet_priv'])

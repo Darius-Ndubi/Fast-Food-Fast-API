@@ -2,7 +2,7 @@
 from flask import jsonify
 
 # local imports
-from app import api
+from app import API
 from app.api.utility.valid_food import FoodDataValidator
 from app.api.utility.messages import success_messages, error_messages
 from app.api.v2.db.conndb import connectdb
@@ -28,10 +28,19 @@ class ManageFoodDAO():
         curs.close()
         connection.close()
         if self.admin_user[3] is not True:
-            api.abort(403, error_messages[19]['unmet_priv'])
+            API.abort(403, error_messages[19]['unmet_priv'])
 
         else:
             return self.admin_user
+
+    def check_food_existance_by_id(self,food_id):
+        """Method to checkif a food item exists if queried by its id"""
+        connection = connectdb()
+        curs = connection.cursor()
+        curs.execute("SELECT * FROM foods WHERE food_id=%(food_id)s",
+                     {'food_id': food_id})
+        existance = curs.fetchone()
+        return existance
 
     def check_items_existance(self, title):
         """Method to validation it the food item exists"""
@@ -51,14 +60,14 @@ class ManageFoodDAO():
             data['description'])
         price_validation = foodvalidatorobject.pricevalidator(data['price'])
         type_validation = foodvalidatorobject.typeValidator(data['type'])
-        title = data['title'].capitalize()
+        title = data['title'].cAPItalize()
         food_exist = self.check_items_existance(title)
 
         # if all validations pass
         if title_validation and description_validation and price_validation and type_validation:
             # validation if title exists
             if food_exist is not None:
-                api.abort(409, error_messages[18]['food_exist'])
+                API.abort(409, error_messages[18]['food_exist'])
             data['creator'] = self.admin_user[2]
             connection = connectdb()
             curs = connection.cursor()
@@ -76,8 +85,8 @@ class ManageFoodDAO():
                 'Food Price': data['price'],
                 'Food Type': data['type']
             }
-            return {success_messages[1]['food_created']: created_food_item}, 201
-        api.abort(500, error_messages[1]['validation_error'])
+            return {"Message":success_messages[1]['food_created'],"Food Item":created_food_item}, 201
+        API.abort(500, error_messages[1]['validation_error'])
 
     def get_all_foods(self):
         """Method to retrieve all food menu item"""
@@ -87,7 +96,7 @@ class ManageFoodDAO():
         menu = curs.fetchall()
         foods = []
         if len(menu) == 0:
-            api.abort(404, error_messages[20]['item_not_found'])
+            API.abort(404, error_messages[20]['item_not_found'])
         for item in menu:
             food_item = {
                 'food_id': item[0],

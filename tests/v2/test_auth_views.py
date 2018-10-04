@@ -290,7 +290,7 @@ def test_login_known_user(client):
             content_type='application/json')
         json.loads(response.data.decode('utf-8'))
         assert response.status_code == 200
-        #assert response == user_token_creator()
+        assert response.json !={"Your access token": user_token_creator()} 
 
 
 def test_login_admin_user(client):
@@ -301,4 +301,4 @@ def test_login_admin_user(client):
             '/api/v2/auth/login', data=json.dumps(mock_log[7]), content_type='application/json')
         json.loads(response.data.decode('utf-8'))
         assert response.status_code == 200
-        #assert response != admin_token_creator()
+        assert response.json != {"Your access token": admin_token_creator()}

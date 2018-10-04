@@ -4,12 +4,23 @@ from flask_restplus import Resource, Namespace, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # local imports
-from app import api
+from app import API
 from app.api.utility.messages import error_messages
 from app.api.v2.models.food_model import ManageFoodDAO
 from app.api.v1.views.food_views import food_item
 
 fastfood = Namespace('menu', description='Foods and their operations')
+
+
+def auth_required(func):
+    func = API.doc(security='apikey')(func)
+    def check_auth(*args, **kwargs):
+        if 'X-API-KEY' not in request.headers:
+            API.abort('401', 'API key required')
+        key = request.headers['X-API-KEY']
+        #Check key validity
+        return func(*args, **kwargs)
+    return check_auth
 
 
 foodobject = ManageFoodDAO()
@@ -29,11 +40,15 @@ class Food(Resource):
     # securing endpoint with token
     @jwt_required
     @fastfood.doc('Create a new food item')
+    @fastfood.doc(security='apikey')
+    @auth_required
     @fastfood.expect(food_item)
     def post(self):
         ''' Post a food item'''
         user_id = get_jwt_identity()
+        print(user_id)
         foodobject.admin_only(user_id)
+
         try:
             new_item = {
                 'title':  request.json['title'],
@@ -42,6 +57,6 @@ class Food(Resource):
                 'type': request.json['type']
             }
         except:
-            api.abort(400, error_messages[25]['invalid_data'])
+            API.abort(400, error_messages[25]['invalid_data'])
 
         return foodobject.create_menu_item(new_item)

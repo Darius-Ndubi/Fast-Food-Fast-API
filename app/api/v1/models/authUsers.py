@@ -4,7 +4,7 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Local imports
-from app import api
+from app import API
 from app.api.utility.valid_user import UserAuthValidator
 
 logged_user = {}
@@ -48,7 +48,7 @@ class ManageUsersDAO(object):
         if data_check_email & data_check_pass & data_check_uname:
 
             if self.check_user_email(data['email']):
-                api.abort(409, "Sign up request for {} could not be completed due to existance of same email".format(
+                API.abort(409, "Sign up request for {} could not be completed due to existance of same email".format(
                     data['email']))
 
             data['id'] = len(self.users)+1
@@ -59,7 +59,7 @@ class ManageUsersDAO(object):
 
             self.users.append(data)
             return "Sign Up was successful proceed to Sign In", 201
-        api.abort(500, "An expected error occurred during data Validation")
+        API.abort(500, "An expected error occurred during data Validation")
 
     def user_signin(self, data):
         """
@@ -77,7 +77,7 @@ class ManageUsersDAO(object):
 
         if data_check == True and existing_user != None:
             if logged_user.get('user') == existing_user['username']:
-                api.abort(
+                API.abort(
                     409, "You: {} are already logged in".format(data['email']))
 
             if check_password_hash(existing_user.get('password'), data['password']):
@@ -89,10 +89,10 @@ class ManageUsersDAO(object):
                 logged_user['priv'] = False
                 return "Sign in Successful Go see our food Menu"
 
-            api.abort(401, "Password: {} is invalid".format(
+            API.abort(401, "Password: {} is invalid".format(
                 data['password']))
 
-        api.abort(404, "Sign in request for {} failed, user not signed up!".format(
+        API.abort(404, "Sign in request for {} failed, user not signed up!".format(
             data['email']))
 
     def are_you_signed_in(self):
@@ -106,7 +106,7 @@ class ManageUsersDAO(object):
             -> editing status of food item
         """
         if len(logged_user) == 0:
-            api.abort(401, "You cannot perform this action without signing in")
+            API.abort(401, "You cannot perform this action without signing in")
         return logged_user['user']
 
     def restraunt_actions(self):
@@ -114,5 +114,5 @@ class ManageUsersDAO(object):
         """
         self.are_you_signed_in()
         if not logged_user['priv']:
-            api.abort(
+            API.abort(
                 401, "Sorry your privileges won't allow you to perform this action")

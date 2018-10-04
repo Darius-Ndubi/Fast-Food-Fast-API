@@ -10,7 +10,7 @@ error_messages = [{'email_conflict':
                    "not contain spaces or #,$,%,^,&,*,!,(,) and :"},
                   {'Incorrect_email': "An email should string not a number"},
                   {'incorrect_passwd': "A password is a string not a number"},
-                  {'unmatching': 'Password and confirm_password don\'t match'},
+                  {'unmatching': 'Password and confirm password don\'t match'},
                   {'poor_pass':
                    "Password should contain @,#,$,& or * with minimum of 6" +
                    " chars and maximum of 10"},
@@ -60,6 +60,6 @@ success_messages = [
     {"order_created1": "Order has been created you,You can edit it to" +
      " make modifications"},
     {'edit_success': 'Status update was successfull'},
-    {'user_orders': "All user orders"},
+    {'user_orders': "All users orders"},
     {'user_order': 'Your orders'}
 ]
