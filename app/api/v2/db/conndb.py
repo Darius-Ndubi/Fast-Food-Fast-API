@@ -7,7 +7,7 @@ import psycopg2
 def connectdb():
     """function to set up connection to either of the dbs
     """
-    connectdb = os.getenv('TDB_URL')
+    connectdb = os.getenv('TDB_URL', 'postgresql:///testfastfoodfast')
     # connectdb = os.getenv('DB_URL')
     try:
         return psycopg2.connect(connectdb)

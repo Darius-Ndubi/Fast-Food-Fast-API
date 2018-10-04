@@ -60,7 +60,7 @@ class ManageFoodDAO():
             data['description'])
         price_validation = foodvalidatorobject.pricevalidator(data['price'])
         type_validation = foodvalidatorobject.typeValidator(data['type'])
-        title = data['title'].cAPItalize()
+        title = data['title'].capitalize()
         food_exist = self.check_items_existance(title)
 
         # if all validations pass

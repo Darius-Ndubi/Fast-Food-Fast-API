@@ -16,33 +16,18 @@ fastfood = Namespace('orders', description='Orders and their operations')
 orderobject = ManageOrdersDAO()
 foodobject = ManageFoodDAO()
 
-""" Model for placing on food item
-"""
-order = API.model('Orders', {
-    'food_id': fields.Integer(required=True, description='Food  unique identifier'),
-    'quantity': fields.Integer(required=True, description='Number of food item ordered')
-})
 
-"""Model for adding status to an order
-"""
-status = API.model('Status', {
-    'status': fields.String(required=True, description='Add order Status')
-})
 
 """User orders endpoint
 """
 
 
 @fastfood.route('/users/orders')
-@fastfood.response(400, 'Bad Request')
-@fastfood.response(401, 'Please sign in First')
 class Order(Resource):
     """
         Class to get all orders and add an order
     """
     @jwt_required
-    @fastfood.doc('List all orders made')
-    @fastfood.doc(security='apikey')
     def get(self):
         """Geting all posted by an individual"""
         user_id = get_jwt_identity()
@@ -50,9 +35,6 @@ class Order(Resource):
             ManageUserDAO.get_username(user_id)), 200
 
     @jwt_required
-    @fastfood.doc('Create food order')
-    @fastfood.doc(security='apikey')
-    @fastfood.expect(order)
     def post(self):
         """Post an order"""
         user_id = get_jwt_identity()
@@ -70,14 +52,11 @@ class Order(Resource):
 
 
 @fastfood.route('/orders/')
-@fastfood.response(200, 'Successful retrieving orders')
 class OrderList(Resource):
     """
         Class to get all orders orders created by a user
     """
     @jwt_required
-    @fastfood.doc(security='apikey')
-    @fastfood.doc('Find all user orders')
     def get(self):
         '''Geting all posted orders'''
         user_id = get_jwt_identity()
@@ -86,15 +65,9 @@ class OrderList(Resource):
 
 
 @fastfood.route('/orders/<int:order_id>')
-@fastfood.response(200, 'Search was successful')
-@fastfood.response(404, 'Order not Found')
-@fastfood.response(401, 'Please sign in First')
-@fastfood.param('order_id', 'The order unique identifier')
 class OrderActiofastfood(Resource):
     """class to retrive a single order as nterd by user"""
     @jwt_required
-    @fastfood.doc('Find specific order')
-    @fastfood.doc(security='apikey')
     def get(self, order_id):
         '''Geting all posted orders'''
         user_id = get_jwt_identity()
@@ -102,9 +75,6 @@ class OrderActiofastfood(Resource):
         return orderobject.find_specific_order(order_id), 200
 
     @jwt_required
-    @fastfood.doc('Add status to an order')
-    @fastfood.doc(security='apikey')
-    @fastfood.expect(status)
     def put(self, order_id):
         '''Editing order satus'''
         user_id = get_jwt_identity()

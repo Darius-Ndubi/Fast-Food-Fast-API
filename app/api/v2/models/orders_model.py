@@ -193,7 +193,7 @@ class ManageOrdersDAO():
 
     def update_status(self, data, order_id):
         """Method to update th status of an order"""
-        status = data['status'].cAPItalize()
+        status = data['status'].capitalize()
         status_check = OrderDataValidator()
         status_checkO = status_check.statusValid(status)
 

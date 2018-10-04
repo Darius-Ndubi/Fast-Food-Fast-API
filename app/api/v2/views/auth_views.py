@@ -18,13 +18,8 @@ fastfood = Namespace('auth', description='User authentication operations')
 
 
 @fastfood.route('/auth/signup')
-@fastfood.response(409, 'Email Conflict')
-@fastfood.response(400, 'Incorrect Input')
 class SignUp(Resource):
     '''Allows a user to sign up'''
-    @fastfood.doc('New user signup')
-    @fastfood.expect(user_signup)
-    @fastfood.response(201, 'Account created')
     def post(self):
         ''' Sign Up User'''
         try:
@@ -44,15 +39,8 @@ class SignUp(Resource):
 
 
 @fastfood.route('/auth/login')
-@fastfood.response(400, 'Input syntax errors')
-@fastfood.response(401, 'Un-authorized user')
-@fastfood.response(403, 'Request forbidden')
-@fastfood.response(409, 'User already signed in')
 class Signin(Resource):
     '''Allows a user to login'''
-    @fastfood.doc('Signed Up  user Sign In')
-    @fastfood.expect(user_signin)
-    @fastfood.response(200, 'Sign In successful')
     def post(self):
         '''Sign In User'''
         try:
