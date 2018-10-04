@@ -3,7 +3,8 @@ from flask import json
 
 # local imports
 from app import app
-from app.api.v2.db.conndb import connectdb
+from app.api.v2.db.conndb import connectdb,droptestdb
+from app.api.v2.db.create_tables import create_dtb
 from app.api.utility.messages import error_messages, success_messages
 from tests.v1.test_order_views import mock_order, mock_answers
 from tests.v2.test_auth_views import user_token_creator, admin_token_creator
@@ -69,6 +70,29 @@ def test_order_food_item_successfully(client):
             "Quantity per food": [3]
         })
 
+def test_order_food_item_repeatedly(client):
+    """test combination of orders in same state to one"""
+    with app.app_context():
+        user_token = user_token_creator()
+        old_num_orders = are_orders_added()
+        response = client.post(
+            '/api/v2/users/orders', data=json.dumps(mock_order[3]),
+            content_type='application/json',
+            headers={'Authorization': 'Bearer ' + user_token})
+        json.loads(response.data)
+        new_num_orders = are_orders_added()
+        assert old_num_orders == new_num_orders
+        assert response.status_code == 201
+        assert response.json == ({
+			"food id": [["1"]],
+			"Order Creator": "delight",
+			"price per food": [500,500],
+			"ordered foods": ["Mokimo","Mokimo"],
+			"Total expenditure": 3000,
+			"Order Status": "NEW",
+			"Quantity per food": [3,3]
+		})
+
 
 def test_orders_retrieval(client):
     """test on user getting orders to them"""
@@ -88,16 +112,18 @@ def test_admin_get_all_orders(client):
             '/api/v2/orders/', content_type='application/json',
             headers={'Authorization': 'Bearer ' + admin_token})
         assert response.status_code == 200
-        assert response.json == {'All user orders': [{
-            "food_id": ['1'],
-            "order_id": 1,
-            "total": 1500,
-            "creator": "delight",
-            "status": "NEW",
-            "price": ['500'],
-            "title": ["Mokimo"],
-            "quantity": ['3']
-        }]}
+        assert response.json == {'All user orders': [
+		{
+			"status": "NEW",
+			"title": ["Mokimo","Mokimo"],
+			"order_id": 1,
+			"quantity": ["3","3"],
+			"price": ["500","500"],
+			"creator": "delight",
+			"food_id": [["1"]],
+			"total": 3000
+		}
+	]}
 
 
 def test_admin_get_specific_order(client):
@@ -109,15 +135,15 @@ def test_admin_get_specific_order(client):
             headers={'Authorization': 'Bearer ' + admin_token})
         assert response.status_code == 200
         assert response.json == ({
-            "food_id": ['1'],
-            "order_id": 1,
-            "total": 1500,
-            "creator": "delight",
-            "status": "NEW",
-            "price": ['500'],
-            "title": ["Mokimo"],
-            "quantity": ['3']
-        })
+	"status": "NEW",
+	"title": ["Mokimo","Mokimo"],
+	"order_id": 1,
+	"quantity": ["3","3"],
+	"price": ["500","500"],
+	"creator": "delight",
+	"food_id": [["1"]],
+	"total": 3000
+})
 
 
 def test_admin_get_specific_order_not_existing(client):
@@ -165,12 +191,17 @@ def test_admin_edit_order_status_successfully(client):
             headers={'Authorization': 'Bearer ' + admin_token})
         assert response.status_code == 200
         assert response.json == {success_messages[4]['edit_success']: {
-            "food_id": ['1'],
-            "order_id": 1,
-            "total": 1500,
-            "creator": "delight",
-            "status": "Complete",
-            "price": ['500'],
-            "title": ["Mokimo"],
-            "quantity": ['3']
-        }}
+		"status": "Complete",
+		"title": ["Mokimo","Mokimo"],
+		"order_id": 1,
+		"quantity": ["3","3"],
+		"price": ["500","500"],
+		"creator": "delight",
+		"food_id": [["1"]],
+		"total": 3000
+	}
+}
+
+droptestdb()
+
+create_dtb()

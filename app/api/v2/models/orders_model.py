@@ -85,23 +85,74 @@ class ManageOrdersDAO():
         ManageUserDAO.normal_user_only(data['username'])
 
         if check_quantity and check_food_id:
-            # check if the exact order exists
+            # check if an order exists with status as new
+            items_to_order = []
+
             connection = connectdb()
             curs = connection.cursor()
 
-            # curs.execute("SELECT * FROM orders WHERE food_id = %(food_id)s" +
-            #              "AND status = %(status)s AND creator = %(creator)s", {
-            #                  'food_id': [str(food_id)], 'status': self.status,
-            #                  'creator': data['username']})
+            curs.execute("SELECT * FROM orders WHERE status = %(status)s" +
+                         "AND creator = %(creator)s", {
+                             'status': self.status,'creator': data['username']})
 
-            # existing = curs.fetchall()
-            # print(existing)
+            existing = curs.fetchone()
+            print(existing)
+            if existing:
+                #api.abort(403, success_messages[3]["order_created1"])
+                for food_ids in data['food_id']:
+                    curs.execute(
+                        "SELECT * FROM foods WHERE food_id = %(food_id)s",
+                        {'food_id': food_ids})
+                order_food = curs.fetchall()
 
-            # if existing:
-            #     api.abort(403, success_messages[3]["order_created1"])
+                items_to_order += order_food
+                order_price = []
+                order_titles = []
+                order_food_ids = []
+                existing_price = [int(p) for p in existing[3]]
+                existing_quantity = [int(y) for y in existing[4]]
+
+                for food in items_to_order:
+                    order_price.append(food[3])
+                    prices = order_price + existing_price
+                    
+                    order_titles.append(food[1])
+                    titles = order_titles + existing[2]
+
+                    order_food_ids.append(existing[1])
+
+
+                quantities = existing_quantity + data['quantity']
+                print (quantities)   
+                print(prices)
+                print(titles)
+                print (order_food_ids)
+                to_find_price = list(zip(quantities, prices))
+
+                total = 0
+                for i in to_find_price:
+                    total = total + (i[0] * i[1])
+                    
+                curs.execute("UPDATE orders SET food_id = %(food_id)s,title = %(title)s,price=%(price)s,quantity=%(quantity)s,total=%(total)s,status=%(status)s,creator=%(creator)s WHERE order_id =%(order_id)s",{
+                    'order_id':existing[0],'food_id':order_food_ids,'title':titles,'price':prices,'quantity':quantities,'total':total,'status':self.status,'creator':data['username']
+                })
+                curs.close()
+                connection.commit()
+                connection.close()
+                updated_order = {
+                    'food id': order_food_ids,
+                    'ordered foods': titles,
+                    'price per food': prices,
+                    'Quantity per food': quantities,
+                    'Total expenditure': total,
+                    'Order Status': self.status,
+                    'Order Creator': data['username']
+                }
+                return updated_order
+
 
             # find the entered foods
-            items_to_order = []
+            
             for food_ids in data['food_id']:
                 curs.execute(
                     "SELECT * FROM foods WHERE food_id = %(food_id)s",
