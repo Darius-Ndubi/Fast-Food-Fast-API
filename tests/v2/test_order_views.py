@@ -47,6 +47,19 @@ def test_order_empty_json_object(client):
         assert response.status_code == 400
 
 
+def test_order_non_existing_food_item(client):
+    """test input of none existing food id in order list"""
+    with app.app_context():
+        user_token = user_token_creator()
+        response = client.post(
+            '/api/v2/users/orders', data=json.dumps(mock_order[5]),
+            content_type='application/json',
+            headers={'Authorization': 'Bearer ' + user_token})
+        json.loads(response.data.decode('utf-8'))
+        #assert response.json == {'message': error_messages[20]['item_not_found']}
+        assert response.status_code == 404
+
+
 def test_order_food_item_successfully(client):
     """test input of correct quantity and food item"""
     with app.app_context():
@@ -112,18 +125,13 @@ def test_admin_get_all_orders(client):
             '/api/v2/orders/', content_type='application/json',
             headers={'Authorization': 'Bearer ' + admin_token})
         assert response.status_code == 200
-        assert response.json == {'All user orders': [
-		{
-			"status": "NEW",
-			"title": ["Mokimo","Mokimo"],
-			"order_id": 1,
-			"quantity": ["3","3"],
+        assert response.json == {"All users orders": [
+		{"order_id": 1,"food_id": [["1"]],"status": "NEW","creator": "delight",
 			"price": ["500","500"],
-			"creator": "delight",
-			"food_id": [["1"]],
-			"total": 3000
-		}
-	]}
+			"total": 3000,
+			"title": ["Mokimo","Mokimo"],
+			"quantity": ["3","3"]
+		}]}
 
 
 def test_admin_get_specific_order(client):

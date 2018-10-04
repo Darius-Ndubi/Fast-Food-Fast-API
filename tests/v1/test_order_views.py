@@ -6,7 +6,8 @@ mock_order = [{'quantity': '3', 'food_id': 'Burger', 'creator': ''},
               {'quantity': 3, 'food_id': "#", 'creator': ''},
               {'quantity': 3, 'food_id': '$%^&@!', 'creator': ''},
               {'quantity': [3], 'food_id': [1]},
-              {}]
+              {},
+              {'quantity': [3], 'food_id': [1,2]}]
 
 """
     Mock answer data to test the working of user edit order

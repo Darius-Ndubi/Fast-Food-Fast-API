@@ -1,7 +1,7 @@
 from flask_restplus import Resource, fields, Namespace
 
 # local imports
-from app import api
+from app import API
 from app.api.v1.models.authUsers import ManageUsersDAO
 
 ns = Namespace('auth', description='User authentication operations')
@@ -11,7 +11,7 @@ ns = Namespace('auth', description='User authentication operations')
 """
 # 'id': fields.Integer(readOnly=True, description='The user unique identifier'),
 
-user_signup = api.model('Sign Up', {
+user_signup = API.model('Sign Up', {
     'email': fields.String(required=True, description='Your Email'),
     'username': fields.String(required=True, description='Your username'),
     'password': fields.String(required=True, description='Your password'),
@@ -20,7 +20,7 @@ user_signup = api.model('Sign Up', {
 
 """Model for signin data to be entered by user
 """
-user_signin = api.model('Sign In', {
+user_signin = API.model('Sign In', {
     'email': fields.String(required=True, description='Your Email'),
     'password': fields.String(required=True, description='Your password')
 })
@@ -46,7 +46,7 @@ class SignUp(Resource):
     def post(self):
         ''' Sign Up User'''
 
-        return UserAO.add_user_details(api.payload)
+        return UserAO.add_user_details(API.payload)
 
 
 """
@@ -65,4 +65,4 @@ class Signin(Resource):
     def post(self):
         '''Sign In User'''
 
-        return UserAO.user_signin(api.payload), 200
+        return UserAO.user_signin(API.payload), 200

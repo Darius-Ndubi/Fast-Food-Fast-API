@@ -4,7 +4,7 @@ from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # local imports
-from app import api
+from app import API
 from app.api.v2.models.orders_model import ManageOrdersDAO
 from app.api.v2.models.user_model import ManageUserDAO
 from app.api.v2.models.food_model import ManageFoodDAO
@@ -18,14 +18,14 @@ foodobject = ManageFoodDAO()
 
 """ Model for placing on food item
 """
-order = api.model('Orders', {
+order = API.model('Orders', {
     'food_id': fields.Integer(required=True, description='Food  unique identifier'),
     'quantity': fields.Integer(required=True, description='Number of food item ordered')
 })
 
 """Model for adding status to an order
 """
-status = api.model('Status', {
+status = API.model('Status', {
     'status': fields.String(required=True, description='Add order Status')
 })
 
@@ -42,6 +42,7 @@ class Order(Resource):
     """
     @jwt_required
     @fastfood.doc('List all orders made')
+    @fastfood.doc(security='apikey')
     def get(self):
         """Geting all posted by an individual"""
         user_id = get_jwt_identity()
@@ -50,6 +51,7 @@ class Order(Resource):
 
     @jwt_required
     @fastfood.doc('Create food order')
+    @fastfood.doc(security='apikey')
     @fastfood.expect(order)
     def post(self):
         """Post an order"""
@@ -60,7 +62,7 @@ class Order(Resource):
                 'quantity': request.json['quantity']
             }
         except:
-            api.abort(400, error_messages[25]['invalid_data'])
+            API.abort(400, error_messages[25]['invalid_data'])
 
         new_order['username'] = ManageUserDAO.get_username(user_id)
 
@@ -74,6 +76,7 @@ class OrderList(Resource):
         Class to get all orders orders created by a user
     """
     @jwt_required
+    @fastfood.doc(security='apikey')
     @fastfood.doc('Find all user orders')
     def get(self):
         '''Geting all posted orders'''
@@ -91,6 +94,7 @@ class OrderActiofastfood(Resource):
     """class to retrive a single order as nterd by user"""
     @jwt_required
     @fastfood.doc('Find specific order')
+    @fastfood.doc(security='apikey')
     def get(self, order_id):
         '''Geting all posted orders'''
         user_id = get_jwt_identity()
@@ -99,6 +103,7 @@ class OrderActiofastfood(Resource):
 
     @jwt_required
     @fastfood.doc('Add status to an order')
+    @fastfood.doc(security='apikey')
     @fastfood.expect(status)
     def put(self, order_id):
         '''Editing order satus'''
@@ -109,6 +114,6 @@ class OrderActiofastfood(Resource):
                 'status': request.json['status']
             }
         except:
-            api.abort(400, error_messages[25]['invalid_data'])
+            API.abort(400, error_messages[25]['invalid_data'])
 
         return orderobject.update_status(new_status, order_id), 200

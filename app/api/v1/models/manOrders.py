@@ -1,7 +1,7 @@
 """Module to handle operations on order endpoints only"""
 
 # local imports
-from app import api
+from app import API
 from app.api.utility.valid_order import OrderDataValidator
 from app.api.v1.models.authUsers import ManageUsersDAO
 
@@ -36,7 +36,7 @@ class ManageOrdersDAO():
             -> If orders have been posted it returns the orders
         """
         if len(self.orders) == 0:
-            api.abort(404, "No orders yet")
+            API.abort(404, "No orders yet")
 
         return self.orders
 
@@ -66,7 +66,7 @@ class ManageOrdersDAO():
         if data_check:
             # check that user has entered a quantity greater than 0
             if data['quantity'] <= 0:
-                api.abort(400, "Sorry the minimum you can order is 1 you ordered {} ".format(
+                API.abort(400, "Sorry the minimum you can order is 1 you ordered {} ".format(
                     data['quantity']))
 
             # find food item name in food item list
@@ -87,10 +87,10 @@ class ManageOrdersDAO():
                     self.orders.append(data)
                     return data
 
-            api.abort(404, "Food Item {} does not Exist, Please order another one".format(
+            API.abort(404, "Food Item {} does not Exist, Please order another one".format(
                 data['food_id']))
 
-        api.abort(500, "An expected error occurred during data Validation")
+        API.abort(500, "An expected error occurred during data Validation")
 
     def get_specific_order(self, order_id):
         """Method to retrieve specific order as per its id"""
@@ -106,10 +106,10 @@ class ManageOrdersDAO():
                     return order
 
                 # if id ws not found report back to user
-            api.abort(
+            API.abort(
                 404, "Order: {} does not Exist, Please view the list of available orders then check again".format(order_id))
 
-        api.abort(500, "An expected error occurred during data Validation")
+        API.abort(500, "An expected error occurred during data Validation")
 
     def update_order(self, order_id, data):
         """Method to edit order and give it a status"""
@@ -126,7 +126,7 @@ class ManageOrdersDAO():
             order.update(data)
             return order
 
-        api.abort(500, "An expected error occurred during data Validation")
+        API.abort(500, "An expected error occurred during data Validation")
 
     def delete_order(self, order_id):
         """Method to delete a food order"""

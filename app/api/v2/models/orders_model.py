@@ -1,13 +1,15 @@
 """Module to run order operations"""
 
 # local imports
-from app import api
+from app import API
 from app.api.utility.messages import success_messages, error_messages
 from app.api.utility.valid_order import OrderDataValidator
 from app.api.v2.db.conndb import connectdb
 from app.api.v2.models.user_model import ManageUserDAO
+from app.api.v2.models.food_model import ManageFoodDAO
 
 ordervalidatorobject = OrderDataValidator()
+foodobject = ManageFoodDAO()
 
 
 class ManageOrdersDAO():
@@ -54,14 +56,8 @@ class ManageOrdersDAO():
         user_orders = []
         for order in all_orders:
             order = {
-                'order_id': order[0],
-                'food_id': order[1],
-                'title': order[2],
-                'price': order[3],
-                'quantity': order[4],
-                'total': order[5],
-                'status': order[6],
-                'creator': order[7]
+                'order_id': order[0],'food_id': order[1],'title': order[2],'price': order[3],
+                'quantity': order[4],'total': order[5],'status': order[6],'creator': order[7]
             }
             user_orders.append(order)
         return {success_messages[5]['user_orders']: user_orders}
@@ -74,7 +70,7 @@ class ManageOrdersDAO():
                 if order_dit['order_id'] == order_id:
                     return order_dit
 
-            return api.abort(404, error_messages[20]['item_not_found'])
+            return API.abort(404, error_messages[20]['item_not_found'])
 
     def create_new_order(self, data):
         """Method that adds user order data to the db"""
@@ -83,9 +79,17 @@ class ManageOrdersDAO():
         food_id = data['food_id']
 
         ManageUserDAO.normal_user_only(data['username'])
+        #check existance of food id  enterd
+        for idee in food_id:
+            existance = foodobject.check_food_existance_by_id(idee)
+            if not existance:
+                API.abort(404,{"Message":error_messages[20]['item_not_found']})
 
         if check_quantity and check_food_id:
             # check if an order exists with status as new
+            order_price = []
+            order_titles = []
+            order_food_ids = []
             items_to_order = []
 
             connection = connectdb()
@@ -96,9 +100,8 @@ class ManageOrdersDAO():
                              'status': self.status,'creator': data['username']})
 
             existing = curs.fetchone()
-            print(existing)
             if existing:
-                #api.abort(403, success_messages[3]["order_created1"])
+                #API.abort(403, success_messages[3]["order_created1"])
                 for food_ids in data['food_id']:
                     curs.execute(
                         "SELECT * FROM foods WHERE food_id = %(food_id)s",
@@ -106,9 +109,7 @@ class ManageOrdersDAO():
                 order_food = curs.fetchall()
 
                 items_to_order += order_food
-                order_price = []
-                order_titles = []
-                order_food_ids = []
+                
                 existing_price = [int(p) for p in existing[3]]
                 existing_quantity = [int(y) for y in existing[4]]
 
@@ -123,10 +124,6 @@ class ManageOrdersDAO():
 
 
                 quantities = existing_quantity + data['quantity']
-                print (quantities)   
-                print(prices)
-                print(titles)
-                print (order_food_ids)
                 to_find_price = list(zip(quantities, prices))
 
                 total = 0
@@ -192,11 +189,11 @@ class ManageOrdersDAO():
             }
             return created_order
 
-        api.abort(500, error_messages[1]['validation_error'])
+        API.abort(500, error_messages[1]['validation_error'])
 
     def update_status(self, data, order_id):
         """Method to update th status of an order"""
-        status = data['status'].capitalize()
+        status = data['status'].cAPItalize()
         status_check = OrderDataValidator()
         status_checkO = status_check.statusValid(status)
 
@@ -213,4 +210,4 @@ class ManageOrdersDAO():
             return{success_messages[4]['edit_success']:
                    self.find_specific_order(order_id)}
 
-        api.abort(500, error_messages[1]['validation_error'])
+        API.abort(500, error_messages[1]['validation_error'])

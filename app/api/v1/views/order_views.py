@@ -8,7 +8,7 @@
 from flask_restplus import Resource, fields, Namespace
 
 # local imports
-from app import api
+from app import API
 from app.api.v1.models.manOrders import ManageOrdersDAO
 
 ns = Namespace('orders', description='Orders and their operations')
@@ -16,14 +16,14 @@ ns = Namespace('orders', description='Orders and their operations')
 """
     Model for adding status to an order
 """
-status = api.model('Status', {
+status = API.model('Status', {
     'status': fields.String(required=True, description='Add order Status')
 })
 
 """
     Model for placing on food item
 """
-order = api.model('Orders', {
+order = API.model('Orders', {
     'food_id': fields.Integer(required=True, description='Food  unique identifier'),
     'quantity': fields.Integer(required=True, description='Number of food item ordered')
 })
@@ -57,7 +57,7 @@ class Order(Resource):
     @ns.marshal_with(order, code=201)
     def post(self):
         '''Post an order'''
-        return orderAO.create_new_order(api.payload), 201
+        return orderAO.create_new_order(API.payload), 201
 
 
 @ns.route('/orders/<int:order_id>')
@@ -78,7 +78,7 @@ class OrderSpecific(Resource):
     def put(self, order_id):
         '''Update the status of order given its identifier'''
 
-        return orderAO.update_order(order_id, api.payload), 200
+        return orderAO.update_order(order_id, API.payload), 200
 
     @ns.doc('Delete an Order')
     @ns.response(204, 'Order deleted')

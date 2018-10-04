@@ -1,7 +1,7 @@
 """Module to handle operations on Foods only"""
 
 # local imports
-from app import api
+from app import API
 from app.api.v1.models.manOrders import food_items
 from app.api.v1.models.authUsers import ManageUsersDAO
 from app.api.utility.valid_food import FoodDataValidator
@@ -22,7 +22,7 @@ class ManageFoodsDAO():
         """Method to check existance of food item"""
         for food_item in food_items:
             if food_item.get('title') == heading:
-                api.abort(
+                API.abort(
                     409, "food item creation for {} could not be completed due to existance of same item".format(heading))
 
             return True
@@ -64,7 +64,7 @@ class ManageFoodsDAO():
             food_items.append(data)
             return data
 
-        api.abort(500, "Un expected error occurred during data Validation")
+        API.abort(500, "Un expected error occurred during data Validation")
 
     def get_all_foods(self):
         """
@@ -72,7 +72,7 @@ class ManageFoodsDAO():
         """
         # if number of food items is 0 tell user no food item exist else show the items
         if len(food_items) == 0:
-            api.abort(404, "No foods created yet yet")
+            API.abort(404, "No foods created yet yet")
 
         # return the food items
         return food_items
@@ -91,10 +91,10 @@ class ManageFoodsDAO():
                     return food
 
                 # if id ws not found report back to user
-            api.abort(
+            API.abort(
                 404, "Food: {} does not Exist, Please view the list of available foods then check again".format(food_id))
 
-        api.abort(500, "Un expected error occurred during data Validation")
+        API.abort(500, "Un expected error occurred during data Validation")
 
     def update_food_item(self, food_id, data):
         """Method to update food item data"""
@@ -113,7 +113,7 @@ class ManageFoodsDAO():
 
             return f_item
 
-        api.abort(500, "Un expected error occurred during data Validation")
+        API.abort(500, "Un expected error occurred during data Validation")
 
     def delete_food_item(self, food_id):
         """Method to delete a food item"""

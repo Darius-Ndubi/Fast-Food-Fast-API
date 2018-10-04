@@ -3,7 +3,7 @@
 import re
 
 # local imports
-from app import api
+from app import API
 from app.api.utility.messages import error_messages
 
 
@@ -16,11 +16,11 @@ class UserAuthValidator():
         """
         # check if email type is a string
         if type(email) != str:
-            api.abort(400, error_messages[3]['Incorrect_email'])
+            API.abort(400, error_messages[3]['Incorrect_email'])
 
         # checking email entered through regular expressions
         elif not re.match(r"(^[a-zA-Z0-9.+-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$)", email):
-            api.abort(
+            API.abort(
                 400, error_messages[2]['Invalid_email'])
         return True
 
@@ -30,16 +30,16 @@ class UserAuthValidator():
         """
         # check if password entered is a string
         if type(password) != str:
-            api.abort(
+            API.abort(
                 400, error_messages[4]['incorrect_passwd'])
 
         # check if password and confirm password match
         elif password != conPassword:
-            api.abort(400, error_messages[5]['unmatching'])
+            API.abort(400, error_messages[5]['unmatching'])
 
         # checking email entered through regular expressions
         elif not re.match(r"([A-Za-z0-9@#$&*]{6,10})", password):
-            api.abort(
+            API.abort(
                 400, error_messages[6]['poor_pass'])
         return True
 
@@ -48,19 +48,19 @@ class UserAuthValidator():
         """
         # username check
         if type(username) != str:
-            api.abort(
+            API.abort(
                 400, error_messages[7]['invalid_uname'])
 
         # username check
         elif not re.match(r"([A-Za-z0-9-]{5,})", username):
-            api.abort(
+            API.abort(
                 400, error_messages[8]['poor_uname'])
 
-        chars = '!#@&*?:\"0123456789'
+        chars = '!#@&*?:\"0123456789 '
 
         for i in chars:
             if i in str(username):
-                api.abort(
+                API.abort(
                     400, error_messages[8]['poor_uname'])
         return True
 
@@ -68,9 +68,9 @@ class UserAuthValidator():
         """Sign In password checker
         """
         if type(password) != str:
-            api.abort(
+            API.abort(
                 400, error_messages[4]['incorrect_passwd'])
 
-        elif not re.match(r"[A-Za-z0-9@#$&*]{6,10}", password):
-            api.abort(400, error_messages[6]['poor_pass'])
+        elif not re.match(r"([A-Za-z0-9@#$&*+=]{6,10})", password):
+            API.abort(400, error_messages[6]['poor_pass'])
         return True

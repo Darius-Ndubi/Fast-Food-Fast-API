@@ -3,7 +3,7 @@
 from flask_restplus import Resource, fields, Namespace
 
 # local imports
-from app import api
+from app import API
 from app.api.v1.models.manFoods import ManageFoodsDAO
 
 ns = Namespace('foods', description='Foods and their operations')
@@ -12,7 +12,7 @@ ns = Namespace('foods', description='Foods and their operations')
 """
     Model for creating a food item
 """
-food_item = api.model('Food', {
+food_item = API.model('Food', {
     'title': fields.String(required=True, description='Food Title'),
     'description': fields.String(required=True, description='Food item description'),
     'price': fields.Integer(required=True, description='Food item price'),
@@ -47,7 +47,7 @@ class Food(Resource):
     @ns.marshal_with(food_item, code=201)
     def post(self):
         ''' Post a food item'''
-        return foodAO.create_new_food_item(api.payload), 201
+        return foodAO.create_new_food_item(API.payload), 201
 
 
 @ns.route('/foods/<int:food_id>')
@@ -69,7 +69,7 @@ class SpecificFood(Resource):
     @ns.marshal_with(food_item, code=200)
     def put(self, food_id):
         '''Updates the contents of a food item given its id and the data needed'''
-        return foodAO.update_food_item(food_id, api.payload), 200
+        return foodAO.update_food_item(food_id, API.payload), 200
 
     @ns.doc('Delete food item')
     @ns.response(204, 'Item deleted')
