@@ -2,10 +2,10 @@
 
 # local imports
 from app import api
-from app.a_p_i.v1.models.manOrders import food_items
-from app.a_p_i.v1.models.authUsers import ManageUsersDAO
-from app.a_p_i.utility.validFood import FoodDataValidator
-from app.a_p_i.utility.validOrder import OrderDataValidator
+from app.api.v1.models.manOrders import food_items
+from app.api.v1.models.authUsers import ManageUsersDAO
+from app.api.utility.valid_food import FoodDataValidator
+from app.api.utility.valid_order import OrderDataValidator
 
 usersAO = ManageUsersDAO()
 foodAO = OrderDataValidator()

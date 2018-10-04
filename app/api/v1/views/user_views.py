@@ -2,24 +2,23 @@ from flask_restplus import Resource, fields, Namespace
 
 # local imports
 from app import api
-from app.a_p_i.v1.models.authUsers import ManageUsersDAO
+from app.api.v1.models.authUsers import ManageUsersDAO
 
 ns = Namespace('auth', description='User authentication operations')
 
 """
     User model for user signup data to be entered
 """
+# 'id': fields.Integer(readOnly=True, description='The user unique identifier'),
 
 user_signup = api.model('Sign Up', {
-    'id': fields.Integer(readOnly=True, description='The user unique identifier'),
     'email': fields.String(required=True, description='Your Email'),
     'username': fields.String(required=True, description='Your username'),
     'password': fields.String(required=True, description='Your password'),
-    'confirm_password': fields.String(required=True, description='Confirm your password'),
+    'confirm_password': fields.String(required=True, description='Confirm your password')
 })
 
-""" 
-    Model for signin data to be entered by user
+"""Model for signin data to be entered by user
 """
 user_signin = api.model('Sign In', {
     'email': fields.String(required=True, description='Your Email'),

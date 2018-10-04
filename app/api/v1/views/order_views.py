@@ -9,7 +9,7 @@ from flask_restplus import Resource, fields, Namespace
 
 # local imports
 from app import api
-from app.a_p_i.v1.models.manOrders import ManageOrdersDAO
+from app.api.v1.models.manOrders import ManageOrdersDAO
 
 ns = Namespace('orders', description='Orders and their operations')
 

@@ -3,12 +3,12 @@ from flask import jsonify
 
 # local imports
 from app import api
-from app.api.utility.validFood import FoodDataValidator
+from app.api.utility.valid_food import FoodDataValidator
 from app.api.utility.messages import success_messages, error_messages
 from app.api.v2.db.conndb import connectdb
 
 """ instance of validation class"""
-foodvalidatorO = FoodDataValidator()
+foodvalidatorobject = FoodDataValidator()
 
 
 class ManageFoodDAO():
@@ -28,13 +28,13 @@ class ManageFoodDAO():
         curs.close()
         connection.close()
         if self.admin_user[3] is not True:
-            api.abort(401, error_messages[19]['unmet_priv'])
+            api.abort(403, error_messages[19]['unmet_priv'])
 
         else:
             return self.admin_user
 
     def check_items_existance(self, title):
-        """Method to check it the food item exists"""
+        """Method to validation it the food item exists"""
         connection = connectdb()
         curs = connection.cursor()
         curs.execute("SELECT * FROM foods WHERE title=%(title)s",
@@ -46,16 +46,17 @@ class ManageFoodDAO():
 
     def create_menu_item(self, data):
         """method to create menu item"""
-        title_check = foodvalidatorO.titleValidator(data['title'])
-        desc_check = foodvalidatorO.descriptionValidator(data['description'])
-        price_check = foodvalidatorO.pricevalidator(data['price'])
-        type_check = foodvalidatorO.typeValidator(data['type'])
+        title_validation = foodvalidatorobject.titleValidator(data['title'])
+        description_validation = foodvalidatorobject.descriptionValidator(
+            data['description'])
+        price_validation = foodvalidatorobject.pricevalidator(data['price'])
+        type_validation = foodvalidatorobject.typeValidator(data['type'])
         title = data['title'].capitalize()
         food_exist = self.check_items_existance(title)
 
-        # if all checks pass
-        if title_check and desc_check and price_check and type_check:
-            # check if title exists
+        # if all validations pass
+        if title_validation and description_validation and price_validation and type_validation:
+            # validation if title exists
             if food_exist is not None:
                 api.abort(409, error_messages[18]['food_exist'])
             data['creator'] = self.admin_user[2]

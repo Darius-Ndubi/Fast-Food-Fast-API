@@ -4,7 +4,7 @@ from flask_restplus import Resource, fields, Namespace
 
 # local imports
 from app import api
-from app.a_p_i.v1.models.manFoods import ManageFoodsDAO
+from app.api.v1.models.manFoods import ManageFoodsDAO
 
 ns = Namespace('foods', description='Foods and their operations')
 

@@ -3,10 +3,11 @@
 # local imports
 from app import api
 from app.api.utility.messages import success_messages, error_messages
-from app.api.utility.validOrder import OrderDataValidator
+from app.api.utility.valid_order import OrderDataValidator
 from app.api.v2.db.conndb import connectdb
+from app.api.v2.models.user_model import ManageUserDAO
 
-orderdataValidatorO = OrderDataValidator()
+ordervalidatorobject = OrderDataValidator()
 
 
 class ManageOrdersDAO():
@@ -73,14 +74,15 @@ class ManageOrdersDAO():
                 if order_dit['order_id'] == order_id:
                     return order_dit
 
-            # order_item = order_item
             return api.abort(404, error_messages[20]['item_not_found'])
 
     def create_new_order(self, data):
         """Method that adds user order data to the db"""
-        check_quantity = orderdataValidatorO.validQuantity(data['quantity'])
-        check_food_id = orderdataValidatorO.orderIdValid(data['food_id'])
+        check_quantity = ordervalidatorobject.validQuantity(data['quantity'])
+        check_food_id = ordervalidatorobject.orderIdValid(data['food_id'])
         food_id = data['food_id']
+
+        ManageUserDAO.normal_user_only(data['username'])
 
         if check_quantity and check_food_id:
             # check if the exact order exists
@@ -89,15 +91,16 @@ class ManageOrdersDAO():
 
             # curs.execute("SELECT * FROM orders WHERE food_id = %(food_id)s" +
             #              "AND status = %(status)s AND creator = %(creator)s", {
-            #                  'food_id': food_id, 'status': self.status,
+            #                  'food_id': [str(food_id)], 'status': self.status,
             #                  'creator': data['username']})
 
             # existing = curs.fetchall()
+            # print(existing)
 
             # if existing:
             #     api.abort(403, success_messages[3]["order_created1"])
 
-            # find the enterd foods
+            # find the entered foods
             items_to_order = []
             for food_ids in data['food_id']:
                 curs.execute(
@@ -146,7 +149,7 @@ class ManageOrdersDAO():
         status_check = OrderDataValidator()
         status_checkO = status_check.statusValid(status)
 
-        if status_checkO and status_check:
+        if status_checkO:
             connection = connectdb()
             curs = connection.cursor()
             curs.execute("UPDATE orders SET status = %(status)s" +
@@ -156,7 +159,6 @@ class ManageOrdersDAO():
             connection.commit()
             connection.close()
 
-            # return success_messages[4]['edit_success']
             return{success_messages[4]['edit_success']:
                    self.find_specific_order(order_id)}
 

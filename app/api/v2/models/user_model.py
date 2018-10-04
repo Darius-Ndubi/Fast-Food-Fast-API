@@ -7,12 +7,13 @@ from flask import jsonify
 
 # local imports
 from app import api
-from app.api.utility.validUser import UserAuthValidator
+from app.api.utility.valid_user import UserAuthValidator
 from app.api.v2.db.conndb import connectdb
 from app.api.utility.messages import success_messages, error_messages
 
-""" instance of validation class"""
-uservalidatorO = UserAuthValidator()
+
+""" instance of validation classes"""
+uservalidatoro = UserAuthValidator()
 
 
 class ManageUserDAO():
@@ -40,10 +41,10 @@ class ManageUserDAO():
     def SignUpNewUser(self):
         """Method to validated user, and add to the database
             If all checks have passed add the user"""
-        data_check_email = uservalidatorO.validEmail(self.email)
-        data_check_pass = uservalidatorO.validPasswd(
+        data_check_email = uservalidatoro.validEmail(self.email)
+        data_check_pass = uservalidatoro.validPasswd(
             self.password, self.confirm_password)
-        data_check_uname = uservalidatorO.validUsername(self.username)
+        data_check_uname = uservalidatoro.validUsername(self.username)
         if str(self.username) == os.getenv('PRIV'):
             user_priv = True
         else:
@@ -75,8 +76,8 @@ class ManageUserDAO():
         """Method to validata user on login and checking if they exist
         if they do it compares the password hashes
         if this pasess it create user access token"""
-        data_check_email = uservalidatorO.validEmail(email)
-        data_check_pass = uservalidatorO.validSignInPassword(password)
+        data_check_email = uservalidatoro.validEmail(email)
+        data_check_pass = uservalidatoro.validSignInPassword(password)
         connection = connectdb()
         curs = connection.cursor()
         curs.execute("SELECT * FROM users WHERE email =%(email)s",
@@ -89,8 +90,8 @@ class ManageUserDAO():
             if check_password_hash(existance[0][4], password):
                 access_token = create_access_token(existance[0][0])
                 return {"Your access token": access_token}
-            api.abort(401, error_messages[9]['invalid_password'])
-        api.abort(404, error_messages[10]['not_signed_up'])
+            api.abort(403, error_messages[9]['invalid_password'])
+        api.abort(401, error_messages[10]['not_signed_up'])
 
     @staticmethod
     def get_username(user_id):
@@ -102,3 +103,13 @@ class ManageUserDAO():
         known_user = curs.fetchone()
 
         return known_user[2]
+
+    @staticmethod
+    def normal_user_only(username):
+        connection = connectdb()
+        curs = connection.cursor()
+        curs.execute("SELECT * FROM users WHERE username=%(username)s",
+                     {'username': username})
+        user_exixtance = curs.fetchone()
+        if user_exixtance[3]:
+            api.abort(403, error_messages[19]['unmet_priv'])

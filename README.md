@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Darius-Ndubi/Fast-Food-Fast-API.svg?branch=ft-add-menu-item-160809873)](https://travis-ci.org/Darius-Ndubi/Fast-Food-Fast-API)  [![Coverage Status](https://coveralls.io/repos/github/Darius-Ndubi/Fast-Food-Fast-API/badge.svg?branch=ft-add-menu-item-160809873)](https://coveralls.io/github/Darius-Ndubi/Fast-Food-Fast-API?branch=ft-add-menu-item-160809873)
+[![Build Status](https://travis-ci.org/Darius-Ndubi/Fast-Food-Fast-API.svg?branch=ft-add-menu-item-160809873)](https://travis-ci.org/Darius-Ndubi/Fast-Food-Fast-API)  [![Coverage Status](https://coveralls.io/repos/github/Darius-Ndubi/Fast-Food-Fast-API/badge.svg?branch=ch-implement-feedback-160912719)](https://coveralls.io/github/Darius-Ndubi/Fast-Food-Fast-API?branch=ch-implement-feedback-160912719)
 ----
 
 # Fast-Food-Fast-API
