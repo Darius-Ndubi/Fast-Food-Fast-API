@@ -18,10 +18,10 @@ def connectdb():
 def droptestdb():
     """Method to destroy the test database after testing
     """
-    connection = connDb()
+    connection = connectdb()
     curs = connection.cursor()
     dropper = ["""DROP TABLE users""",
-               """DROP TABLE orders""", """DROP TABLE foods"""]
+               """DROP TABLE foods""","""DROP TABLE orders"""]
     for table in dropper:
         curs.execute(table)
 
