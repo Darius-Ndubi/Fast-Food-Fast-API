@@ -101,7 +101,6 @@ class ManageOrdersDAO():
 
             existing = curs.fetchone()
             if existing:
-                #API.abort(403, success_messages[3]["order_created1"])
                 for food_ids in data['food_id']:
                     curs.execute(
                         "SELECT * FROM foods WHERE food_id = %(food_id)s",
