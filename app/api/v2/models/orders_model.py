@@ -83,7 +83,7 @@ class ManageOrdersDAO():
         for idee in food_id:
             existance = foodobject.check_food_existance_by_id(idee)
             if not existance:
-                API.abort(404,{"Message":error_messages[20]['item_not_found']})
+                API.abort(404,{"Message":error_messages[22]['food_not_found']})
 
         if check_quantity and check_food_id:
             # check if an order exists with status as new
@@ -158,8 +158,6 @@ class ManageOrdersDAO():
 
                 items_to_order += order_food
 
-            order_price = []
-            order_titles = []
             for food in items_to_order:
                 order_price.append(food[3])
                 order_titles.append(food[1])

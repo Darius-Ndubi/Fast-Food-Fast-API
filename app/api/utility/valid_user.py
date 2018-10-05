@@ -38,7 +38,7 @@ class UserAuthValidator():
             API.abort(400, error_messages[5]['unmatching'])
 
         # checking email entered through regular expressions
-        elif not re.match(r"([A-Za-z0-9@#$&*]{6,10})", password):
+        elif not re.match(r"^([A-Za-z0-9]{6,10})", password):
             API.abort(
                 400, error_messages[6]['poor_pass'])
         return True
@@ -52,7 +52,7 @@ class UserAuthValidator():
                 400, error_messages[7]['invalid_uname'])
 
         # username check
-        elif not re.match(r"([A-Za-z0-9-]{5,})", username):
+        elif not re.match(r"([A-Za-z-]{5,})", username):
             API.abort(
                 400, error_messages[8]['poor_uname'])
 
@@ -71,6 +71,6 @@ class UserAuthValidator():
             API.abort(
                 400, error_messages[4]['incorrect_passwd'])
 
-        elif not re.match(r"([A-Za-z0-9@#$&*+=]{6,10})", password):
+        elif not re.match(r"^[A-Za-z0-9]{6,10}$", password):
             API.abort(400, error_messages[6]['poor_pass'])
         return True

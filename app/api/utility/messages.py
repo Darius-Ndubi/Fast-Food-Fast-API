@@ -41,9 +41,9 @@ error_messages = [{'email_conflict':
                    "action"},
                   {'item_not_found': "Item or items do not exist"},
                   {"invalid_quantity": "Quantity entered is not an integer"},
-                  {"None_zero":
-                   "Order id cannot be found, Orders are identified from 1" +
-                   " onwards"},
+                  {"food_not_found":
+                   "A food id you entered cannot be linked to its meal " +
+                   " ceck the available menu and try again"},
                   {"invalid_status": "Order status  should be a string"},
                   {"incorect_status":
                    "Order status can either be processing , cancelled or" +
