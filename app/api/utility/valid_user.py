@@ -38,7 +38,7 @@ class UserAuthValidator():
             API.abort(400, error_messages[5]['unmatching'])
 
         # checking email entered through regular expressions
-        elif not re.match(r"^([A-Za-z0-9]{6,10})", password):
+        elif len(password) < 6:
             API.abort(
                 400, error_messages[6]['poor_pass'])
         return True
@@ -71,6 +71,6 @@ class UserAuthValidator():
             API.abort(
                 400, error_messages[4]['incorrect_passwd'])
 
-        elif not re.match(r"^[A-Za-z0-9]{6,10}$", password):
+        elif len(password) < 6:
             API.abort(400, error_messages[6]['poor_pass'])
         return True

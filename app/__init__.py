@@ -17,13 +17,6 @@ jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=60)
 
-authorizations = {
-    'apikey': {
-        'type': 'apiKey',
-        'in': 'header',
-        'name': 'X-API-KEY'
-    }
-}
 
 API = Api(app, version='2.0', title='Fast Food Fast API',
           description='Fast-Food-Fast is a food delivery service app for a restaurant')

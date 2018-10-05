@@ -12,8 +12,7 @@ error_messages = [{'email_conflict':
                   {'incorrect_passwd': "A password is a string not a number"},
                   {'unmatching': 'Password and confirm password don\'t match'},
                   {'poor_pass':
-                   "Password should contain @,#,$,& or * with minimum of 6" +
-                   " chars and maximum of 10"},
+                   "password too short,minimum is 6"},
                   {'invalid_uname':
                    "A username is not a number,spaces or empty"},
                   {'poor_uname':
