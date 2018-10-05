@@ -41,6 +41,3 @@ API.add_namespace(menu, path='/api/v2')
 
 from app.api.v2.views.order_views import fastfood as orders
 API.add_namespace(orders, path='/api/v2')
-
-
-#pasword regex not good, token issue
