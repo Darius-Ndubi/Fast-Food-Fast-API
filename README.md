@@ -2,7 +2,8 @@
 ----
 
 # Fast-Food-Fast-API
-- Fast-Food-Fast is a food delivery service app for a restaurant.
+- Fast-Food-Fast is a food delivery service app for a restaurant. The restraunt provides a service to its contomers.
+Customers are allowed to view all food items and if they choose to create an  order they should signup and be authorized users. After authorization the user can now actually create orders of there choice . The user has the freedom to choose the number of items to order so long as they are in the menu. After creating an order the user awaiting for admins aproval and procedures. An order is considered as an item in diffrent states. If the last order the user created is still new, The user can add more orders to it. But if the status changes to processng then the user creates a new order.
 
 #### Getting Started
 Go to https://github.com/Darius-Ndubi/Fast-Food-Fast-API.git 
@@ -20,11 +21,14 @@ Open the project using your ide
  
  ----
   #### Installing
-Creating virtual environment
-On the working directory, open terminal.
-
-* Run the command: virtualenv venv
-* Activating virtual environment : source venv\bin\activate
+Create a virtual enviroment. *virtualenv name_of_virtual_enviroment.
+Folder with the 'name_of_virtual_enviroment' will be created and that is out enviroment.
+Navigate inside the folder, open folder called Scripts or scripts and run the script activate. *Type activate
+Clone this repo to your local computer using git clone https://github.com/Darius-Ndubi/Fast-Food-Fast-API
+Switch into the project directory
+Install the project's dependencies by running pip install -r requirements.txt
+Run the app locally with python run.py or python3 run.py
+Navigate to your project folder and open it using the terminal.
 
 #### Application requirements
 The requirements.txt files will contain all the requirements needed for the application. 
@@ -70,7 +74,9 @@ Endpoint available for this api are shown in the table below:
  
 Run application on postman
 
-  http://127.0.0.1:5000
+  http://127.0.0.1:5000/api.v2/auth/signup 
+  
+
   
  #### Running test
 on terminal run:
@@ -89,7 +95,7 @@ on terminal run:
 
 *********
 #### Documentation
-https://documenter.getpostman.com/view/5492229/RWgjb2eb
+https://dariusndubi.docs.apiary.io/#introduction/authentication
 
 *********
 
