@@ -83,28 +83,17 @@ def test_order_food_item_successfully(client):
             "Quantity per food": [3]
         })
 
-def test_order_food_item_repeatedly(client):
-    """test combination of orders in same state to one"""
+
+def test_order_food_item_admin(client):
+    """test input of correct quantity and food item"""
     with app.app_context():
-        user_token = user_token_creator()
-        old_num_orders = are_orders_added()
+        admin_token = admin_token_creator()
         response = client.post(
             '/api/v2/users/orders', data=json.dumps(mock_order[3]),
             content_type='application/json',
-            headers={'Authorization': 'Bearer ' + user_token})
-        json.loads(response.data)
-        new_num_orders = are_orders_added()
-        assert old_num_orders == new_num_orders
-        assert response.status_code == 201
-        assert response.json == ({
-			"food id": [["1"]],
-			"Order Creator": "delight",
-			"price per food": [500,500],
-			"ordered foods": ["Mokimo","Mokimo"],
-			"Total expenditure": 3000,
-			"Order Status": "NEW",
-			"Quantity per food": [3,3]
-		})
+            headers={'Authorization': 'Bearer ' + admin_token})
+        assert response.status_code == 403
+
 
 
 def test_orders_retrieval(client):
@@ -125,13 +114,28 @@ def test_admin_get_all_orders(client):
             '/api/v2/orders/', content_type='application/json',
             headers={'Authorization': 'Bearer ' + admin_token})
         assert response.status_code == 200
-        assert response.json == {"All users orders": [
-		{"order_id": 1,"food_id": [["1"]],"status": "NEW","creator": "delight",
-			"price": ["500","500"],
-			"total": 3000,
-			"title": ["Mokimo","Mokimo"],
-			"quantity": ["3","3"]
-		}]}
+        assert response.json == {
+	"All users orders": [
+		{
+			"quantity": [
+				"3"
+			],
+			"creator": "delight",
+			"total": 1500,
+			"food_id": [
+				"1"
+			],
+			"order_id": 1,
+			"title": [
+				"Mokimo"
+			],
+			"status": "NEW",
+			"price": [
+				"500"
+			]
+		}
+	]
+}
 
 
 def test_admin_get_specific_order(client):
@@ -142,15 +146,14 @@ def test_admin_get_specific_order(client):
             '/api/v2/orders/1', content_type='application/json',
             headers={'Authorization': 'Bearer ' + admin_token})
         assert response.status_code == 200
-        assert response.json == ({
-	"status": "NEW",
-	"title": ["Mokimo","Mokimo"],
-	"order_id": 1,
-	"quantity": ["3","3"],
-	"price": ["500","500"],
+        assert response.json == ({"quantity": ["3"],
 	"creator": "delight",
-	"food_id": [["1"]],
-	"total": 3000
+	"total": 1500,
+	"food_id": ["1"],
+	"order_id": 1,
+	"title": ["Mokimo"],
+	"status": "NEW",
+	"price": ["500"]
 })
 
 
@@ -198,16 +201,15 @@ def test_admin_edit_order_status_successfully(client):
             content_type='application/json',
             headers={'Authorization': 'Bearer ' + admin_token})
         assert response.status_code == 200
-        assert response.json == {success_messages[4]['edit_success']: {
-		"status": "Complete",
-		"title": ["Mokimo","Mokimo"],
-		"order_id": 1,
-		"quantity": ["3","3"],
-		"price": ["500","500"],
-		"creator": "delight",
-		"food_id": [["1"]],
-		"total": 3000
-	}
+        assert response.json == {success_messages[4]['edit_success']: {"quantity": ["3"],
+	"creator": "delight",
+	"total": 1500,
+	"food_id": ["1"],
+	"order_id": 1,
+	"title": ["Mokimo"],
+	"status": 'Complete',
+	"price": ["500"]
+}
 }
 
 droptestdb()
