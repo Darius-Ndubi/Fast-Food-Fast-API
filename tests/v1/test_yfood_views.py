@@ -11,7 +11,9 @@ mock_food = [{'title': "", 'description': 'Better than moms way', 'price': 500, 
              {'title': "Mokimo", 'description': 'Better than moms way',
               'price': 500, 'creator': '', 'type': ''},
              {'title': "Mokimo", 'description': 'Better than moms way', 'price': 500, 'creator': '', 'type': 'meal'},
-             {}]
+             {},
+             {'title': "Mtungo", 'description': 'Better than moms way', 'price': 500, 'creator': '', 'type': 'meal'},
+             ]
 
 """ 
     Mock data to edit existing food item

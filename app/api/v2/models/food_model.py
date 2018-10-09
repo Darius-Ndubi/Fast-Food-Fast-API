@@ -33,6 +33,16 @@ class ManageFoodDAO():
         else:
             return self.admin_user
 
+    def food_data_validator(self,data):
+        title_validation = foodvalidatorobject.titleValidator(data['title'])
+        description_validation = foodvalidatorobject.descriptionValidator(
+            data['description'])
+        price_validation = foodvalidatorobject.pricevalidator(data['price'])
+        type_validation = foodvalidatorobject.typeValidator(data['type'])
+
+        return title_validation and description_validation and price_validation and type_validation
+
+
     def check_food_existance_by_id(self,food_id):
         """Method to checkif a food item exists if queried by its id"""
         connection = connectdb()
@@ -55,16 +65,12 @@ class ManageFoodDAO():
 
     def create_menu_item(self, data):
         """method to create menu item"""
-        title_validation = foodvalidatorobject.titleValidator(data['title'])
-        description_validation = foodvalidatorobject.descriptionValidator(
-            data['description'])
-        price_validation = foodvalidatorobject.pricevalidator(data['price'])
-        type_validation = foodvalidatorobject.typeValidator(data['type'])
+        valid_data = self.food_data_validator(data)
         title = data['title'].capitalize()
         food_exist = self.check_items_existance(title)
 
         # if all validations pass
-        if title_validation and description_validation and price_validation and type_validation:
+        if valid_data:
             # validation if title exists
             if food_exist is not None:
                 API.abort(409, error_messages[18]['food_exist'])
@@ -107,3 +113,41 @@ class ManageFoodDAO():
             }
             foods.append(food_item)
         return (foods)
+
+
+    def edit_menu_item(self,food_id,data):
+        to_edit=self.check_food_existance_by_id(food_id)
+       
+        if to_edit is None:
+            API.abort(404, error_messages[20]['item_not_found'])
+        valid_data = self.food_data_validator(data)
+        title = data['title'].capitalize()
+        food_exist = self.check_items_existance(title)
+        
+        if valid_data:
+           
+            if food_exist is not None:
+                API.abort(409, error_messages[18]['food_exist'])
+            connection = connectdb()
+            curs = connection.cursor()
+
+            curs.execute("UPDATE foods SET title = %(title)s,description = %(description)s,price = %(price)s,type = %(type)s WHERE food_id = %(food_id)s",{
+                    'food_id':food_id,'title':data['title'],'description':data['description'],'price':data['price'],'type':data['type']
+                })
+
+            
+            curs.close()
+            connection.commit()
+            connection.close()
+
+            edited_food_item = {
+                'Title': title,
+                'Food Description': data['description'],
+                'Food Price': data['price'],
+                'Food Type': data['type']
+            }
+
+            return edited_food_item
+        API.abort(500, error_messages[1]['validation_error'])
+
+
