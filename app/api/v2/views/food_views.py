@@ -40,3 +40,23 @@ class Food(Resource):
             API.abort(400, error_messages[25]['invalid_data'])
 
         return foodobject.create_menu_item(new_item)
+
+@fastfood.route('/menu/<int:food_id>')
+class FoodItem(Resource):
+    """A class to handle actions to a menu item and getting"""
+    @jwt_required
+    def put(self,food_id):
+        user_id = get_jwt_identity()
+        foodobject.admin_only(user_id)
+
+        try:
+            edit_item = {
+                'title':  request.json['title'],
+                'description': request.json['description'],
+                'price': request.json['price'],
+                'type': request.json['type']
+            }
+        except:
+            API.abort(400, error_messages[25]['invalid_data'])
+            
+        return foodobject.edit_menu_item(food_id,edit_item)
