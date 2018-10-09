@@ -4,7 +4,7 @@ from flask import json
 # local imports
 from app import app
 from app.api.v2.db.conndb import connectdb
-from app.api.utility.messages import error_messages
+from app.api.utility.messages import error_messages,success_messages
 from tests.v1.test_yfood_views import mock_food,mock_up_food
 from tests.v2.test_auth_views import admin_token_creator
 
@@ -172,9 +172,24 @@ def test_on_retrieving_all_menu_items(client):
         '/api/v2/menu', content_type='application/json')
     assert response.status_code == 200
 
+def test_on_deleting_an_item_not_existing(client):
+    """Test on deleting a food item that doesnot exist"""
+    with app.app_context():
+        admin_token = admin_token_creator()
+        response = client.delete(
+            '/api/v2/menu/20000', content_type='application/json',
+            headers={'Authorization': 'Bearer ' + admin_token})
+        assert response.status_code == 404
 
 def test_on_deleting_an_item(client):
     """Test on deleting a food item"""
-    response = client.delete(
-        '/api/v2/menu/2', content_type='application/json')
-    assert response.status_code == 200
+    with app.app_context():
+        admin_token = admin_token_creator()
+        old_num_items = food_items()
+        response = client.delete(
+            '/api/v2/menu/2', content_type='application/json',
+            headers={'Authorization': 'Bearer ' + admin_token})
+        new_num_items = food_items()
+        assert new_num_items +1 == old_num_items
+        assert response.json == {'Message': success_messages[7]['Delete']}
+        assert response.status_code == 200

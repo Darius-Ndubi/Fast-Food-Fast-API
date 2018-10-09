@@ -151,3 +151,18 @@ class ManageFoodDAO():
         API.abort(500, error_messages[1]['validation_error'])
 
 
+    def delete_menu_item(self,food_id):
+        to_delete=self.check_food_existance_by_id(food_id)
+
+        if to_delete is None:
+            API.abort(404, error_messages[20]['item_not_found'])
+        connection = connectdb()
+        curs = connection.cursor()
+
+        curs.execute("DELETE FROM foods WHERE food_id=%(food_id)s",{
+            'food_id':food_id
+        })
+        curs.close()
+        connection.commit()
+        connection.close()
+        return {"Message":success_messages[7]['Delete']},200

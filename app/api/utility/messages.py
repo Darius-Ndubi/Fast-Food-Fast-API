@@ -60,5 +60,6 @@ success_messages = [
      " make modifications"},
     {'edit_success': 'Status update was successfull'},
     {'user_orders': "All users orders"},
-    {'user_order': 'Your orders'}
+    {'user_order': 'Your orders'},
+    {'Delete':"Deletion was successful"}
 ]
