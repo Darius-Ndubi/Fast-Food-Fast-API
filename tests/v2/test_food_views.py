@@ -171,3 +171,10 @@ def test_on_retrieving_all_menu_items(client):
     response = client.get(
         '/api/v2/menu', content_type='application/json')
     assert response.status_code == 200
+
+
+def test_on_deleting_an_item(client):
+    """Test on deleting a food item"""
+    response = client.delete(
+        '/api/v2/menu/2', content_type='application/json')
+    assert response.status_code == 200
