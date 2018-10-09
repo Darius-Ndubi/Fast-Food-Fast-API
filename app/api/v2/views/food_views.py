@@ -60,3 +60,11 @@ class FoodItem(Resource):
             API.abort(400, error_messages[25]['invalid_data'])
             
         return foodobject.edit_menu_item(food_id,edit_item)
+
+    @jwt_required
+    def delete(self,food_id):
+        """Method to delete food item from menu"""
+        user_id = get_jwt_identity()
+        foodobject.admin_only(user_id)
+
+        return foodobject.delete_menu_item(food_id)
