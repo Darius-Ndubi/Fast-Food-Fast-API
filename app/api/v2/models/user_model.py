@@ -115,3 +115,27 @@ class ManageUserDAO():
         user_exixtance = curs.fetchone()
         if user_exixtance[3]:
             API.abort(403, error_messages[19]['unmet_priv'])
+    
+    @staticmethod
+    def user_logout(user_token):
+        # user_token = str(user_token)
+        connection = connectdb()
+        curs =  connection.cursor()
+        curs.execute("INSERT INTO logout (user_token) VALUES (%s)",(user_token,))
+        curs.close()
+        connection.commit()
+        connection.close()
+        return {"message": "Successfully logged out"}, 200
+
+    @staticmethod
+    def fetch_blacklisted_token(user_token):
+        connection = connectdb()
+        curs =  connection.cursor()
+        curs.execute("SELECT * FROM logout WHERE user_token = %(user_token)s",
+        {'user_token': user_token})
+        known_token = curs.fetchone()
+        curs.close()
+        connection.close()
+        return known_token
+
+

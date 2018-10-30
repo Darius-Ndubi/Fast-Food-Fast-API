@@ -1,9 +1,10 @@
 """Module on user authentication endpoints"""
 from flask_restplus import Resource, Namespace
 from flask import request
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_raw_jwt
 
 # local imports
-from app import API
+from app import API,jwt
 from app.api.utility.messages import error_messages
 from app.api.v2.models.user_model import ManageUserDAO
 from app.api.v1.views.user_views import user_signup, user_signin
@@ -53,3 +54,20 @@ class Signin(Resource):
 
         return ManageUserDAO.loginUser(existing_user['email'],
                                        existing_user['password'])
+
+
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+    user_token = decrypted_token['jti']
+    return ManageUserDAO.fetch_blacklisted_token(user_token)
+
+
+@fastfood.route('/auth/logout')
+class Logout(Resource):
+    '''Allows a user to logout'''
+    @jwt_required
+    def post(self):
+        '''logout user'''
+        user_token = get_raw_jwt()['jti']
+
+        return ManageUserDAO.user_logout(user_token)

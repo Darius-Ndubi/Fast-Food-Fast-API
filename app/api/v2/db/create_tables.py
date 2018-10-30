@@ -36,6 +36,12 @@ def create_dtb():
         status VARCHAR NOT NULL,
         creator VARCHAR NOT NULL
         )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS logout(
+        logout_id SERIAL PRIMARY KEY NOT NULL,
+        user_token VARCHAR NOT NULL
+        )
         """
     ]
     connection = connectdb()

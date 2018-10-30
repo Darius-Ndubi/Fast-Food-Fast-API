@@ -15,6 +15,8 @@ app = Flask(__name__)
 jwt = JWTManager(app)
 
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+app.config['JWT_BLACKLIST_ENABLED'] = True
+app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=60)
 
 
